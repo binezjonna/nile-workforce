@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Egypt Staffing | توظيف فنادق ومصانع</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background:#f6f7f9; color:#222; }
+    header { background:#0f172a; color:#fff; padding:40px 20px; text-align:center; }
+    header h1 { margin:0 0 10px; font-size:32px; }
+    header p { margin:0; opacity:0.9; }
+    .lang-switch { margin-top:15px; }
+    .lang-switch button { margin:0 5px; padding:8px 14px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; }
+    .container { max-width:1000px; margin:40px auto; padding:0 20px; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
+    .card { background:#fff; border-radius:12px; padding:24px; box-shadow:0 10px 20px rgba(0,0,0,0.08); }
+    .btn { display:inline-block; margin-top:15px; padding:12px 18px; border-radius:10px; background:#2563eb; color:#fff; text-decoration:none; font-weight:bold; }
+    .btn.alt { background:#16a34a; }
+    section { margin-bottom:50px; }
+    footer { background:#e5e7eb; padding:20px; text-align:center; font-size:14px; }
+    iframe { width:100%; min-height:800px; border:none; }
+    .ar { display:none; direction:rtl; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Egypt Staffing | إيجبت ستافينج</h1>
+  <p class="en">Connecting Hotels & Factories with Ready-to-Work Staff Across Egypt</p>
+  <p class="ar">نربط الفنادق والمصانع بعمالة جاهزة للعمل في جميع أنحاء مصر</p>
+  <div class="lang-switch">
+    <button onclick="setLang('en')">English</button>
+    <button onclick="setLang('ar')">عربي</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <section>
+    <div class="cards">
+      <div class="card">
+        <h2 class="en">For Hotels & Factories</h2>
+        <h2 class="ar">للفنادق والمصانع</h2>
+        <p class="en">Request qualified workers quickly without recruitment hassle.</p>
+        <p class="ar">اطلب عمالة مؤهلة بسرعة وبدون تعقيدات التوظيف.</p>
+        <a href="#employers" class="btn en">Request Staff</a>
+        <a href="#employers" class="btn ar">اطلب موظفين</a>
+      </div>
+      <div class="card">
+        <h2 class="en">For Job Seekers</h2>
+        <h2 class="ar">للباحثين عن عمل</h2>
+        <p class="en">Apply for hotel & factory jobs across Egypt. No fees.</p>
+        <p class="ar">قدّم على وظائف فنادق ومصانع داخل مصر. بدون أي رسوم.</p>
+        <a href="#candidates" class="btn alt en">Apply for a Job</a>
+        <a href="#candidates" class="btn alt ar">قدّم على وظيفة</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="employers">
+    <h2 class="en">Request Staff (Employers Form)</h2>
+    <h2 class="ar">طلب عمالة (نموذج الشركات)</h2>
+    <p class="en">Please fill the form below and we will contact you shortly.</p>
+    <p class="ar">يرجى ملء النموذج وسيتم التواصل معكم في أقرب وقت.</p>
+    <iframe src="https://docs.google.com/forms/d/e/FORM_ID_EMPLOYERS/viewform?embedded=true"></iframe>
+  </section>
+
+  <section id="candidates">
+    <h2 class="en">Apply for a Job (Candidates Form)</h2>
+    <h2 class="ar">التقديم على وظيفة (نموذج المتقدمين)</h2>
+    <p class="en">Fill the form and our team will contact you if you match available jobs.</p>
+    <p class="ar">املأ النموذج وسيتم التواصل معك في حالة وجود وظيفة مناسبة.</p>
+    <iframe src="https://docs.google.com/forms/d/e/FORM_ID_CANDIDATES/viewform?embedded=true"></iframe>
+  </section>
+
+</div>
+
+<footer>
+  <p class="en">We do not charge job seekers any fees.</p>
+  <p class="ar">نحن لا نتقاضى أي رسوم من الباحثين عن عمل.</p>
+  <p class="en">Contact: <a href="mailto:hussienadly606@gmail.com">hussienadly606@gmail.com</a></p>
+  <p class="ar">للتواصل: <a href="mailto:hussienadly606@gmail.com">hussienadly606@gmail.com</a></p>
+  <p>© 2025 Egypt Staffing</p>
+</footer>
+
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/201028052445" target="_blank" style="position:fixed;bottom:20px;right:20px;background:#25d366;color:#fff;padding:14px 18px;border-radius:50px;text-decoration:none;font-weight:bold;box-shadow:0 8px 16px rgba(0,0,0,0.2)">WhatsApp</a>
+
+<!-- Legal Notice -->
+<section style="background:#fff;padding:30px;margin:40px auto;max-width:1000px;border-radius:12px;box-shadow:0 10px 20px rgba(0,0,0,0.08)">
+  <h2 class="en">Legal Notice</h2>
+  <h2 class="ar">إشعار قانوني</h2>
+  <p class="en">Egypt Staffing provides recruitment and HR consulting services only. We do not provide visa services or charge job seekers any fees.</p>
+  <p class="ar">تقدم Egypt Staffing خدمات التوظيف والاستشارات الإدارية فقط، ولا نقوم باستخراج تأشيرات أو تحصيل أي رسوم من الباحثين عن عمل.</p>
+</section>
+
+<script>
+  function setLang(lang) {
+    document.querySelectorAll('.en').forEach(el => el.style.display = lang === 'en' ? 'block' : 'none');
+    document.querySelectorAll('.ar').forEach(el => el.style.display = lang === 'ar' ? 'block' : 'none');
+  }
+  setLang('en');
+</script>
+
+</body>
+</html>
