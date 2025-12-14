@@ -1,886 +1,1305 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="نربط الفنادق والمصانع والشركات بعمالة جاهزة للعمل في جميع أنحاء مصر">
-  <title>Egypt Staffing | توظيف فنادق ومصانع وشركات</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    /* CSS Variables for easy theme management */
-    :root {
-      --primary-color: #0f172a;
-      --secondary-color: #2563eb;
-      --accent-color: #16a34a;
-      --light-color: #f8fafc;
-      --dark-color: #1e293b;
-      --gray-color: #64748b;
-      --border-radius: 12px;
-      --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-      --transition: all 0.3s ease;
-    }
-
-    /* Reset and Base Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
-      line-height: 1.6;
-      color: var(--dark-color);
-      background-color: #f6f7f9;
-      overflow-x: hidden;
-    }
-
-    .rtl {
-      direction: rtl;
-    }
-
-    .ltr {
-      direction: ltr;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* Typography */
-    h1, h2, h3, h4 {
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 1rem;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-    }
-
-    h2 {
-      font-size: 2rem;
-    }
-
-    h3 {
-      font-size: 1.5rem;
-    }
-
-    p {
-      margin-bottom: 1rem;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-      transition: var(--transition);
-    }
-
-    /* Layout */
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    .section {
-      padding: 80px 0;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 3rem;
-      position: relative;
-    }
-
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 4px;
-      background: var(--secondary-color);
-      border-radius: 2px;
-    }
-
-    /* Header Styles */
-    header {
-      background: linear-gradient(135deg, var(--primary-color), #1e293b);
-      color: white;
-      padding: 2rem 0;
-      position: relative;
-      overflow: hidden;
-    }
-
-    header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
-      background-size: cover;
-    }
-
-    .header-content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 1.5rem;
-    }
-
-    .logo-icon {
-      background: var(--secondary-color);
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-    }
-
-    .header-content h1 {
-      margin-bottom: 0.5rem;
-    }
-
-    .tagline {
-      font-size: 1.1rem;
-      opacity: 0.9;
-      margin-bottom: 2rem;
-    }
-
-    /* Language Switcher */
-    .lang-switch {
-      display: inline-flex;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50px;
-      padding: 5px;
-      margin-top: 1rem;
-    }
-
-    .lang-btn {
-      padding: 8px 20px;
-      border: none;
-      border-radius: 50px;
-      background: transparent;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .lang-btn.active {
-      background: white;
-      color: var(--primary-color);
-    }
-
-    /* Cards Grid */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-      margin-top: 40px;
-    }
-
-    .card {
-      background: white;
-      border-radius: var(--border-radius);
-      padding: 30px;
-      box-shadow: var(--box-shadow);
-      transition: var(--transition);
-      border-top: 4px solid var(--secondary-color);
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 12px;
-      background: rgba(37, 99, 235, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-      color: var(--secondary-color);
-      font-size: 1.5rem;
-    }
-
-    .card h3 {
-      color: var(--primary-color);
-    }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 14px 28px;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      border: none;
-      font-size: 1rem;
-      margin-top: auto;
-    }
-
-    .btn-primary {
-      background: var(--secondary-color);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #1d4ed8;
-      transform: translateY(-2px);
-    }
-
-    .btn-success {
-      background: var(--accent-color);
-      color: white;
-    }
-
-    .btn-success:hover {
-      background: #15803d;
-      transform: translateY(-2px);
-    }
-
-    .btn-block {
-      width: 100%;
-    }
-
-    /* Form Sections */
-    .form-section {
-      background: white;
-      border-radius: var(--border-radius);
-      padding: 40px;
-      box-shadow: var(--box-shadow);
-      margin-top: 30px;
-    }
-
-    .form-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .form-description {
-      color: var(--gray-color);
-      text-align: center;
-      max-width: 700px;
-      margin: 0 auto 2rem;
-    }
-
-    /* Iframe Container */
-    .iframe-container {
-      position: relative;
-      width: 100%;
-      height: 800px;
-      border-radius: var(--border-radius);
-      overflow: hidden;
-      border: 1px solid #e2e8f0;
-    }
-
-    .iframe-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    /* Footer */
-    footer {
-      background: var(--primary-color);
-      color: white;
-      padding: 60px 0 30px;
-      margin-top: 60px;
-    }
-
-    .footer-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 40px;
-      margin-bottom: 40px;
-    }
-
-    .footer-section h3 {
-      color: white;
-      margin-bottom: 1.5rem;
-      position: relative;
-      padding-bottom: 10px;
-    }
-
-    .footer-section h3::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 50px;
-      height: 3px;
-      background: var(--secondary-color);
-    }
-
-    .footer-links {
-      list-style: none;
-    }
-
-    .footer-links li {
-      margin-bottom: 10px;
-    }
-
-    .footer-links a {
-      color: #cbd5e1;
-      transition: var(--transition);
-    }
-
-    .footer-links a:hover {
-      color: white;
-      padding-right: 5px;
-    }
-
-    .contact-info {
-      color: #cbd5e1;
-    }
-
-    .contact-info i {
-      width: 20px;
-      margin-left: 10px;
-      color: var(--secondary-color);
-    }
-
-    .copyright {
-      text-align: center;
-      padding-top: 30px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      color: #94a3b8;
-      font-size: 0.9rem;
-    }
-
-    /* WhatsApp Button */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 30px;
-      left: 30px;
-      background: #25d366;
-      color: white;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
-      z-index: 1000;
-      transition: var(--transition);
-      text-decoration: none;
-    }
-
-    .whatsapp-float:hover {
-      background: #128c7e;
-      transform: scale(1.1);
-    }
-
-    /* Legal Notice */
-    .legal-notice {
-      background: white;
-      padding: 40px;
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
-      margin: 40px 0;
-      border-left: 5px solid var(--accent-color);
-    }
-
-    /* Stats Section */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin: 60px 0;
-    }
-
-    .stat-card {
-      background: white;
-      padding: 30px;
-      border-radius: var(--border-radius);
-      text-align: center;
-      box-shadow: var(--box-shadow);
-    }
-
-    .stat-number {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--secondary-color);
-      margin-bottom: 10px;
-    }
-
-    .stat-label {
-      color: var(--gray-color);
-      font-size: 1.1rem;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 992px) {
-      h1 {
-        font-size: 2.2rem;
-      }
-      
-      h2 {
-        font-size: 1.8rem;
-      }
-      
-      .section {
-        padding: 60px 0;
-      }
-    }
-
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 1.8rem;
-      }
-      
-      h2 {
-        font-size: 1.5rem;
-      }
-      
-      .cards {
-        grid-template-columns: 1fr;
-      }
-      
-      .form-section {
-        padding: 25px;
-      }
-      
-      .iframe-container {
-        height: 700px;
-      }
-      
-      .whatsapp-float {
-        width: 50px;
-        height: 50px;
-        font-size: 1.5rem;
-        bottom: 20px;
-        left: 20px;
-      }
-    }
-
-    @media (max-width: 576px) {
-      .container {
-        padding: 0 15px;
-      }
-      
-      .header-content {
-        padding: 0 15px;
-      }
-      
-      .iframe-container {
-        height: 600px;
-      }
-      
-      .lang-btn {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-      }
-    }
-
-    /* Animation for cards */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .fade-in-up {
-      animation: fadeInUp 0.6s ease forwards;
-    }
-
-    /* Loading state for iframe */
-    .iframe-loading {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #f8fafc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      z-index: 10;
-    }
-
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid rgba(37, 99, 235, 0.2);
-      border-radius: 50%;
-      border-top-color: var(--secondary-color);
-      animation: spin 1s linear infinite;
-      margin-bottom: 15px;
-    }
-
-    @keyframes spin {
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Egypt Workforce | توظيف فنادق ومصانع وشركات في مصر</title>
+    <meta name="description" content="المنصة الأولى لتوظيف العمالة في الفنادق والمصانع والشركات في جميع محافظات مصر">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #0a2540;
+            --secondary-color: #00a8e8;
+            --accent-color: #ff6b35;
+            --success-color: #2ecc71;
+            --light-color: #f8f9fa;
+            --dark-color: #1a1a2e;
+            --text-color: #333;
+            --text-light: #666;
+            --border-radius: 10px;
+            --box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --gradient-primary: linear-gradient(135deg, #0a2540, #1a3a5f);
+            --gradient-secondary: linear-gradient(135deg, #00a8e8, #0097d6);
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--light-color);
+            overflow-x: hidden;
+        }
+
+        .en {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Layout */
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+            width: 70%;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        .en .section-title::after {
+            right: auto;
+            left: 0;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary-color);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Language Switcher */
+        .lang-switcher {
+            display: flex;
+            background: #f1f5f9;
+            border-radius: 50px;
+            padding: 5px;
+        }
+
+        .lang-btn {
+            padding: 8px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: var(--primary-color);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(rgba(10, 37, 64, 0.9), rgba(10, 37, 64, 0.8)), 
+                        url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            color: white;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0097d6;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 168, 232, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--light-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border-top: 5px solid var(--secondary-color);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(0, 168, 232, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-text {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        /* Categories Section */
+        .categories-section {
+            background: #f8fafc;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-image {
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .category-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .category-card:hover .category-image img {
+            transform: scale(1.05);
+        }
+
+        .category-content {
+            padding: 30px;
+        }
+
+        .category-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .category-desc {
+            color: var(--text-light);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* Forms Section */
+        .forms-section {
+            background: white;
+        }
+
+        .forms-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tab-btn.active {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .tab-btn i {
+            font-size: 1.2rem;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 40px;
+            min-height: 800px;
+        }
+
+        .form-iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .form-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 800px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .form-placeholder i {
+            font-size: 4rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .form-placeholder h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .form-placeholder p {
+            color: var(--text-light);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+        }
+
+        .contact-info h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .contact-detail i {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 80px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary-color);
+        }
+
+        .en .footer-column h3::after {
+            right: auto;
+            left: 0;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-right: 10px;
+        }
+
+        .en .footer-links a:hover {
+            padding-right: 0;
+            padding-left: 10px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+            background: #128c7e;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                color: var(--primary-color);
+                cursor: pointer;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section {
+                padding: 80px 0;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .category-card {
+                max-width: 100%;
+            }
+            
+            .whatsapp-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+                bottom: 20px;
+                left: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .stat-number {
+                font-size: 2.2rem;
+            }
+            
+            .tab-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            padding: 30px;
+            transition: var(--transition);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .close-menu {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .mobile-nav-links li {
+            margin-bottom: 20px;
+        }
+
+        .mobile-nav-links a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: block;
+            padding: 10px 0;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
 </head>
 <body class="rtl">
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/201028052445" target="_blank" class="whatsapp-btn">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
-<!-- WhatsApp Floating Button -->
-<a href="https://wa.me/201028052445" target="_blank" class="whatsapp-float">
-  <i class="fab fa-whatsapp"></i>
-</a>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Egypt Workforce</h1>
+                        <p class="rtl">توظيف الفنادق والمصانع والشركات</p>
+                        <p class="en hidden">Hotel, Factory & Company Staffing</p>
+                    </div>
+                </div>
 
-<!-- Header Section -->
-<header>
-  <div class="container">
-    <div class="header-content">
-      <div class="logo">
-        <div class="logo-icon">
-          <i class="fas fa-handshake"></i>
-        </div>
-        <h1>Egypt Staffing</h1>
-      </div>
-      <p class="tagline rtl">نربط الفنادق والمصانع والشركات بعمالة جاهزة للعمل في جميع أنحاء مصر</p>
-      <p class="tagline ltr hidden">Connecting Hotels, Factories & Companies with Ready-to-Work Staff Across Egypt</p>
-      
-      <div class="lang-switch">
-        <button class="lang-btn active" data-lang="ar">عربي</button>
-        <button class="lang-btn" data-lang="en">English</button>
-      </div>
-    </div>
-  </div>
-</header>
+                <nav class="desktop-nav">
+                    <ul class="nav-links">
+                        <li><a href="#home" class="rtl">الرئيسية</a><a href="#home" class="en hidden">Home</a></li>
+                        <li><a href="#categories" class="rtl">القطاعات</a><a href="#categories" class="en hidden">Sectors</a></li>
+                        <li><a href="#forms" class="rtl">التوظيف</a><a href="#forms" class="en hidden">Hiring</a></li>
+                        <li><a href="#contact" class="rtl">اتصل بنا</a><a href="#contact" class="en hidden">Contact</a></li>
+                    </ul>
+                </nav>
 
-<!-- Main Content -->
-<main>
-  <!-- Stats Section -->
-  <section class="section">
-    <div class="container">
-      <div class="stats">
-        <div class="stat-card fade-in-up">
-          <div class="stat-number">500+</div>
-          <div class="stat-label rtl">شركة شريكة</div>
-          <div class="stat-label ltr hidden">Partner Companies</div>
+                <div class="nav-actions">
+                    <div class="lang-switcher">
+                        <button class="lang-btn active" data-lang="ar">عربي</button>
+                        <button class="lang-btn" data-lang="en">English</button>
+                    </div>
+                    <button class="mobile-menu-btn" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="stat-card fade-in-up">
-          <div class="stat-number">10,000+</div>
-          <div class="stat-label rtl">باحث عن عمل</div>
-          <div class="stat-label ltr hidden">Job Seekers</div>
-        </div>
-        <div class="stat-card fade-in-up">
-          <div class="stat-number">27</div>
-          <div class="stat-label rtl">محافظة مصرية</div>
-          <div class="stat-label ltr hidden">Egyptian Governorates</div>
-        </div>
-        <div class="stat-card fade-in-up">
-          <div class="stat-number">0</div>
-          <div class="stat-label rtl">رسوم على المتقدمين</div>
-          <div class="stat-label ltr hidden">Fees for Applicants</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- Services Section -->
-  <section class="section" style="background-color: #f1f5f9;">
-    <div class="container">
-      <h2 class="section-title rtl">خدماتنا</h2>
-      <h2 class="section-title ltr hidden">Our Services</h2>
-      
-      <div class="cards">
-        <div class="card fade-in-up">
-          <div class="card-icon">
-            <i class="fas fa-hotel"></i>
-          </div>
-          <h3 class="rtl">للفنادق والمنتجعات</h3>
-          <h3 class="ltr hidden">For Hotels & Resorts</h3>
-          <p class="rtl">نوفر لك جميع التخصصات الفندقية من إدارة، مطاعم، خدمات غرف، استقبال، طهاة، ونظافة.</p>
-          <p class="ltr hidden">We provide all hotel specialties: management, restaurants, room service, reception, chefs, and cleaning.</p>
-          <a href="#employers" class="btn btn-primary rtl">اطلب موظفين</a>
-          <a href="#employers" class="btn btn-primary ltr hidden">Request Staff</a>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="menu-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <div class="logo-text">
+                    <h3>Egypt Workforce</h3>
+                </div>
+            </div>
+            <button class="close-menu" id="closeMenu">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        
-        <div class="card fade-in-up">
-          <div class="card-icon">
-            <i class="fas fa-industry"></i>
-          </div>
-          <h3 class="rtl">للمصانع والشركات</h3>
-          <h3 class="ltr hidden">For Factories & Companies</h3>
-          <p class="rtl">عمالة مدربة وجاهزة للعمل في جميع التخصصات الصناعية والإدارية واللوجستية.</p>
-          <p class="ltr hidden">Trained and ready-to-work labor in all industrial, administrative and logistics specialties.</p>
-          <a href="#employers" class="btn btn-primary rtl">اطلب موظفين</a>
-          <a href="#employers" class="btn btn-primary ltr hidden">Request Staff</a>
-        </div>
-        
-        <div class="card fade-in-up">
-          <div class="card-icon">
-            <i class="fas fa-user-tie"></i>
-          </div>
-          <h3 class="rtl">للباحثين عن عمل</h3>
-          <h3 class="ltr hidden">For Job Seekers</h3>
-          <p class="rtl">قدم على وظائف مناسبة لمهاراتك في جميع أنحاء مصر. الخدمة مجانية بالكامل.</p>
-          <p class="ltr hidden">Apply for jobs that match your skills all over Egypt. The service is completely free.</p>
-          <a href="#candidates" class="btn btn-success rtl">قدم على وظيفة</a>
-          <a href="#candidates" class="btn btn-success ltr hidden">Apply for a Job</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- For Employers Section -->
-  <section id="employers" class="section">
-    <div class="container">
-      <div class="form-header">
-        <h2 class="rtl">نموذج طلب عمالة للشركات</h2>
-        <h2 class="ltr hidden">Staff Request Form for Companies</h2>
-        <p class="form-description rtl">املأ النموذج التالي لطلب عمالة، وسنتواصل معك خلال 24 ساعة</p>
-        <p class="form-description ltr hidden">Fill out the following form to request staff, and we will contact you within 24 hours</p>
-      </div>
-      
-      <div class="form-section">
-        <div class="iframe-container">
-          <div class="iframe-loading">
-            <div class="spinner"></div>
-            <p class="rtl">جاري تحميل النموذج...</p>
-            <p class="ltr hidden">Loading form...</p>
-          </div>
-          <iframe 
-            src="https://docs.google.com/forms/d/e/1FAIpQLSdKX5JgxrQPrzC7NSXU_J38Ose6O08qk_2bKv10fIY2eR50CA/viewform?embedded=true" 
-            loading="lazy">
-          </iframe>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- For Job Seekers Section -->
-  <section id="candidates" class="section" style="background-color: #f1f5f9;">
-    <div class="container">
-      <div class="form-header">
-        <h2 class="rtl">نموذج التقديم للوظائف (للباحثين عن عمل)</h2>
-        <h2 class="ltr hidden">Job Application Form (For Job Seekers)</h2>
-        <p class="form-description rtl">املأ النموذج التالي وسنتواصل معك في حال توفر وظيفة مناسبة لمهاراتك</p>
-        <p class="form-description ltr hidden">Fill out the form below and we will contact you if a job matching your skills becomes available</p>
-      </div>
-      
-      <div class="form-section">
-        <div class="iframe-container">
-          <div class="iframe-loading">
-            <div class="spinner"></div>
-            <p class="rtl">جاري تحميل النموذج...</p>
-            <p class="ltr hidden">Loading form...</p>
-          </div>
-          <iframe 
-            src="https://docs.google.com/forms/d/e/1FAIpQLSebMkNGXMPnYx7Pk2puiVX-dimZBvyVPl0ky0Tl1p8B2QLlOA/viewform?embedded=true" 
-            loading="lazy">
-          </iframe>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Legal Notice -->
-  <section class="section">
-    <div class="container">
-      <div class="legal-notice">
-        <h3 class="rtl">إشعار قانوني</h3>
-        <h3 class="ltr hidden">Legal Notice</h3>
-        <p class="rtl">تقدم Egypt Staffing خدمات التوظيف والاستشارات الإدارية فقط. نحن لا نقوم باستخراج تأشيرات أو تحصيل أي رسوم من الباحثين عن عمل. جميع خدماتنا للباحثين عن عمل مجانية بالكامل.</p>
-        <p class="ltr hidden">Egypt Staffing provides recruitment and HR consulting services only. We do not provide visa services or charge job seekers any fees. All our services for job seekers are completely free.</p>
-      </div>
-    </div>
-  </section>
-</main>
-
-<!-- Footer -->
-<footer>
-  <div class="container">
-    <div class="footer-content">
-      <div class="footer-section">
-        <h3 class="rtl">Egypt Staffing</h3>
-        <h3 class="ltr hidden">Egypt Staffing</h3>
-        <p class="rtl" style="color: #cbd5e1;">نربط أصحاب العمل بالعمالة المؤهلة في جميع أنحاء مصر</p>
-        <p class="ltr hidden" style="color: #cbd5e1;">Connecting employers with qualified workforce across Egypt</p>
-      </div>
-      
-      <div class="footer-section">
-        <h3 class="rtl">روابط سريعة</h3>
-        <h3 class="ltr hidden">Quick Links</h3>
-        <ul class="footer-links">
-          <li><a href="#employers" class="rtl">لأصحاب العمل</a><a href="#employers" class="ltr hidden">For Employers</a></li>
-          <li><a href="#candidates" class="rtl">للباحثين عن عمل</a><a href="#candidates" class="ltr hidden">For Job Seekers</a></li>
-          <li><a href="mailto:hussienadly606@gmail.com" class="rtl">اتصل بنا</a><a href="mailto:hussienadly606@gmail.com" class="ltr hidden">Contact Us</a></li>
+        <ul class="mobile-nav-links">
+            <li><a href="#home" class="rtl">الرئيسية</a><a href="#home" class="en hidden">Home</a></li>
+            <li><a href="#categories" class="rtl">القطاعات</a><a href="#categories" class="en hidden">Sectors</a></li>
+            <li><a href="#forms" class="rtl">التوظيف</a><a href="#forms" class="en hidden">Hiring</a></li>
+            <li><a href="#contact" class="rtl">اتصل بنا</a><a href="#contact" class="en hidden">Contact</a></li>
         </ul>
-      </div>
-      
-      <div class="footer-section">
-        <h3 class="rtl">معلومات التواصل</h3>
-        <h3 class="ltr hidden">Contact Information</h3>
-        <div class="contact-info">
-          <p><i class="fas fa-envelope"></i> hussienadly606@gmail.com</p>
-          <p><i class="fab fa-whatsapp"></i> +20 102 805 2445</p>
-          <p class="rtl"><i class="fas fa-map-marker-alt"></i> خدمة في جميع محافظات مصر</p>
-          <p class="ltr hidden"><i class="fas fa-map-marker-alt"></i> Service available across all Egyptian governorates</p>
+        <div class="lang-switcher" style="margin-top: 30px;">
+            <button class="lang-btn active" data-lang="ar">عربي</button>
+            <button class="lang-btn" data-lang="en">English</button>
         </div>
-      </div>
     </div>
-    
-    <div class="copyright">
-      <p class="rtl">© 2025 Egypt Staffing. جميع الحقوق محفوظة.</p>
-      <p class="ltr hidden">© 2025 Egypt Staffing. All rights reserved.</p>
-      <p class="rtl">نحن لا نتقاضى أي رسوم من الباحثين عن عمل.</p>
-      <p class="ltr hidden">We do not charge job seekers any fees.</p>
-    </div>
-  </div>
-</footer>
+    <div class="overlay" id="overlay"></div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Language switching functionality
-    const langButtons = document.querySelectorAll('.lang-btn');
-    const rtlElements = document.querySelectorAll('.rtl');
-    const ltrElements = document.querySelectorAll('.ltr');
-    
-    // Set initial language to Arabic
-    setLanguage('ar');
-    
-    // Add click event to language buttons
-    langButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        const lang = this.getAttribute('data-lang');
-        setLanguage(lang);
-        
-        // Update active button
-        langButtons.forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-      });
-    });
-    
-    function setLanguage(lang) {
-      if (lang === 'ar') {
-        // Show Arabic, hide English
-        rtlElements.forEach(el => el.classList.remove('hidden'));
-        ltrElements.forEach(el => el.classList.add('hidden'));
-        
-        // Change HTML direction
-        document.documentElement.dir = 'rtl';
-        document.documentElement.lang = 'ar';
-      } else {
-        // Show English, hide Arabic
-        rtlElements.forEach(el => el.classList.add('hidden'));
-        ltrElements.forEach(el => el.classList.remove('hidden'));
-        
-        // Change HTML direction
-        document.documentElement.dir = 'ltr';
-        document.documentElement.lang = 'en';
-      }
-      
-      // Save language preference
-      localStorage.setItem('preferred-language', lang);
-    }
-    
-    // Check for saved language preference
-    const savedLang = localStorage.getItem('preferred-language');
-    if (savedLang && savedLang !== 'ar') {
-      setLanguage(savedLang);
-      langButtons.forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.getAttribute('data-lang') === savedLang) {
-          btn.classList.add('active');
-        }
-      });
-    }
-    
-    // Handle iframe loading
-    const iframes = document.querySelectorAll('iframe');
-    const loadingElements = document.querySelectorAll('.iframe-loading');
-    
-    iframes.forEach((iframe, index) => {
-      iframe.addEventListener('load', function() {
-        if (loadingElements[index]) {
-          loadingElements[index].style.display = 'none';
-        }
-      });
-      
-      // Fallback in case iframe doesn't load properly
-      setTimeout(() => {
-        if (loadingElements[index] && loadingElements[index].style.display !== 'none') {
-          loadingElements[index].style.display = 'none';
-        }
-      }, 5000);
-    });
-    
-    // Add animation to cards on scroll
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('fade-in-up');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-    
-    // Observe all cards
-    document.querySelectorAll('.card').forEach(card => {
-      observer.observe(card);
-    });
-    
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          window.scrollTo({
-            top: targetElement.offsetTop - 80,
-            behavior: 'smooth'
-          });
-        }
-      });
-    });
-  });
-</script>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="rtl">توظيف احترافي للفنادق والمصانع والشركات في مصر</h1>
+                <h1 class="en hidden">Professional Staffing for Hotels, Factories & Companies in Egypt</h1>
+                <p class="rtl">نوفر لك أفضل الكوادر المؤهلة والمدربة للعمل في الفنادق والمصانع والشركات في جميع محافظات مصر. نوفر الوقت والجهد في عملية التوظيف ونضمن لك عمالة موثوقة وجاهزة للعمل.</p>
+                <p class="en hidden">We provide you with the best qualified and trained cadres to work in hotels, factories and companies in all governorates of Egypt. We save you time and effort in the recruitment process and guarantee you reliable and work-ready labor.</p>
+                <div class="cta-buttons">
+                    <a href="#forms" class="btn btn-primary rtl">التوظيف الآن</a>
+                    <a href="#forms" class="btn btn-primary en hidden">Hire Now</a>
+                    <a href="#contact" class="btn btn-outline rtl">تواصل معنا</a>
+                    <a href="#contact" class="btn btn-outline en hidden">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section stats-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title rtl">أرقام تبرز ثقتنا</h2>
+                <h2 class="section-title en hidden">Numbers That Highlight Our Trust</h2>
+                <p class="section-subtitle rtl">نعمل باحترافية لنكون الشريك الموثوق لتوظيف العمالة في مصر</p>
+                <p class="section-subtitle en hidden">We work professionally to be the trusted partner for manpower recruitment in Egypt</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-hotel"></i>
+                    </div>
+                    <div class="stat-number">500+</div>
+                    <div class="stat-text rtl">فندق ومنتجع</div>
+                    <div class="stat-text en hidden">Hotels & Resorts</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <div class="stat-number">300+</div>
+                    <div class="stat-text rtl">مصنع وشركة</div>
+                    <div class="stat-text en hidden">Factories & Companies</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number">10,000+</div>
+                    <div class="stat-text rtl">باحث عن عمل</div>
+                    <div class="stat-text en hidden">Job Seekers</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="stat-number">27</div>
+                    <div class="stat-text rtl">محافظة مصرية</div>
+                    <div class="stat-text en hidden">Egyptian Governorates</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="section categories-section" id="categories">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title rtl">القطاعات المتخصصة</h2>
+                <h2 class="section-title en hidden">Specialized Sectors</h2>
+                <p class="section-subtitle rtl">نوفر عمالة مؤهلة ومتدربة في جميع التخصصات الفندقية والصناعية والإدارية</p>
+                <p class="section-subtitle en hidden">We provide qualified and trained manpower in all hotel, industrial and administrative specialties</p>
+            </div>
+            <div class="categories-grid">
+                <!-- Hotels Card -->
+                <div class="category-card fade-in">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="الفنادق والمنتجعات في مصر">
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title rtl">الفنادق والمنتجعات</h3>
+                        <h3 class="category-title en hidden">Hotels & Resorts</h3>
+                        <p class="category-desc rtl">نوفر جميع التخصصات الفندقية: الإدارة، المطاعم، خدمات الغرف، الاستقبال، الطهاة، النظافة، الأمن، وغيرها من الوظائف الفندقية المتخصصة.</p>
+                        <p class="category-desc en hidden">We provide all hotel specialties: management, restaurants, room service, reception, chefs, cleaning, security, and other specialized hotel jobs.</p>
+                        <a href="#forms" class="btn btn-primary rtl" style="padding: 12px 25px;">توظيف في الفنادق</a>
+                        <a href="#forms" class="btn btn-primary en hidden" style="padding: 12px 25px;">Hotel Staffing</a>
+                    </div>
+                </div>
+
+                <!-- Factories Card -->
+                <div class="category-card fade-in">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="المصانع في مصر">
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title rtl">المصانع والصناعات</h3>
+                        <h3 class="category-title en hidden">Factories & Industries</h3>
+                        <p class="category-desc rtl">عمالة مدربة في جميع التخصصات الصناعية: الإنتاج، الجودة، الصيانة، التشغيل، اللوجستيات، التخزين، وغيرها من الوظائف الصناعية.</p>
+                        <p class="category-desc en hidden">Trained labor in all industrial specialties: production, quality, maintenance, operation, logistics, storage, and other industrial jobs.</p>
+                        <a href="#forms" class="btn btn-primary rtl" style="padding: 12px 25px;">توظيف في المصانع</a>
+                        <a href="#forms" class="btn btn-primary en hidden" style="padding: 12px 25px;">Factory Staffing</a>
+                    </div>
+                </div>
+
+                <!-- Companies Card -->
+                <div class="category-card fade-in">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="الشركات في مصر">
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title rtl">الشركات والمؤسسات</h3>
+                        <h3 class="category-title en hidden">Companies & Organizations</h3>
+                        <p class="category-desc rtl">كوادر إدارية ومهنية متخصصة: المحاسبة، المبيعات، التسويق، خدمة العملاء، الموارد البشرية، التكنولوجيا، وغيرها من الوظائف الإدارية.</p>
+                        <p class="category-desc en hidden">Administrative and professional specialized cadres: accounting, sales, marketing, customer service, human resources, technology, and other administrative jobs.</p>
+                        <a href="#forms" class="btn btn-primary rtl" style="padding: 12px 25px;">توظيف في الشركات</a>
+                        <a href="#forms" class="btn btn-primary en hidden" style="padding: 12px 25px;">Company Staffing</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Forms Section -->
+    <section class="section forms-section" id="forms">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title rtl">نظام التوظيف</h2>
+                <h2 class="section-title en hidden">Hiring System</h2>
+                <p class="section-subtitle rtl">اختر القطاع المناسب واملأ النموذج الخاص به للتوظيف السريع والمضمون</p>
+                <p class="section-subtitle en hidden">Choose the appropriate sector and fill out its form for fast and guaranteed employment</p>
+            </div>
+
+            <div class="forms-tabs">
+                <button class="tab-btn active" data-tab="hotels">
+                    <i class="fas fa-hotel"></i>
+                    <span class="rtl">الفنادق والمنتجعات</span>
+                    <span class="en hidden">Hotels & Resorts</span>
+                </button>
+                <button class="tab-btn" data-tab="factories">
+                    <i class="fas fa-industry"></i>
+                    <span class="rtl">المصانع</span>
+                    <span class="en hidden">Factories</span>
+                </button>
+                <button class="tab-btn" data-tab="companies">
+                    <i class="fas fa-building"></i>
+                    <span class="rtl">الشركات</span>
+                    <span class="en hidden">Companies</span>
+                </button>
+                <button class="tab-btn" data-tab="jobseekers">
+                    <i class="fas fa-user-tie"></i>
+                    <span class="rtl">الباحثين عن عمل</span>
+                    <span class="en hidden">Job Seekers</span>
+                </button>
+            </div>
+
+            <div class="form-container">
+                <!-- Hotels Form -->
+                <div class="tab-content active" id="hotels-tab">
+                    <iframe class="form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSe6Nk26A6Ogy8a_E1KvFf-gJJgjl28izTgimlqLV4n4uV42mw/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">جاري التحميل...</iframe>
+                </div>
+
+                <!-- Factories Form -->
+                <div class="tab-content" id="factories-tab">
+                    <iframe class="form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSfHhFfrZflhFVz-_jp1K02rPx1IBYKmFOmWHBL3M5ly2PgeHA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">جاري التحميل...</iframe>
+                </div>
+
+                <!-- Companies Form -->
+                <div class="tab-content" id="companies-tab">
+                    <iframe class="form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSdmPH7uOfzS1tHOrULRgUo5IFOj4Lmw6aPS59q04e7ymXk25g/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">جاري التحميل...</iframe>
+                </div>
+
+                <!-- Job Seekers Form -->
+                <div class="tab-content" id="jobseekers-tab">
+                    <iframe class="form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSebMkNGXMPnYx7Pk2puiVX-dimZBvyVPl0ky0Tl1p8B2QLlOA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">جاري التحميل...</iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact-section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" style="color: white;">اتصل بنا</h2>
+                <h2 class="section-title en hidden" style="color: white;">Contact Us</h2>
+                <p class="section-subtitle" style="color: rgba(255, 255, 255, 0.8);">نحن هنا لمساعدتك في جميع استفساراتك واحتياجاتك التوظيفية</p>
+                <p class="section-subtitle en hidden" style="color: rgba(255, 255, 255, 0.8);">We are here to help you with all your inquiries and employment needs</p>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3 class="rtl">معلومات التواصل</h3>
+                    <h3 class="en hidden">Contact Information</h3>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4 class="rtl">البريد الإلكتروني</h4>
+                            <h4 class="en hidden">Email</h4>
+                            <p>hussienadly606@gmail.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-detail">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <h4 class="rtl">واتساب</h4>
+                            <h4 class="en hidden">WhatsApp</h4>
+                            <p>+20 102 805 2445</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <h4 class="rtl">هاتف</h4>
+                            <h4 class="en hidden">Phone</h4>
+                            <p>+20 100 000 0000</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4 class="rtl">خدمة في جميع أنحاء مصر</h4>
+                            <h4 class="en hidden">Service throughout Egypt</h4>
+                            <p class="rtl">نغطي جميع محافظات مصر</p>
+                            <p class="en hidden">We cover all governorates of Egypt</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>Egypt Workforce</h3>
+                    <p class="rtl" style="color: #b0b0b0; margin-bottom: 20px;">المنصة الأولى لتوظيف العمالة في الفنادق والمصانع والشركات في مصر. نضمن لك عمالة موثوقة وجاهزة للعمل.</p>
+                    <p class="en hidden" style="color: #b0b0b0; margin-bottom: 20px;">The first platform for staffing in hotels, factories and companies in Egypt. We guarantee you reliable and work-ready labor.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="rtl">روابط سريعة</h3>
+                    <h3 class="en hidden">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home" class="rtl">الرئيسية</a><a href="#home" class="en hidden">Home</a></li>
+                        <li><a href="#categories" class="rtl">القطاعات</a><a href="#categories" class="en hidden">Sectors</a></li>
+                        <li><a href="#forms" class="rtl">التوظيف</a><a href="#forms" class="en hidden">Hiring</a></li>
+                        <li><a href="#contact" class="rtl">اتصل بنا</a><a href="#contact" class="en hidden">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="rtl">القطاعات</h3>
+                    <h3 class="en hidden">Sectors</h3>
+                    <ul class="footer-links">
+                        <li><a href="#forms" data-tab="hotels" class="rtl">الفنادق والمنتجعات</a><a href="#forms" data-tab="hotels" class="en hidden">Hotels & Resorts</a></li>
+                        <li><a href="#forms" data-tab="factories" class="rtl">المصانع</a><a href="#forms" data-tab="factories" class="en hidden">Factories</a></li>
+                        <li><a href="#forms" data-tab="companies" class="rtl">الشركات</a><a href="#forms" data-tab="companies" class="en hidden">Companies</a></li>
+                        <li><a href="#forms" data-tab="jobseekers" class="rtl">الباحثين عن عمل</a><a href="#forms" data-tab="jobseekers" class="en hidden">Job Seekers</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="rtl">تواصل معنا</h3>
+                    <h3 class="en hidden">Connect With Us</h3>
+                    <div style="color: #b0b0b0;">
+                        <p><i class="fas fa-envelope" style="margin-left: 10px;"></i> hussienadly606@gmail.com</p>
+                        <p><i class="fab fa-whatsapp" style="margin-left: 10px;"></i> +20 102 805 2445</p>
+                        <p class="rtl" style="margin-top: 20px;"><i class="fas fa-clock" style="margin-left: 10px;"></i> خدمة 24/7</p>
+                        <p class="en hidden" style="margin-top: 20px;"><i class="fas fa-clock" style="margin-left: 10px;"></i> 24/7 Service</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="rtl">© 2024 Egypt Workforce. جميع الحقوق محفوظة. | نحن لا نتقاضى أي رسوم من الباحثين عن عمل.</p>
+                <p class="en hidden">© 2024 Egypt Workforce. All rights reserved. | We do not charge any fees from job seekers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Language Switching
+            const langButtons = document.querySelectorAll('.lang-btn');
+            const rtlElements = document.querySelectorAll('.rtl');
+            const ltrElements = document.querySelectorAll('.ltr');
+            const html = document.documentElement;
+            
+            function setLanguage(lang) {
+                // Update active button
+                langButtons.forEach(btn => btn.classList.remove('active'));
+                langButtons.forEach(btn => {
+                    if (btn.getAttribute('data-lang') === lang) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                // Show/hide language elements
+                if (lang === 'ar') {
+                    rtlElements.forEach(el => el.classList.remove('hidden'));
+                    ltrElements.forEach(el => el.classList.add('hidden'));
+                    html.setAttribute('dir', 'rtl');
+                    html.setAttribute('lang', 'ar');
+                } else {
+                    rtlElements.forEach(el => el.classList.add('hidden'));
+                    ltrElements.forEach(el => el.classList.remove('hidden'));
+                    html.setAttribute('dir', 'ltr');
+                    html.setAttribute('lang', 'en');
+                }
+                
+                // Save preference
+                localStorage.setItem('preferredLang', lang);
+            }
+            
+            // Load saved language preference
+            const savedLang = localStorage.getItem('preferredLang') || 'ar';
+            setLanguage(savedLang);
+            
+            // Add click events to language buttons
+            langButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    setLanguage(lang);
+                });
+            });
+            
+            // Tab Switching for Forms
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update active tab button
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected tab content
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `${tabId}-tab`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            // Mobile Menu
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const closeMenu = document.getElementById('closeMenu');
+            const overlay = document.getElementById('overlay');
+            
+            menuToggle.addEventListener('click', function() {
+                mobileMenu.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            closeMenu.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+            
+            overlay.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Mobile menu links
+            const mobileLinks = document.querySelectorAll('.mobile-nav-links a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                });
+            });
+            
+            // Header scroll effect
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // Fade in animation on scroll
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(el => observer.observe(el));
+            
+            // Footer links for tabs
+            const footerTabLinks = document.querySelectorAll('a[data-tab]');
+            footerTabLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Switch to forms section
+                    document.getElementById('forms').scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Activate the tab after a short delay
+                    setTimeout(() => {
+                        tabButtons.forEach(b => {
+                            if (b.getAttribute('data-tab') === tabId) {
+                                b.click();
+                            }
+                        });
+                    }, 500);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
