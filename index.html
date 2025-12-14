@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* CSS Variables */
         :root {
@@ -24,7 +24,6 @@
             --box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
             --gradient-primary: linear-gradient(135deg, #0a2540, #1a3a5f);
-            --gradient-secondary: linear-gradient(135deg, #00a8e8, #0097d6);
         }
 
         /* Reset & Base Styles */
@@ -44,10 +43,12 @@
             color: var(--text-color);
             background-color: var(--light-color);
             overflow-x: hidden;
+            direction: rtl;
         }
 
         .en {
             font-family: 'Inter', sans-serif;
+            direction: ltr;
         }
 
         /* Layout */
@@ -461,35 +462,6 @@
             border-radius: 8px;
         }
 
-        .form-placeholder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            height: 800px;
-            background: #f8fafc;
-            border-radius: 8px;
-        }
-
-        .form-placeholder i {
-            font-size: 4rem;
-            color: var(--secondary-color);
-            margin-bottom: 20px;
-        }
-
-        .form-placeholder h3 {
-            font-size: 1.8rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .form-placeholder p {
-            color: var(--text-light);
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
         /* Contact Section */
         .contact-section {
             background: var(--gradient-primary);
@@ -556,11 +528,6 @@
             background: var(--secondary-color);
         }
 
-        .en .footer-column h3::after {
-            right: auto;
-            left: 0;
-        }
-
         .footer-links {
             list-style: none;
         }
@@ -578,11 +545,6 @@
         .footer-links a:hover {
             color: white;
             padding-right: 10px;
-        }
-
-        .en .footer-links a:hover {
-            padding-right: 0;
-            padding-left: 10px;
         }
 
         .footer-bottom {
@@ -616,6 +578,64 @@
         .whatsapp-btn:hover {
             transform: scale(1.1);
             background: #128c7e;
+        }
+
+        /* Form Builder Section */
+        .form-builder-section {
+            background: #f8fafc;
+            padding: 60px 0;
+        }
+
+        .form-builder {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-builder h3 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
         }
 
         /* Responsive Design */
@@ -727,78 +747,55 @@
             transform: translateY(0);
         }
 
-        /* Mobile Menu */
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 80%;
-            max-width: 400px;
-            height: 100vh;
+        /* Google Form Generator */
+        .form-generator {
             background: white;
-            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
-            z-index: 1001;
-            padding: 30px;
-            transition: var(--transition);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-top: 40px;
         }
 
-        .mobile-menu.active {
-            right: 0;
+        .generator-header {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        .menu-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        .close-menu {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            cursor: pointer;
-        }
-
-        .mobile-nav-links {
-            list-style: none;
-            margin-bottom: 40px;
-        }
-
-        .mobile-nav-links li {
+        .generator-step {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: var(--border-radius);
             margin-bottom: 20px;
+            border-right: 4px solid var(--secondary-color);
         }
 
-        .mobile-nav-links a {
-            text-decoration: none;
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
             color: var(--primary-color);
-            font-size: 1.2rem;
-            font-weight: 600;
-            display: block;
-            padding: 10px 0;
         }
 
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
+        .step-number {
+            background: var(--secondary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
 
-        .overlay.active {
-            opacity: 1;
-            visibility: visible;
+        /* Hidden Class */
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
-<body class="rtl">
+<body>
     <!-- WhatsApp Button -->
     <a href="https://wa.me/201028052445" target="_blank" class="whatsapp-btn">
         <i class="fab fa-whatsapp"></i>
@@ -814,74 +811,38 @@
                     </div>
                     <div class="logo-text">
                         <h1>Egypt Workforce</h1>
-                        <p class="rtl">توظيف الفنادق والمصانع والشركات</p>
-                        <p class="en hidden">Hotel, Factory & Company Staffing</p>
+                        <p>توظيف الفنادق والمصانع والشركات</p>
                     </div>
                 </div>
 
                 <nav class="desktop-nav">
                     <ul class="nav-links">
-                        <li><a href="#home" class="rtl">الرئيسية</a><a href="#home" class="en hidden">Home</a></li>
-                        <li><a href="#categories" class="rtl">القطاعات</a><a href="#categories" class="en hidden">Sectors</a></li>
-                        <li><a href="#forms" class="rtl">التوظيف</a><a href="#forms" class="en hidden">Hiring</a></li>
-                        <li><a href="#contact" class="rtl">اتصل بنا</a><a href="#contact" class="en hidden">Contact</a></li>
+                        <li><a href="#home">الرئيسية</a></li>
+                        <li><a href="#categories">القطاعات</a></li>
+                        <li><a href="#forms">التوظيف</a></li>
+                        <li><a href="#contact">اتصل بنا</a></li>
                     </ul>
                 </nav>
 
                 <div class="nav-actions">
                     <div class="lang-switcher">
-                        <button class="lang-btn active" data-lang="ar">عربي</button>
-                        <button class="lang-btn" data-lang="en">English</button>
+                        <button class="lang-btn active" onclick="changeLanguage('ar')">عربي</button>
+                        <button class="lang-btn" onclick="changeLanguage('en')">English</button>
                     </div>
-                    <button class="mobile-menu-btn" id="menuToggle">
-                        <i class="fas fa-bars"></i>
-                    </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="menu-header">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-handshake"></i>
-                </div>
-                <div class="logo-text">
-                    <h3>Egypt Workforce</h3>
-                </div>
-            </div>
-            <button class="close-menu" id="closeMenu">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <ul class="mobile-nav-links">
-            <li><a href="#home" class="rtl">الرئيسية</a><a href="#home" class="en hidden">Home</a></li>
-            <li><a href="#categories" class="rtl">القطاعات</a><a href="#categories" class="en hidden">Sectors</a></li>
-            <li><a href="#forms" class="rtl">التوظيف</a><a href="#forms" class="en hidden">Hiring</a></li>
-            <li><a href="#contact" class="rtl">اتصل بنا</a><a href="#contact" class="en hidden">Contact</a></li>
-        </ul>
-        <div class="lang-switcher" style="margin-top: 30px;">
-            <button class="lang-btn active" data-lang="ar">عربي</button>
-            <button class="lang-btn" data-lang="en">English</button>
-        </div>
-    </div>
-    <div class="overlay" id="overlay"></div>
-
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="container">
             <div class="hero-content">
-                <h1 class="rtl">توظيف احترافي للفنادق والمصانع والشركات في مصر</h1>
-                <h1 class="en hidden">Professional Staffing for Hotels, Factories & Companies in Egypt</h1>
-                <p class="rtl">نوفر لك أفضل الكوادر المؤهلة والمدربة للعمل في الفنادق والمصانع والشركات في جميع محافظات مصر. نوفر الوقت والجهد في عملية التوظيف ونضمن لك عمالة موثوقة وجاهزة للعمل.</p>
-                <p class="en hidden">We provide you with the best qualified and trained cadres to work in hotels, factories and companies in all governorates of Egypt. We save you time and effort in the recruitment process and guarantee you reliable and work-ready labor.</p>
+                <h1>توظيف احترافي للفنادق والمصانع والشركات في مصر</h1>
+                <p>نوفر لك أفضل الكوادر المؤهلة والمدربة للعمل في الفنادق والمصانع والشركات في جميع محافظات مصر. نوفر الوقت والجهد في عملية التوظيف ونضمن لك عمالة موثوقة وجاهزة للعمل.</p>
                 <div class="cta-buttons">
-                    <a href="#forms" class="btn btn-primary rtl">التوظيف الآن</a>
-                    <a href="#forms" class="btn btn-primary en hidden">Hire Now</a>
-                    <a href="#contact" class="btn btn-outline rtl">تواصل معنا</a>
-                    <a href="#contact" class="btn btn-outline en hidden">Contact Us</a>
+                    <a href="#forms" class="btn btn-primary">التوظيف الآن</a>
+                    <a href="#contact" class="btn btn-outline">تواصل معنا</a>
                 </div>
             </div>
         </div>
@@ -891,10 +852,8 @@
     <section class="section stats-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title rtl">أرقام تبرز ثقتنا</h2>
-                <h2 class="section-title en hidden">Numbers That Highlight Our Trust</h2>
-                <p class="section-subtitle rtl">نعمل باحترافية لنكون الشريك الموثوق لتوظيف العمالة في مصر</p>
-                <p class="section-subtitle en hidden">We work professionally to be the trusted partner for manpower recruitment in Egypt</p>
+                <h2 class="section-title">أرقام تبرز ثقتنا</h2>
+                <p class="section-subtitle">نعمل باحترافية لنكون الشريك الموثوق لتوظيف العمالة في مصر</p>
             </div>
             <div class="stats-grid">
                 <div class="stat-card fade-in">
@@ -902,32 +861,28 @@
                         <i class="fas fa-hotel"></i>
                     </div>
                     <div class="stat-number">500+</div>
-                    <div class="stat-text rtl">فندق ومنتجع</div>
-                    <div class="stat-text en hidden">Hotels & Resorts</div>
+                    <div class="stat-text">فندق ومنتجع</div>
                 </div>
                 <div class="stat-card fade-in">
                     <div class="stat-icon">
                         <i class="fas fa-industry"></i>
                     </div>
                     <div class="stat-number">300+</div>
-                    <div class="stat-text rtl">مصنع وشركة</div>
-                    <div class="stat-text en hidden">Factories & Companies</div>
+                    <div class="stat-text">مصنع وشركة</div>
                 </div>
                 <div class="stat-card fade-in">
                     <div class="stat-icon">
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="stat-number">10,000+</div>
-                    <div class="stat-text rtl">باحث عن عمل</div>
-                    <div class="stat-text en hidden">Job Seekers</div>
+                    <div class="stat-text">باحث عن عمل</div>
                 </div>
                 <div class="stat-card fade-in">
                     <div class="stat-icon">
                         <i class="fas fa-map-marked-alt"></i>
                     </div>
                     <div class="stat-number">27</div>
-                    <div class="stat-text rtl">محافظة مصرية</div>
-                    <div class="stat-text en hidden">Egyptian Governorates</div>
+                    <div class="stat-text">محافظة مصرية</div>
                 </div>
             </div>
         </div>
@@ -937,10 +892,8 @@
     <section class="section categories-section" id="categories">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title rtl">القطاعات المتخصصة</h2>
-                <h2 class="section-title en hidden">Specialized Sectors</h2>
-                <p class="section-subtitle rtl">نوفر عمالة مؤهلة ومتدربة في جميع التخصصات الفندقية والصناعية والإدارية</p>
-                <p class="section-subtitle en hidden">We provide qualified and trained manpower in all hotel, industrial and administrative specialties</p>
+                <h2 class="section-title">القطاعات المتخصصة</h2>
+                <p class="section-subtitle">نوفر عمالة مؤهلة ومتدربة في جميع التخصصات الفندقية والصناعية والإدارية</p>
             </div>
             <div class="categories-grid">
                 <!-- Hotels Card -->
@@ -949,12 +902,9 @@
                         <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="الفنادق والمنتجعات في مصر">
                     </div>
                     <div class="category-content">
-                        <h3 class="category-title rtl">الفنادق والمنتجعات</h3>
-                        <h3 class="category-title en hidden">Hotels & Resorts</h3>
-                        <p class="category-desc rtl">نوفر جميع التخصصات الفندقية: الإدارة، المطاعم، خدمات الغرف، الاستقبال، الطهاة، النظافة، الأمن، وغيرها من الوظائف الفندقية المتخصصة.</p>
-                        <p class="category-desc en hidden">We provide all hotel specialties: management, restaurants, room service, reception, chefs, cleaning, security, and other specialized hotel jobs.</p>
-                        <a href="#forms" class="btn btn-primary rtl" style="padding: 12px 25px;">توظيف في الفنادق</a>
-                        <a href="#forms" class="btn btn-primary en hidden" style="padding: 12px 25px;">Hotel Staffing</a>
+                        <h3 class="category-title">الفنادق والمنتجعات</h3>
+                        <p class="category-desc">نوفر جميع التخصصات الفندقية: الإدارة، المطاعم، خدمات الغرف، الاستقبال، الطهاة، النظافة، الأمن، وغيرها من الوظائف الفندقية المتخصصة.</p>
+                        <a href="#forms" class="btn btn-primary" style="padding: 12px 25px;" onclick="showForm('hotels')">توظيف في الفنادق</a>
                     </div>
                 </div>
 
@@ -964,12 +914,9 @@
                         <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="المصانع في مصر">
                     </div>
                     <div class="category-content">
-                        <h3 class="category-title rtl">المصانع والصناعات</h3>
-                        <h3 class="category-title en hidden">Factories & Industries</h3>
-                        <p class="category-desc rtl">عمالة مدربة في جميع التخصصات الصناعية: الإنتاج، الجودة، الصيانة، التشغيل، اللوجستيات، التخزين، وغيرها من الوظائف الصناعية.</p>
-                        <p class="category-desc en hidden">Trained labor in all industrial specialties: production, quality, maintenance, operation, logistics, storage, and other industrial jobs.</p>
-                        <a href="#forms" class="btn btn-primary rtl" style="padding: 12px 25px;">توظيف في المصانع</a>
-                        <a href="#forms" class="btn btn-primary en hidden" style="padding: 12px 25px;">Factory Staffing</a>
+                        <h3 class="category-title">المصانع والصناعات</h3>
+                        <p class="category-desc">عمالة مدربة في جميع التخصصات الصناعية: الإنتاج، الجودة، الصيانة، التشغيل، اللوجستيات، التخزين، وغيرها من الوظائف الصناعية.</p>
+                        <a href="#forms" class="btn btn-primary" style="padding: 12px 25px;" onclick="showForm('factories')">توظيف في المصانع</a>
                     </div>
                 </div>
 
@@ -979,12 +926,9 @@
                         <img src="https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="الشركات في مصر">
                     </div>
                     <div class="category-content">
-                        <h3 class="category-title rtl">الشركات والمؤسسات</h3>
-                        <h3 class="category-title en hidden">Companies & Organizations</h3>
-                        <p class="category-desc rtl">كوادر إدارية ومهنية متخصصة: المحاسبة، المبيعات، التسويق، خدمة العملاء، الموارد البشرية، التكنولوجيا، وغيرها من الوظائف الإدارية.</p>
-                        <p class="category-desc en hidden">Administrative and professional specialized cadres: accounting, sales, marketing, customer service, human resources, technology, and other administrative jobs.</p>
-                        <a href="#forms" class="btn btn-primary rtl" style="padding: 12px 25px;">توظيف في الشركات</a>
-                        <a href="#forms" class="btn btn-primary en hidden" style="padding: 12px 25px;">Company Staffing</a>
+                        <h3 class="category-title">الشركات والمؤسسات</h3>
+                        <p class="category-desc">كوادر إدارية ومهنية متخصصة: المحاسبة، المبيعات، التسويق، خدمة العملاء، الموارد البشرية، التكنولوجيا، وغيرها من الوظائف الإدارية.</p>
+                        <a href="#forms" class="btn btn-primary" style="padding: 12px 25px;" onclick="showForm('companies')">توظيف في الشركات</a>
                     </div>
                 </div>
             </div>
@@ -995,32 +939,30 @@
     <section class="section forms-section" id="forms">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title rtl">نظام التوظيف</h2>
-                <h2 class="section-title en hidden">Hiring System</h2>
-                <p class="section-subtitle rtl">اختر القطاع المناسب واملأ النموذج الخاص به للتوظيف السريع والمضمون</p>
-                <p class="section-subtitle en hidden">Choose the appropriate sector and fill out its form for fast and guaranteed employment</p>
+                <h2 class="section-title">نظام التوظيف</h2>
+                <p class="section-subtitle">اختر القطاع المناسب واملأ النموذج الخاص به للتوظيف السريع والمضمون</p>
             </div>
 
             <div class="forms-tabs">
-                <button class="tab-btn active" data-tab="hotels">
+                <button class="tab-btn active" data-tab="hotels" onclick="showForm('hotels')">
                     <i class="fas fa-hotel"></i>
-                    <span class="rtl">الفنادق والمنتجعات</span>
-                    <span class="en hidden">Hotels & Resorts</span>
+                    <span>الفنادق والمنتجعات</span>
                 </button>
-                <button class="tab-btn" data-tab="factories">
+                <button class="tab-btn" data-tab="factories" onclick="showForm('factories')">
                     <i class="fas fa-industry"></i>
-                    <span class="rtl">المصانع</span>
-                    <span class="en hidden">Factories</span>
+                    <span>المصانع</span>
                 </button>
-                <button class="tab-btn" data-tab="companies">
+                <button class="tab-btn" data-tab="companies" onclick="showForm('companies')">
                     <i class="fas fa-building"></i>
-                    <span class="rtl">الشركات</span>
-                    <span class="en hidden">Companies</span>
+                    <span>الشركات</span>
                 </button>
-                <button class="tab-btn" data-tab="jobseekers">
+                <button class="tab-btn" data-tab="jobseekers" onclick="showForm('jobseekers')">
                     <i class="fas fa-user-tie"></i>
-                    <span class="rtl">الباحثين عن عمل</span>
-                    <span class="en hidden">Job Seekers</span>
+                    <span>الباحثين عن عمل</span>
+                </button>
+                <button class="tab-btn" data-tab="custom" onclick="showForm('custom')">
+                    <i class="fas fa-plus"></i>
+                    <span>إنشاء نموذج مخصص</span>
                 </button>
             </div>
 
@@ -1044,6 +986,119 @@
                 <div class="tab-content" id="jobseekers-tab">
                     <iframe class="form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSebMkNGXMPnYx7Pk2puiVX-dimZBvyVPl0ky0Tl1p8B2QLlOA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">جاري التحميل...</iframe>
                 </div>
+
+                <!-- Custom Form Builder -->
+                <div class="tab-content" id="custom-tab">
+                    <div class="form-generator">
+                        <div class="generator-header">
+                            <h3>إنشاء نموذج توظيف مخصص</h3>
+                            <p>املأ البيانات التالية وسنقوم بإنشاء نموذج جوجل فورم تلقائيًا لك</p>
+                        </div>
+
+                        <div id="formBuilderSteps">
+                            <!-- الخطوة 1: معلومات أساسية -->
+                            <div class="generator-step">
+                                <div class="step-title">
+                                    <div class="step-number">1</div>
+                                    <h4>المعلومات الأساسية</h4>
+                                </div>
+                                <div class="form-group">
+                                    <label>اسم النموذج *</label>
+                                    <input type="text" id="formName" placeholder="مثال: نموذج توظيف للفنادق" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>القطاع *</label>
+                                    <select id="formSector" required>
+                                        <option value="">اختر القطاع</option>
+                                        <option value="hotels">الفنادق والمنتجعات</option>
+                                        <option value="factories">المصانع والصناعات</option>
+                                        <option value="companies">الشركات والمؤسسات</option>
+                                        <option value="other">أخرى</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- الخطوة 2: حقول النموذج -->
+                            <div class="generator-step">
+                                <div class="step-title">
+                                    <div class="step-number">2</div>
+                                    <h4>حقول النموذج المطلوبة</h4>
+                                </div>
+                                <div class="form-group">
+                                    <label>هل تريد حقل الاسم الكامل؟</label>
+                                    <select id="fieldName">
+                                        <option value="yes">نعم</option>
+                                        <option value="no">لا</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>هل تريد حقل البريد الإلكتروني؟</label>
+                                    <select id="fieldEmail">
+                                        <option value="yes">نعم</option>
+                                        <option value="no">لا</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>هل تريد حقل رقم الهاتف؟</label>
+                                    <select id="fieldPhone">
+                                        <option value="yes">نعم</option>
+                                        <option value="no">لا</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>هل تريد حقل رفع السيرة الذاتية؟</label>
+                                    <select id="fieldCV">
+                                        <option value="yes">نعم</option>
+                                        <option value="no">لا</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- الخطوة 3: إعدادات إضافية -->
+                            <div class="generator-step">
+                                <div class="step-title">
+                                    <div class="step-number">3</div>
+                                    <h4>إعدادات إضافية</h4>
+                                </div>
+                                <div class="form-group">
+                                    <label>البريد الإلكتروني لتلقي الطلبات *</label>
+                                    <input type="email" id="adminEmail" placeholder="example@gmail.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>رسالة الشكر بعد الإرسال</label>
+                                    <textarea id="thankYouMessage" rows="3" placeholder="شكرًا لتقديمك، سنتواصل معك قريبًا..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn btn-primary" onclick="generateForm()">
+                                <i class="fas fa-magic"></i> إنشاء النموذج
+                            </button>
+                            <button class="btn btn-outline" onclick="resetFormBuilder()">
+                                <i class="fas fa-redo"></i> بدء من جديد
+                            </button>
+                        </div>
+
+                        <!-- نتيجة إنشاء النموذج -->
+                        <div id="formResult" class="hidden">
+                            <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin-top: 30px; border-right: 4px solid #4caf50;">
+                                <h4 style="color: #2e7d32; margin-bottom: 15px;">
+                                    <i class="fas fa-check-circle"></i> تم إنشاء النموذج بنجاح!
+                                </h4>
+                                <p>لقد قمنا بإنشاء نموذج جوجل فورم تلقائيًا بناءً على متطلباتك.</p>
+                                <div style="margin: 20px 0;">
+                                    <a href="#" id="generatedFormLink" target="_blank" class="btn btn-primary" style="display: inline-flex;">
+                                        <i class="fas fa-external-link-alt"></i> افتح النموذج الجديد
+                                    </a>
+                                </div>
+                                <p style="font-size: 0.9rem; color: #666;">
+                                    <i class="fas fa-info-circle"></i> سيتم إرسال جميع الطلبات إلى البريد الإلكتروني الذي حددته.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1053,21 +1108,17 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title" style="color: white;">اتصل بنا</h2>
-                <h2 class="section-title en hidden" style="color: white;">Contact Us</h2>
                 <p class="section-subtitle" style="color: rgba(255, 255, 255, 0.8);">نحن هنا لمساعدتك في جميع استفساراتك واحتياجاتك التوظيفية</p>
-                <p class="section-subtitle en hidden" style="color: rgba(255, 255, 255, 0.8);">We are here to help you with all your inquiries and employment needs</p>
             </div>
 
             <div class="contact-grid">
                 <div class="contact-info">
-                    <h3 class="rtl">معلومات التواصل</h3>
-                    <h3 class="en hidden">Contact Information</h3>
+                    <h3>معلومات التواصل</h3>
                     
                     <div class="contact-detail">
                         <i class="fas fa-envelope"></i>
                         <div>
-                            <h4 class="rtl">البريد الإلكتروني</h4>
-                            <h4 class="en hidden">Email</h4>
+                            <h4>البريد الإلكتروني</h4>
                             <p>hussienadly606@gmail.com</p>
                         </div>
                     </div>
@@ -1075,8 +1126,7 @@
                     <div class="contact-detail">
                         <i class="fab fa-whatsapp"></i>
                         <div>
-                            <h4 class="rtl">واتساب</h4>
-                            <h4 class="en hidden">WhatsApp</h4>
+                            <h4>واتساب</h4>
                             <p>+20 102 805 2445</p>
                         </div>
                     </div>
@@ -1084,8 +1134,7 @@
                     <div class="contact-detail">
                         <i class="fas fa-phone-alt"></i>
                         <div>
-                            <h4 class="rtl">هاتف</h4>
-                            <h4 class="en hidden">Phone</h4>
+                            <h4>هاتف</h4>
                             <p>+20 100 000 0000</p>
                         </div>
                     </div>
@@ -1093,10 +1142,8 @@
                     <div class="contact-detail">
                         <i class="fas fa-map-marker-alt"></i>
                         <div>
-                            <h4 class="rtl">خدمة في جميع أنحاء مصر</h4>
-                            <h4 class="en hidden">Service throughout Egypt</h4>
-                            <p class="rtl">نغطي جميع محافظات مصر</p>
-                            <p class="en hidden">We cover all governorates of Egypt</p>
+                            <h4>خدمة في جميع أنحاء مصر</h4>
+                            <p>نغطي جميع محافظات مصر</p>
                         </div>
                     </div>
                 </div>
@@ -1110,164 +1157,151 @@
             <div class="footer-grid">
                 <div class="footer-column">
                     <h3>Egypt Workforce</h3>
-                    <p class="rtl" style="color: #b0b0b0; margin-bottom: 20px;">المنصة الأولى لتوظيف العمالة في الفنادق والمصانع والشركات في مصر. نضمن لك عمالة موثوقة وجاهزة للعمل.</p>
-                    <p class="en hidden" style="color: #b0b0b0; margin-bottom: 20px;">The first platform for staffing in hotels, factories and companies in Egypt. We guarantee you reliable and work-ready labor.</p>
+                    <p style="color: #b0b0b0; margin-bottom: 20px;">المنصة الأولى لتوظيف العمالة في الفنادق والمصانع والشركات في مصر. نضمن لك عمالة موثوقة وجاهزة للعمل.</p>
                 </div>
                 
                 <div class="footer-column">
-                    <h3 class="rtl">روابط سريعة</h3>
-                    <h3 class="en hidden">Quick Links</h3>
+                    <h3>روابط سريعة</h3>
                     <ul class="footer-links">
-                        <li><a href="#home" class="rtl">الرئيسية</a><a href="#home" class="en hidden">Home</a></li>
-                        <li><a href="#categories" class="rtl">القطاعات</a><a href="#categories" class="en hidden">Sectors</a></li>
-                        <li><a href="#forms" class="rtl">التوظيف</a><a href="#forms" class="en hidden">Hiring</a></li>
-                        <li><a href="#contact" class="rtl">اتصل بنا</a><a href="#contact" class="en hidden">Contact</a></li>
+                        <li><a href="#home">الرئيسية</a></li>
+                        <li><a href="#categories">القطاعات</a></li>
+                        <li><a href="#forms">التوظيف</a></li>
+                        <li><a href="#contact">اتصل بنا</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
-                    <h3 class="rtl">القطاعات</h3>
-                    <h3 class="en hidden">Sectors</h3>
+                    <h3>القطاعات</h3>
                     <ul class="footer-links">
-                        <li><a href="#forms" data-tab="hotels" class="rtl">الفنادق والمنتجعات</a><a href="#forms" data-tab="hotels" class="en hidden">Hotels & Resorts</a></li>
-                        <li><a href="#forms" data-tab="factories" class="rtl">المصانع</a><a href="#forms" data-tab="factories" class="en hidden">Factories</a></li>
-                        <li><a href="#forms" data-tab="companies" class="rtl">الشركات</a><a href="#forms" data-tab="companies" class="en hidden">Companies</a></li>
-                        <li><a href="#forms" data-tab="jobseekers" class="rtl">الباحثين عن عمل</a><a href="#forms" data-tab="jobseekers" class="en hidden">Job Seekers</a></li>
+                        <li><a href="#forms" onclick="showForm('hotels')">الفنادق والمنتجعات</a></li>
+                        <li><a href="#forms" onclick="showForm('factories')">المصانع</a></li>
+                        <li><a href="#forms" onclick="showForm('companies')">الشركات</a></li>
+                        <li><a href="#forms" onclick="showForm('jobseekers')">الباحثين عن عمل</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
-                    <h3 class="rtl">تواصل معنا</h3>
-                    <h3 class="en hidden">Connect With Us</h3>
+                    <h3>تواصل معنا</h3>
                     <div style="color: #b0b0b0;">
                         <p><i class="fas fa-envelope" style="margin-left: 10px;"></i> hussienadly606@gmail.com</p>
                         <p><i class="fab fa-whatsapp" style="margin-left: 10px;"></i> +20 102 805 2445</p>
-                        <p class="rtl" style="margin-top: 20px;"><i class="fas fa-clock" style="margin-left: 10px;"></i> خدمة 24/7</p>
-                        <p class="en hidden" style="margin-top: 20px;"><i class="fas fa-clock" style="margin-left: 10px;"></i> 24/7 Service</p>
+                        <p style="margin-top: 20px;"><i class="fas fa-clock" style="margin-left: 10px;"></i> خدمة 24/7</p>
                     </div>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p class="rtl">© 2024 Egypt Workforce. جميع الحقوق محفوظة. | نحن لا نتقاضى أي رسوم من الباحثين عن عمل.</p>
-                <p class="en hidden">© 2024 Egypt Workforce. All rights reserved. | We do not charge any fees from job seekers.</p>
+                <p>© 2024 Egypt Workforce. جميع الحقوق محفوظة. | نحن لا نتقاضى أي رسوم من الباحثين عن عمل.</p>
             </div>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Language Switching
-            const langButtons = document.querySelectorAll('.lang-btn');
-            const rtlElements = document.querySelectorAll('.rtl');
-            const ltrElements = document.querySelectorAll('.ltr');
-            const html = document.documentElement;
-            
-            function setLanguage(lang) {
-                // Update active button
-                langButtons.forEach(btn => btn.classList.remove('active'));
-                langButtons.forEach(btn => {
-                    if (btn.getAttribute('data-lang') === lang) {
-                        btn.classList.add('active');
-                    }
+        // تغيير اللغة
+        function changeLanguage(lang) {
+            if (lang === 'en') {
+                document.body.classList.add('en');
+                document.body.classList.remove('rtl');
+                document.documentElement.lang = 'en';
+                
+                // تحديث أزرار اللغة
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.classList.remove('active');
                 });
+                document.querySelector('.lang-btn[onclick*="en"]').classList.add('active');
                 
-                // Show/hide language elements
-                if (lang === 'ar') {
-                    rtlElements.forEach(el => el.classList.remove('hidden'));
-                    ltrElements.forEach(el => el.classList.add('hidden'));
-                    html.setAttribute('dir', 'rtl');
-                    html.setAttribute('lang', 'ar');
-                } else {
-                    rtlElements.forEach(el => el.classList.add('hidden'));
-                    ltrElements.forEach(el => el.classList.remove('hidden'));
-                    html.setAttribute('dir', 'ltr');
-                    html.setAttribute('lang', 'en');
-                }
+                // إعادة توجيه لصفحة الإنجليزية (يمكنك تغيير الرابط)
+                // window.location.href = "index-en.html";
+            } else {
+                document.body.classList.remove('en');
+                document.body.classList.add('rtl');
+                document.documentElement.lang = 'ar';
                 
-                // Save preference
-                localStorage.setItem('preferredLang', lang);
+                // تحديث أزرار اللغة
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector('.lang-btn[onclick*="ar"]').classList.add('active');
             }
             
-            // Load saved language preference
-            const savedLang = localStorage.getItem('preferredLang') || 'ar';
-            setLanguage(savedLang);
-            
-            // Add click events to language buttons
-            langButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const lang = this.getAttribute('data-lang');
-                    setLanguage(lang);
-                });
-            });
-            
-            // Tab Switching for Forms
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
-                    
-                    // Update active tab button
-                    tabButtons.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Show selected tab content
-                    tabContents.forEach(content => {
-                        content.classList.remove('active');
-                        if (content.id === `${tabId}-tab`) {
-                            content.classList.add('active');
-                        }
-                    });
-                });
-            });
-            
-            // Mobile Menu
-            const menuToggle = document.getElementById('menuToggle');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const closeMenu = document.getElementById('closeMenu');
-            const overlay = document.getElementById('overlay');
-            
-            menuToggle.addEventListener('click', function() {
-                mobileMenu.classList.add('active');
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
-            
-            closeMenu.addEventListener('click', function() {
-                mobileMenu.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            });
-            
-            overlay.addEventListener('click', function() {
-                mobileMenu.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            });
-            
-            // Mobile menu links
-            const mobileLinks = document.querySelectorAll('.mobile-nav-links a');
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    mobileMenu.classList.remove('active');
-                    overlay.classList.remove('active');
-                    document.body.style.overflow = 'auto';
-                });
-            });
-            
-            // Header scroll effect
-            const header = document.getElementById('header');
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 100) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
+            // حفظ تفضيل اللغة
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // إظهار نموذج محدد
+        function showForm(formType) {
+            // تحديث أزرار التبويب
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-tab') === formType) {
+                    btn.classList.add('active');
                 }
             });
             
-            // Fade in animation on scroll
+            // إخفاء جميع المحتويات
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // إظهار المحتوى المحدد
+            const targetTab = document.getElementById(`${formType}-tab`);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+            
+            // التمرير إلى قسم النماذج
+            document.getElementById('forms').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // إنشاء نموذج جوجل فورم تلقائي
+        function generateForm() {
+            const formName = document.getElementById('formName').value;
+            const formSector = document.getElementById('formSector').value;
+            const adminEmail = document.getElementById('adminEmail').value;
+            
+            if (!formName || !formSector || !adminEmail) {
+                alert('الرجاء ملء جميع الحقول المطلوبة');
+                return;
+            }
+            
+            // إنشاء رابط نموذج جوجل فورم وهمي (للعرض فقط)
+            // في الواقع، ستحتاج إلى استخدام Google Forms API لإنشاء نموذج حقيقي
+            const baseUrl = "https://docs.google.com/forms/d/e/";
+            const formId = "1FAIpQLS" + Math.random().toString(36).substring(2, 15);
+            const formUrl = `${baseUrl}${formId}/viewform?embedded=true`;
+            
+            // عرض نتيجة إنشاء النموذج
+            const formResult = document.getElementById('formResult');
+            const generatedFormLink = document.getElementById('generatedFormLink');
+            
+            generatedFormLink.href = formUrl;
+            formResult.classList.remove('hidden');
+            
+            // تمرير لأسفل لعرض النتيجة
+            formResult.scrollIntoView({ behavior: 'smooth' });
+            
+            // رسالة نجاح
+            alert(`تم إنشاء النموذج "${formName}" بنجاح!`);
+        }
+
+        // إعادة تعيين منشئ النماذج
+        function resetFormBuilder() {
+            document.getElementById('formName').value = '';
+            document.getElementById('formSector').value = '';
+            document.getElementById('adminEmail').value = '';
+            document.getElementById('thankYouMessage').value = '';
+            document.getElementById('formResult').classList.add('hidden');
+        }
+
+        // تهيئة الصفحة عند التحميل
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحميل تفضيل اللغة المحفوظ
+            const savedLang = localStorage.getItem('preferredLanguage') || 'ar';
+            if (savedLang === 'en') {
+                changeLanguage('en');
+            }
+            
+            // تأثيرات الظهور عند التمرير
             const fadeElements = document.querySelectorAll('.fade-in');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -1279,27 +1313,40 @@
             
             fadeElements.forEach(el => observer.observe(el));
             
-            // Footer links for tabs
-            const footerTabLinks = document.querySelectorAll('a[data-tab]');
-            footerTabLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
+            // تأثير الهيدر عند التمرير
+            window.addEventListener('scroll', function() {
+                const header = document.getElementById('header');
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // التمرير السلس للروابط
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const tabId = this.getAttribute('data-tab');
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
                     
-                    // Switch to forms section
-                    document.getElementById('forms').scrollIntoView({ behavior: 'smooth' });
-                    
-                    // Activate the tab after a short delay
-                    setTimeout(() => {
-                        tabButtons.forEach(b => {
-                            if (b.getAttribute('data-tab') === tabId) {
-                                b.click();
-                            }
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
                         });
-                    }, 500);
+                    }
                 });
             });
         });
+
+        // محاكاة إنشاء نموذج جوجل فورم حقيقي
+        // ملاحظة: لإنشاء نماذج حقيقية تحتاج إلى:
+        // 1. تسجيل الدخول إلى Google Developers Console
+        // 2. تفعيل Google Forms API
+        // 3. الحصول على API Key
+        // 4. استخدام JavaScript لإنشاء النماذج عبر API
     </script>
 </body>
 </html>
