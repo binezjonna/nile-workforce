@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نيل ورك فورس | توظيف الفنادق والمصانع والشركات في مصر</title>
+    <title>Nile Work Force | توظيف الفنادق والمصانع والشركات في مصر</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,6 +23,7 @@
             --border-radius: 12px;
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             --transition: all 0.3s ease;
+            --card-bg: #ffffff;
         }
 
         * {
@@ -462,6 +463,11 @@
             background: linear-gradient(135deg, var(--success), #2ecc71);
         }
 
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+        }
+
         .message {
             padding: 25px;
             border-radius: var(--border-radius);
@@ -474,6 +480,12 @@
             background: #d4edda;
             color: #155724;
             border: 2px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
         }
 
         @keyframes fadeIn {
@@ -827,7 +839,7 @@
                     <i class="fas fa-handshake"></i>
                 </div>
                 <div class="logo-text">
-                    <h1>نيل ورك فورس</h1>
+                    <h1>Nile Work Force</h1>
                     <p>توظيف الفنادق والمصانع والشركات</p>
                 </div>
             </div>
@@ -876,7 +888,7 @@
                     <div class="stat-icon">
                         <i class="fas fa-hotel"></i>
                     </div>
-                    <span class="stat-number">500+</span>
+                    <span class="stat-number" id="statHotels">500+</span>
                     <span class="stat-text">فندق ومنتجع</span>
                 </div>
                 
@@ -884,7 +896,7 @@
                     <div class="stat-icon">
                         <i class="fas fa-industry"></i>
                     </div>
-                    <span class="stat-number">300+</span>
+                    <span class="stat-number" id="statFactories">300+</span>
                     <span class="stat-text">مصنع وشركة</span>
                 </div>
                 
@@ -892,7 +904,7 @@
                     <div class="stat-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <span class="stat-number">10,000+</span>
+                    <span class="stat-number" id="statApplicants">10,000+</span>
                     <span class="stat-text">باحث عن عمل</span>
                 </div>
                 
@@ -900,7 +912,7 @@
                     <div class="stat-icon">
                         <i class="fas fa-map-marker-alt"></i>
                     </div>
-                    <span class="stat-number">27</span>
+                    <span class="stat-number" id="statGovernorates">27</span>
                     <span class="stat-text">محافظة مصرية</span>
                 </div>
             </div>
@@ -1010,7 +1022,7 @@
                     
                     <div class="form-group">
                         <label for="experience">الخبرة (سنوات) *</label>
-                        <select id="experience" name="experience" required>
+                            <select id="experience" name="experience" required>
                             <option value="">حدد سنوات خبرتك</option>
                             <option value="بدون خبرة">بدون خبرة</option>
                             <option value="1-3 سنوات">من سنة إلى 3 سنوات</option>
@@ -1151,7 +1163,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-col">
-                    <h3>نيل ورك فورس</h3>
+                    <h3>Nile Work Force</h3>
                     <p style="color: #ccc; line-height: 1.8; margin-top: 20px;">
                         المنصة الموثوقة لتوظيف العمالة في الفنادق والمصانع والشركات في جميع أنحاء مصر.
                         نضمن لك عمالة موثوقة وجاهزة للعمل.
@@ -1189,21 +1201,21 @@
             </div>
             
             <div class="copyright">
-                <p>© 2024 نيل ورك فورس. جميع الحقوق محفوظة. | لا نتقاضى أي رسوم من الباحثين عن عمل.</p>
+                <p>© 2024 Nile Work Force. جميع الحقوق محفوظة. | لا نتقاضى أي رسوم من الباحثين عن عمل.</p>
             </div>
         </div>
     </footer>
     
     <script>
         // =========== متغيرات النظام ===========
-        const STORAGE_KEY = 'nileWorkforceApplications_v2';
+        const STORAGE_KEY = 'nileWorkforceApplications_v3';
         const ADMIN_PASSWORD = 'admin123';
         const PHONE_NUMBER = '01028052445';
         const WHATSAPP_NUMBER = '201028052445';
         
         // =========== تهيئة النظام ===========
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 نظام نيل ورك فورس يعمل بنجاح');
+            console.log('🚀 نظام Nile Work Force يعمل بنجاح');
             
             // تفعيل رفع الملفات
             document.getElementById('fileUploadArea').addEventListener('click', function() {
@@ -1232,7 +1244,7 @@
             if (file) {
                 // التحقق من الحجم (5MB كحد أقصى)
                 if (file.size > 5 * 1024 * 1024) {
-                    alert('حجم الملف كبير جدًا. الحد الأقصى المسموح به هو 5MB.');
+                    showMessage('حجم الملف كبير جدًا. الحد الأقصى المسموح به هو 5MB.', 'error');
                     e.target.value = '';
                     uploadText.textContent = 'انقر لرفع السيرة الذاتية';
                     fileName.textContent = '';
@@ -1246,7 +1258,7 @@
                 const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
                 
                 if (!allowedTypes.includes(fileExtension)) {
-                    alert('نوع الملف غير مدعوم. يرجى رفع ملف PDF أو Word فقط.');
+                    showMessage('نوع الملف غير مدعوم. يرجى رفع ملف PDF أو Word فقط.', 'error');
                     e.target.value = '';
                     uploadText.textContent = 'انقر لرفع السيرة الذاتية';
                     fileName.textContent = '';
@@ -1267,19 +1279,30 @@
         document.getElementById('jobApplicationForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // التحقق من رفع الملف
+            // جمع البيانات
             const cvFile = document.getElementById('cv').files[0];
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            
+            // التحقق من البيانات الأساسية
+            if (!fullName || !phone || !email) {
+                showMessage('يرجى ملء جميع الحقول المطلوبة', 'error');
+                return;
+            }
+            
+            // التحقق من رفع الملف
             if (!cvFile) {
                 showMessage('يرجى رفع السيرة الذاتية', 'error');
                 return;
             }
             
-            // جمع البيانات
+            // إنشاء كائن الطلب
             const application = {
                 id: Date.now() + Math.random().toString(36).substr(2, 9),
-                name: document.getElementById('fullName').value.trim(),
-                phone: document.getElementById('phone').value.trim(),
-                email: document.getElementById('email').value.trim(),
+                name: fullName,
+                phone: phone,
+                email: email,
                 governorate: document.getElementById('governorate').value,
                 sector: document.getElementById('sector').value,
                 experience: document.getElementById('experience').value,
@@ -1293,12 +1316,6 @@
                 timestamp: Date.now(),
                 status: 'جديد'
             };
-            
-            // التحقق من البيانات
-            if (!application.name || !application.phone || !application.email) {
-                showMessage('يرجى ملء جميع الحقول المطلوبة', 'error');
-                return;
-            }
             
             // حفظ الطلب
             saveApplication(application);
@@ -1386,9 +1403,9 @@
                 new Date(app.timestamp).toDateString() === today
             ).length;
             
-            const hotelApps = applications.filter(app => app.sector.includes('فندق')).length;
-            const factoryApps = applications.filter(app => app.sector.includes('مصنع')).length;
-            const companyApps = applications.filter(app => app.sector.includes('شركات')).length;
+            const hotelApps = applications.filter(app => app.sector && app.sector.includes('فندق')).length;
+            const factoryApps = applications.filter(app => app.sector && app.sector.includes('مصنع')).length;
+            const companyApps = applications.filter(app => app.sector && app.sector.includes('شركات')).length;
             
             const statsHTML = `
                 <div class="dashboard-stat">
@@ -1441,10 +1458,10 @@
                             <small>${app.email}</small>
                         </td>
                         <td>${app.phone}</td>
-                        <td>${app.governorate}</td>
-                        <td><span style="background: #e8f0fe; color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.9rem;">${app.sector}</span></td>
-                        <td>${app.experience}</td>
-                        <td><small style="color: var(--gray);">${app.date}</small></td>
+                        <td>${app.governorate || 'غير محدد'}</td>
+                        <td><span style="background: #e8f0fe; color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.9rem;">${app.sector || 'غير محدد'}</span></td>
+                        <td>${app.experience || 'غير محدد'}</td>
+                        <td><small style="color: var(--gray);">${app.date || 'غير محدد'}</small></td>
                         <td>
                             <div class="action-btns">
                                 <button class="btn" onclick="viewApplication('${app.id}')" style="background: var(--primary); color: white; padding: 8px 12px; font-size: 0.9rem;">
@@ -1517,7 +1534,7 @@
         }
         
         function contactApplicant(phone, name) {
-            const message = `مرحبًا ${name}، شكرًا لتقديمك على موقع نيل ورك فورس. نود التواصل معك بخصوص طلب التوظيف.`;
+            const message = `مرحبًا ${name}، شكرًا لتقديمك على موقع Nile Work Force. نود التواصل معك بخصوص طلب التوظيف.`;
             const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
         }
@@ -1645,8 +1662,8 @@
             const applications = getApplications();
             
             // تحديث الإحصائيات في الهيدر
-            document.getElementById('statHotels').textContent = `${applications.filter(app => app.sector.includes('فندق')).length}+`;
-            document.getElementById('statFactories').textContent = `${applications.filter(app => app.sector.includes('مصنع')).length}+`;
+            document.getElementById('statHotels').textContent = `${applications.filter(app => app.sector && app.sector.includes('فندق')).length}+`;
+            document.getElementById('statFactories').textContent = `${applications.filter(app => app.sector && app.sector.includes('مصنع')).length}+`;
             document.getElementById('statApplicants').textContent = `${applications.length}+`;
             
             const uniqueGovernorates = new Set(applications.map(app => app.governorate));
