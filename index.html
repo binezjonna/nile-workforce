@@ -3,238 +3,890 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nile Workforce | توظيف فنادق ومصانع وشركات</title>
+    <title>نيل ورك فورس | توظيف فنادق ومصانع وشركات</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* أساسيات الموقع */
+        /* ====== المتغيرات والأساسيات ====== */
         :root {
             --primary: #0f3b5c;
             --secondary: #1e88e5;
             --accent: #ff9800;
+            --success: #4CAF50;
+            --danger: #f44336;
             --light: #f8f9fa;
             --dark: #343a40;
-            --success: #4CAF50;
-            --warning: #ff9800;
+            --gray: #6c757d;
+            --border-radius: 12px;
+            --shadow: 0 5px 15px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.8; color: #333; background: #f5f7fa; }
-        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .section { padding: 80px 0; }
-        h1, h2, h3 { color: var(--primary); margin-bottom: 1rem; }
-        a { text-decoration: none; color: inherit; }
-        .btn { display: inline-block; padding: 14px 28px; background: var(--secondary); color: white; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; transition: all 0.3s; }
-        .btn:hover { background: #1565c0; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .btn-accent { background: var(--accent); }
-        .btn-accent:hover { background: #f57c00; }
-        .btn-success { background: var(--success); }
-        .btn-success:hover { background: #388E3C; }
-
-        /* الهيدر */
-        header { background: white; box-shadow: 0 2px 15px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 1000; }
-        .header-container { display: flex; justify-content: space-between; align-items: center; padding: 20px; }
-        .logo { display: flex; align-items: center; gap: 15px; }
-        .logo i { font-size: 2.5rem; color: var(--secondary); }
-        .logo-text h1 { font-size: 1.8rem; margin-bottom: 5px; }
-        .logo-text p { color: #666; font-size: 0.95rem; }
-        .nav a { margin-right: 25px; font-weight: 600; color: var(--dark); position: relative; }
-        .nav a:hover { color: var(--secondary); }
-        .nav a::after { content: ''; position: absolute; bottom: -5px; right: 0; width: 0; height: 2px; background: var(--secondary); transition: width 0.3s; }
-        .nav a:hover::after { width: 100%; }
-        .contact-header { font-weight: bold; color: var(--primary); }
-
-        /* قسم البطل */
-        .hero { background: linear-gradient(rgba(15, 59, 92, 0.85), rgba(15, 59, 92, 0.9)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat; color: white; padding: 120px 0; text-align: center; }
-        .hero h1 { font-size: 3.2rem; color: white; margin-bottom: 20px; }
-        .hero p { font-size: 1.2rem; max-width: 800px; margin: 0 auto 40px; opacity: 0.95; }
-        .hero-btns { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-
-        /* قسم الإحصائيات */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; margin-top: 50px; }
-        .stat-card { background: white; padding: 30px; text-align: center; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.07); border-top: 5px solid var(--secondary); }
-        .stat-card i { font-size: 2.5rem; color: var(--secondary); margin-bottom: 15px; }
-        .stat-number { font-size: 2.8rem; font-weight: 800; color: var(--primary); display: block; line-height: 1; }
-        .stat-text { color: #666; margin-top: 10px; font-size: 1.1rem; }
-
-        /* قسم القطاعات */
-        .sectors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; }
-        .sector-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.08); transition: transform 0.4s; }
-        .sector-card:hover { transform: translateY(-10px); }
-        .sector-img { height: 200px; overflow: hidden; }
-        .sector-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-        .sector-card:hover .sector-img img { transform: scale(1.05); }
-        .sector-content { padding: 25px; }
-        .sector-content h3 { font-size: 1.5rem; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
-
-        /* قسم نموذج التوظيف */
-        .application-form-section { background: #f0f4f8; }
-        .form-container { background: white; max-width: 800px; margin: 40px auto 0; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .form-title { text-align: center; color: var(--primary); margin-bottom: 10px; }
-        .form-subtitle { text-align: center; color: #666; margin-bottom: 30px; }
-        .form-group { margin-bottom: 25px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark); }
-        .form-group input, .form-group select, .form-group textarea, .form-group .file-input { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; font-family: inherit; transition: border 0.3s; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.2); }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .btn-submit { width: 100%; padding: 17px; font-size: 1.1rem; margin-top: 10px; }
         
-        /* تنسيق خاص لحقل الرفع */
-        .file-input-container { position: relative; }
-        .file-input { padding: 15px; background: #f8f9fa; border: 2px dashed #ccc; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .file-input:hover { border-color: var(--secondary); background: #e8f0fe; }
-        .file-input.has-file { border-color: var(--success); background: #f0f9f0; }
-        .file-name { margin-top: 8px; font-size: 0.9rem; color: #666; }
-        .file-name i { margin-left: 5px; color: var(--success); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
-        #formMessage { text-align: center; padding: 25px; margin-top: 25px; border-radius: 10px; display: none; }
-        .success { background: #f0f9f0; color: #155724; border: 2px solid #c3e6cb; }
-        .error { background: #fdf0f0; color: #721c24; border: 2px solid #f5c6cb; }
-        .application-summary { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: right; }
-        .summary-item { margin-bottom: 10px; display: flex; justify-content: space-between; }
-        .summary-label { font-weight: bold; color: #555; }
-        .summary-value { color: #333; }
-
-        /* قسم الاتصال */
-        .contact-info-card { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); max-width: 500px; margin: 40px auto 0; text-align: center; }
-        .contact-info-card h3 { color: var(--primary); margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #eee; }
-        .contact-item { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 25px; }
-        .contact-item i { font-size: 1.8rem; color: var(--secondary); width: 40px; }
-        .contact-item p { font-size: 1.2rem; color: #333; }
-        .whatsapp-btn { background: #25D366; color: white; padding: 15px 25px; border-radius: 50px; display: inline-flex; align-items: center; gap: 10px; font-weight: bold; margin-top: 10px; }
-        .whatsapp-btn:hover { background: #128C7E; transform: scale(1.05); }
-
-        /* الفوتر */
-        footer { background: var(--primary); color: white; padding: 50px 0 25px; margin-top: 80px; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
-        .footer-col h4 { font-size: 1.3rem; margin-bottom: 25px; position: relative; padding-bottom: 10px; }
-        .footer-col h4::after { content: ''; position: absolute; bottom: 0; right: 0; width: 50px; height: 3px; background: var(--accent); }
-        .footer-links { list-style: none; }
-        .footer-links li { margin-bottom: 12px; }
-        .footer-links a { color: #ccc; transition: color 0.3s; }
-        .footer-links a:hover { color: white; padding-right: 8px; }
-        .copyright { text-align: center; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); color: #aaa; font-size: 0.95rem; }
-
-        /* تحسينات للجوال */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .section {
+            padding: 80px 0;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1565c0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30, 136, 229, 0.3);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        /* ====== الهيدر ====== */
+        header {
+            background: white;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .logo-text p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .contact-header {
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* ====== قسم الهيرو ====== */
+        .hero {
+            background: linear-gradient(rgba(15, 59, 92, 0.9), rgba(15, 59, 92, 0.85)), 
+                        url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
+            color: white;
+            padding: 120px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            opacity: 0.95;
+        }
+        
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* ====== قسم الإحصائيات ====== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-top: 5px solid var(--secondary);
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(30, 136, 229, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--secondary);
+            font-size: 1.8rem;
+        }
+        
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+            line-height: 1;
+        }
+        
+        .stat-text {
+            color: var(--gray);
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+        
+        /* ====== قسم القطاعات ====== */
+        .sectors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .sector-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .sector-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .sector-img {
+            height: 220px;
+            overflow: hidden;
+        }
+        
+        .sector-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .sector-card:hover .sector-img img {
+            transform: scale(1.05);
+        }
+        
+        .sector-content {
+            padding: 25px;
+        }
+        
+        .sector-content h3 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        /* ====== قسم النموذج ====== */
+        .form-section {
+            background: #f0f4f8;
+        }
+        
+        .form-container {
+            background: white;
+            max-width: 800px;
+            margin: 40px auto 0;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .form-title {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .form-subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.2);
+        }
+        
+        /* حقل رفع الملفات */
+        .file-upload {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: #f8f9fa;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--secondary);
+            background: #e8f0fe;
+        }
+        
+        .file-upload i {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .file-name {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--success);
+        }
+        
+        #cv {
+            display: none;
+        }
+        
+        /* زر الإرسال */
+        .btn-submit {
+            width: 100%;
+            padding: 17px;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+        
+        /* رسالة النجاح */
+        .message {
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ====== لوحة التحكم المدمجة ====== */
+        .dashboard-section {
+            display: none;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-top: 50px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-stat {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .dashboard-stat h3 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .applications-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .applications-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: right;
+            font-weight: 600;
+        }
+        
+        .applications-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .applications-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+        
+        /* ====== قسم الاتصال ====== */
+        .contact-card {
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            max-width: 500px;
+            margin: 40px auto 0;
+            text-align: center;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .contact-item i {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            width: 40px;
+        }
+        
+        /* ====== الفوتر ====== */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 80px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-right: 8px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+        
+        /* ====== زر واتساب عائم ====== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            background: #128C7E;
+        }
+        
+        /* ====== زر لوحة التحكم العائم ====== */
+        .admin-float {
+            position: fixed;
+            bottom: 100px;
+            left: 30px;
+            background: var(--primary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(15, 59, 92, 0.4);
+            z-index: 1000;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .admin-float:hover {
+            transform: scale(1.1);
+            background: #0a2540;
+        }
+        
+        /* ====== نافذة عرض التفاصيل ====== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.4s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .close-modal {
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+        
+        .close-modal:hover {
+            color: var(--danger);
+        }
+        
+        /* ====== التجاوب ====== */
+        @media (max-width: 992px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         @media (max-width: 768px) {
-            .header-container { flex-direction: column; gap: 20px; text-align: center; }
-            .nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
-            .nav a { margin: 0; }
-            .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1.1rem; }
-            .form-row { grid-template-columns: 1fr; }
-            .hero-btns, .cta-buttons { flex-direction: column; align-items: center; }
-            .btn { width: 100%; max-width: 300px; text-align: center; }
+            .hero {
+                padding: 80px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section {
+                padding: 60px 0;
+            }
+            
+            .btn {
+                padding: 12px 24px;
+            }
+            
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- زر واتساب عائم -->
+    <a href="https://wa.me/201028052445" target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+    <!-- زر لوحة التحكم العائم -->
+    <div class="admin-float" id="adminToggle" title="لوحة التحكم">
+        <i class="fas fa-chart-line"></i>
+    </div>
+    
     <!-- الهيدر -->
     <header>
-        <div class="container header-container">
-            <div class="logo">
-                <i class="fas fa-handshake"></i>
-                <div class="logo-text">
-                    <h1>Nile Workforce</h1>
-                    <p>توظيف الفنادق والمصانع والشركات في مصر</p>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>نيل ورك فورس</h1>
+                        <p>توظيف الفنادق والمصانع والشركات في مصر</p>
+                    </div>
                 </div>
+                
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="#home">الرئيسية</a></li>
+                        <li><a href="#sectors">القطاعات</a></li>
+                        <li><a href="#application">التقديم للوظائف</a></li>
+                        <li><a href="#contact">اتصل بنا</a></li>
+                        <li><span class="contact-header"><i class="fas fa-phone"></i> 201028052445+</span></li>
+                    </ul>
+                </nav>
             </div>
-            <nav class="nav">
-                <a href="#home">الرئيسية</a>
-                <a href="#sectors">القطاعات</a>
-                <a href="#application">التقديم للوظائف</a>
-                <a href="#contact">اتصل بنا</a>
-                <span class="contact-header"><i class="fas fa-phone"></i> 201028052445+</span>
-            </nav>
         </div>
     </header>
-
-    <!-- قسم البطل -->
+    
+    <!-- قسم الهيرو -->
     <section class="hero" id="home">
         <div class="container">
             <h1>توظيف احترافي للفنادق والمصانع والشركات</h1>
             <p>نوفر لك أفضل الكوادر المؤهلة والمدربة للعمل في جميع محافظات مصر. قدم سيرتك الذاتية الآن ووفر وقتك وجهدك في عملية التوظيف.</p>
             <div class="hero-btns">
-                <a href="#application" class="btn">قدم على وظيفة الآن</a>
-                <a href="#contact" class="btn btn-accent">التوظيف لدى شركتك</a>
+                <a href="#application" class="btn btn-primary">قدم على وظيفة الآن</a>
+                <a href="#contact" class="btn btn-outline">التوظيف لدى شركتك</a>
             </div>
         </div>
     </section>
-
+    
     <!-- قسم الإحصائيات -->
     <section class="section">
         <div class="container">
             <h2 style="text-align: center;">أرقام تبرز ثقتنا</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px;">نعمل باحترافية لنكون شريكك الموثوق في توظيف العمالة في مصر</p>
+            <p style="text-align: center; color: var(--gray); margin-bottom: 30px;">نعمل باحترافية لنكون شريكك الموثوق في توظيف العمالة في مصر</p>
+            
             <div class="stats-grid">
                 <div class="stat-card">
-                    <i class="fas fa-hotel"></i>
+                    <div class="stat-icon">
+                        <i class="fas fa-hotel"></i>
+                    </div>
                     <span class="stat-number">500+</span>
                     <span class="stat-text">فندق ومنتجع</span>
                 </div>
+                
                 <div class="stat-card">
-                    <i class="fas fa-industry"></i>
+                    <div class="stat-icon">
+                        <i class="fas fa-industry"></i>
+                    </div>
                     <span class="stat-number">300+</span>
                     <span class="stat-text">مصنع وشركة</span>
                 </div>
+                
                 <div class="stat-card">
-                    <i class="fas fa-users"></i>
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
                     <span class="stat-number">10,000+</span>
                     <span class="stat-text">باحث عن عمل</span>
                 </div>
+                
                 <div class="stat-card">
-                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="stat-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
                     <span class="stat-number">27</span>
                     <span class="stat-text">محافظة مصرية</span>
                 </div>
             </div>
         </div>
     </section>
-
+    
     <!-- قسم القطاعات -->
     <section class="section" id="sectors" style="background: var(--light);">
         <div class="container">
             <h2 style="text-align: center;">القطاعات المتخصصة</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px;">نوفر عمالة مؤهلة ومتدربة في جميع التخصصات</p>
+            <p style="text-align: center; color: var(--gray); margin-bottom: 30px;">نوفر عمالة مؤهلة ومتدربة في جميع التخصصات</p>
+            
             <div class="sectors-grid">
+                <!-- قطاع الفنادق -->
                 <div class="sector-card">
                     <div class="sector-img">
                         <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=700&q=80" alt="الفنادق والمنتجعات">
                     </div>
                     <div class="sector-content">
                         <h3>الفنادق والمنتجعات</h3>
-                        <p>إدارة، مطاعم، خدمات غرف، استقبال، طهاة، نظافة، أمن، وجميع التخصصات الفندقية.</p>
-                        <a href="#application" class="btn" style="width: 100%; margin-top: 20px;">التوظيف في هذا القطاع</a>
+                        <p style="margin-bottom: 20px; color: var(--gray);">إدارة، مطاعم، خدمات غرف، استقبال، طهاة، نظافة، أمن، وجميع التخصصات الفندقية.</p>
+                        <a href="#application" class="btn btn-primary" style="width: 100%;">التوظيف في هذا القطاع</a>
                     </div>
                 </div>
+                
+                <!-- قطاع المصانع -->
                 <div class="sector-card">
                     <div class="sector-img">
                         <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=700&q=80" alt="المصانع والصناعات">
                     </div>
                     <div class="sector-content">
                         <h3>المصانع والصناعات</h3>
-                        <p>إنتاج، جودة، صيانة، تشغيل، لوجستيات، تخزين، وجميع الوظائف الصناعية.</p>
-                        <a href="#application" class="btn" style="width: 100%; margin-top: 20px;">التوظيف في هذا القطاع</a>
+                        <p style="margin-bottom: 20px; color: var(--gray);">إنتاج، جودة، صيانة، تشغيل، لوجستيات، تخزين، وجميع الوظائف الصناعية.</p>
+                        <a href="#application" class="btn btn-primary" style="width: 100%;">التوظيف في هذا القطاع</a>
                     </div>
                 </div>
+                
+                <!-- قطاع الشركات -->
                 <div class="sector-card">
                     <div class="sector-img">
                         <img src="https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=700&q=80" alt="الشركات والمؤسسات">
                     </div>
                     <div class="sector-content">
                         <h3>الشركات والمؤسسات</h3>
-                        <p>محاسبة، مبيعات، تسويق، خدمة عملاء، موارد بشرية، تكنولوجيا، وإداريين.</p>
-                        <a href="#application" class="btn" style="width: 100%; margin-top: 20px;">التوظيف في هذا القطاع</a>
+                        <p style="margin-bottom: 20px; color: var(--gray);">محاسبة، مبيعات، تسويق، خدمة عملاء، موارد بشرية، تكنولوجيا، وإداريين.</p>
+                        <a href="#application" class="btn btn-primary" style="width: 100%;">التوظيف في هذا القطاع</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- قسم نموذج التوظيف -->
-    <section class="section application-form-section" id="application">
+    
+    <!-- قسم نموذج التقديم -->
+    <section class="section form-section" id="application">
         <div class="container">
             <h2 class="form-title">نموذج التقدم للوظائف</h2>
             <p class="form-subtitle">املأ النموذج أدناه مع إرفاق سيرتك الذاتية وسنتواصل معك في أقرب وقت</p>
-
+            
             <div class="form-container">
                 <form id="jobApplicationForm">
                     <div class="form-row">
@@ -242,584 +894,103 @@
                             <label for="fullName">الاسم بالكامل *</label>
                             <input type="text" id="fullName" name="fullName" required placeholder="أدخل اسمك الثلاثي">
                         </div>
+                        
                         <div class="form-group">
                             <label for="phone">رقم الهاتف *</label>
-                            <input type="tel" id="phone" name="phone" required placeholder="مثال: +201028052445" value="+20">
+                            <input type="tel" id="phone" name="phone" required placeholder="+201028052445">
                         </div>
                     </div>
-
+                    
                     <div class="form-row">
                         <div class="form-group">
                             <label for="email">البريد الإلكتروني *</label>
                             <input type="email" id="email" name="email" required placeholder="example@domain.com">
                         </div>
+                        
                         <div class="form-group">
                             <label for="governorate">المحافظة *</label>
                             <select id="governorate" name="governorate" required>
                                 <option value="">اختر محافظتك</option>
-                                <option value="cairo">القاهرة</option>
-                                <option value="giza">الجيزة</option>
-                                <option value="alex">الإسكندرية</option>
-                                <option value="sharqia">الشرقية</option>
-                                <option value="daqahlia">الدقهلية</option>
-                                <option value="other">محافظة أخرى</option>
+                                <option value="القاهرة">القاهرة</option>
+                                <option value="الجيزة">الجيزة</option>
+                                <option value="الإسكندرية">الإسكندرية</option>
+                                <option value="الشرقية">الشرقية</option>
+                                <option value="الدقهلية">الدقهلية</option>
+                                <option value="أخرى">محافظة أخرى</option>
                             </select>
                         </div>
                     </div>
-
+                    
                     <div class="form-group">
                         <label for="sector">القطاع المرغوب *</label>
                         <select id="sector" name="sector" required>
                             <option value="">اختر القطاع الذي ترغب العمل به</option>
-                            <option value="hotels">الفنادق والمنتجعات</option>
-                            <option value="factories">المصانع والصناعات</option>
-                            <option value="companies">الشركات والمؤسسات</option>
-                            <option value="any">أي قطاع متاح</option>
+                            <option value="الفنادق والمنتجعات">الفنادق والمنتجعات</option>
+                            <option value="المصانع والصناعات">المصانع والصناعات</option>
+                            <option value="الشركات والمؤسسات">الشركات والمؤسسات</option>
+                            <option value="أي قطاع متاح">أي قطاع متاح</option>
                         </select>
                     </div>
-
+                    
                     <div class="form-group">
                         <label for="experience">الخبرة (سنوات) *</label>
                         <select id="experience" name="experience" required>
                             <option value="">حدد سنوات خبرتك</option>
-                            <option value="none">بدون خبرة</option>
-                            <option value="1-3">من سنة إلى 3 سنوات</option>
-                            <option value="3-5">من 3 إلى 5 سنوات</option>
-                            <option value="5+">أكثر من 5 سنوات</option>
+                            <option value="بدون خبرة">بدون خبرة</option>
+                            <option value="1-3 سنوات">من سنة إلى 3 سنوات</option>
+                            <option value="3-5 سنوات">من 3 إلى 5 سنوات</option>
+                            <option value="أكثر من 5 سنوات">أكثر من 5 سنوات</option>
                         </select>
                     </div>
-
-                    <!-- الحقل الجديد: رفع السيرة الذاتية -->
+                    
+                    <!-- حقل رفع السيرة الذاتية -->
                     <div class="form-group">
                         <label for="cv">السيرة الذاتية (PDF أو Word) *</label>
-                        <div class="file-input-container">
-                            <div class="file-input" id="cvUploadArea">
-                                <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #666; margin-bottom: 10px; display: block;"></i>
-                                <span id="cvUploadText">انقر لرفع السيرة الذاتية</span>
-                                <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" style="display: none;" required>
-                                <p style="margin-top: 10px; font-size: 0.9rem; color: #888;">المسموح: PDF, DOC, DOCX (الحد الأقصى: 5MB)</p>
-                            </div>
-                            <div id="cvFileName" class="file-name"></div>
+                        <div class="file-upload" id="fileUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span id="fileUploadText">انقر لرفع السيرة الذاتية</span>
+                            <p style="margin-top: 10px; font-size: 0.9rem; color: var(--gray);">المسموح: PDF, DOC, DOCX (الحد الأقصى: 5MB)</p>
+                            <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required>
                         </div>
+                        <div id="fileName" class="file-name"></div>
                     </div>
-
+                    
                     <div class="form-group">
                         <label for="message">ملاحظات إضافية (اختياري)</label>
                         <textarea id="message" name="message" rows="4" placeholder="أي معلومات إضافية تود إضافتها عن مؤهلاتك أو طلباتك..."></textarea>
                     </div>
-
-                    <button type="submit" class="btn btn-submit btn-success">
+                    
+                    <button type="submit" class="btn btn-primary btn-submit">
                         <i class="fas fa-paper-plane"></i> إرسال الطلب
                     </button>
                 </form>
-
-                <div id="formMessage"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- قسم الاتصال -->
-    <section class="section" id="contact">
-        <div class="container">
-            <h2 style="text-align: center;">اتصل بنا</h2>
-            <p style="text-align: center; color: #666;">نحن هنا لمساعدتك في جميع استفساراتك واحتياجاتك التوظيفية</p>
-
-            <div class="contact-info-card">
-                <h3>معلومات التواصل</h3>
-                <div class="contact-item">
-                    <i class="fas fa-phone-alt"></i>
-                    <p><strong>هاتف / واتساب:</strong><br>+20 102 805 2445</p>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <p><strong>البريد الإلكتروني:</strong><br>hussienadly606@gmail.com</p>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <p><strong>خدمتنا:</strong><br>تغطي جميع محافظات مصر</p>
-                </div>
-                <a href="https://wa.me/201028052445" target="_blank" class="whatsapp-btn">
-                    <i class="fab fa-whatsapp"></i> تواصل معنا على واتساب
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- الفوتر -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <h4>Nile Workforce</h4>
-                    <p style="color: #ccc;">المنصة الموثوقة لتوظيف العمالة في الفنادق والمصانع والشركات في جميع أنحاء مصر. نضمن عمالة موثوقة وجاهزة للعمل.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>روابط سريعة</h4>
-                    <ul class="footer-links">
-                        <li><a href="#home">الرئيسية</a></li>
-                        <li><a href="#sectors">القطاعات</a></li>
-                        <li><a href="#application">التقديم للوظائف</a></li>
-                        <li><a href="#contact">اتصل بنا</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>التوظيف حسب القطاع</h4>
-                    <ul class="footer-links">
-                        <li><a href="#application">الفنادق والمنتجعات</a></li>
-                        <li><a href="#application">المصانع والصناعات</a></li>
-                        <li><a href="#application">الشركات والمؤسسات</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>وسائل التواصل</h4>
-                    <div style="color: #ccc;">
-                        <p><i class="fas fa-phone" style="margin-left: 10px;"></i> +20 102 805 2445</p>
-                        <p><i class="fas fa-envelope" style="margin-left: 10px;"></i> hussienadly606@gmail.com</p>
-                        <p style="margin-top: 15px;"><i class="fas fa-clock" style="margin-left: 10px;"></i> خدمة عملاء 24/7</p>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>© 2024 Nile Workforce. جميع الحقوق محفوظة. | <strong>ملاحظة:</strong> لا نتقاضى أي رسوم من الباحثين عن عمل.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- زر واتساب عائم -->
-    <a href="https://wa.me/201028052445" target="_blank" style="position: fixed; left: 25px; bottom: 25px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5); z-index: 1000;">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
-    <script>
-        // تفعيل حقل رفع الملف
-        document.getElementById('cvUploadArea').addEventListener('click', function() {
-            document.getElementById('cv').click();
-        });
-        
-        document.getElementById('cv').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const uploadArea = document.getElementById('cvUploadArea');
-            const fileNameDisplay = document.getElementById('cvFileName');
-            const uploadText = document.getElementById('cvUploadText');
-            
-            if (file) {
-                // التحقق من حجم الملف (5MB كحد أقصى)
-                const maxSize = 5 * 1024 * 1024; // 5MB
-                if (file.size > maxSize) {
-                    alert('حجم الملف كبير جدًا. الحد الأقصى المسموح به هو 5MB.');
-                    e.target.value = '';
-                    uploadArea.classList.remove('has-file');
-                    fileNameDisplay.innerHTML = '';
-                    uploadText.textContent = 'انقر لرفع السيرة الذاتية';
-                    return;
-                }
                 
-                // التحقق من نوع الملف
-                const allowedTypes = ['.pdf', '.doc', '.docx'];
-                const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-                
-                if (!allowedTypes.includes(fileExtension)) {
-                    alert('نوع الملف غير مدعوم. يرجى رفع ملف PDF أو Word.');
-                    e.target.value = '';
-                    uploadArea.classList.remove('has-file');
-                    fileNameDisplay.innerHTML = '';
-                    uploadText.textContent = 'انقر لرفع السيرة الذاتية';
-                    return;
-                }
-                
-                // عرض اسم الملف
-                uploadArea.classList.add('has-file');
-                fileNameDisplay.innerHTML = `<i class="fas fa-check-circle"></i> ${file.name} (${formatFileSize(file.size)})`;
-                uploadText.textContent = 'تم اختيار الملف';
-            }
-        });
-        
-        // دالة لتنسيق حجم الملف
-        function formatFileSize(bytes) {
-            if (bytes < 1024) return bytes + ' بايت';
-            else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' كيلوبايت';
-            else return (bytes / 1048576).toFixed(1) + ' ميجابايت';
-        }
-        
-        // معالجة نموذج التقديم
-        document.getElementById('jobApplicationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+                <!-- رسالة النجاح -->
+                <div id="formMessage" class="message"></div>
+            </div>
             
-            // التحقق من وجود ملف مرفوع
-            const cvFile = document.getElementById('cv').files[0];
-            if (!cvFile) {
-                alert('يرجى رفع السيرة الذاتية.');
-                return;
-            }
-            
-            // جمع بيانات النموذج
-            const formData = {
-                name: document.getElementById('fullName').value,
-                phone: document.getElementById('phone').value,
-                email: document.getElementById('email').value,
-                governorate: document.getElementById('governorate').options[document.getElementById('governorate').selectedIndex].text,
-                sector: document.getElementById('sector').options[document.getElementById('sector').selectedIndex].text,
-                experience: document.getElementById('experience').options[document.getElementById('experience').selectedIndex].text,
-                cv: cvFile.name,
-                cvSize: formatFileSize(cvFile.size),
-                message: document.getElementById('message').value || 'لا يوجد'
-            };
-            
-            // عرض رسالة النجاح مع تفاصيل الطلب
-            const messageDiv = document.getElementById('formMessage');
-            messageDiv.className = 'success';
-            messageDiv.style.display = 'block';
-            
-            const referenceNumber = 'NW-' + Math.floor(100000 + Math.random() * 900000);
-            const submissionTime = new Date().toLocaleString('ar-EG');
-            
-            messageDiv.innerHTML = `
-                <i class="fas fa-check-circle" style="font-size: 3rem; margin-bottom: 15px; color: #4CAF50;"></i>
-                <h3>تم إرسال طلبك بنجاح!</h3>
-                <p>شكرًا لك <strong>${formData.name}</strong> على تقديم طلبك للعمل.</p>
-                
-                <div class="application-summary">
-                    <div class="summary-item">
-                        <span class="summary-label">رقم المرجع:</span>
-                        <span class="summary-value">${referenceNumber}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">تاريخ الإرسال:</span>
-                        <span class="summary-value">${submissionTime}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">القطاع المطلوب:</span>
-                        <span class="summary-value">${formData.sector}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">المحافظة:</span>
-                        <span class="summary-value">${formData.governorate}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">السيرة الذاتية:</span>
-                        <span class="summary-value">${formData.cv} (${formData.cvSize})</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">رقم التواصل:</span>
-                        <span class="summary-value">${formData.phone}</span>
+            <!-- لوحة التحكم المدمجة -->
+            <div class="dashboard-section" id="dashboard">
+                <div class="dashboard-header">
+                    <h2 style="color: var(--primary);">
+                        <i class="fas fa-chart-line"></i> لوحة تحكم المشرف
+                    </h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="exportData()">
+                            <i class="fas fa-download"></i> تصدير البيانات
+                        </button>
+                        <button class="btn btn-danger" onclick="clearAllData()">
+                            <i class="fas fa-trash"></i> مسح الكل
+                        </button>
                     </div>
                 </div>
                 
-                <p style="margin-top: 20px;">سنتواصل معك على الرقم <strong>${formData.phone}</strong> في غضون 48 ساعة عمل.</p>
-                <p><small>للاستفسار الفوري، يمكنك التواصل على واتساب: <strong>+20 102 805 2445</strong></small></p>
-            `;
-            
-            // مسح النموذج بعد 10 ثوانٍ
-            setTimeout(() => {
-                document.getElementById('jobApplicationForm').reset();
-                document.getElementById('cvUploadArea').classList.remove('has-file');
-                document.getElementById('cvFileName').innerHTML = '';
-                document.getElementById('cvUploadText').textContent = 'انقر لرفع السيرة الذاتية';
-                messageDiv.style.display = 'none';
-            }, 10000);
-            
-            // تمرير لأسفل لرؤية الرسالة
-            messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            // هنا يمكنك إضافة كود إرسال البيانات إلى الخادم أو البريد الإلكتروني
-            // sendDataToServer(formData, cvFile);
-        });
-        
-        // التحقق من صحة رقم الهاتف
-        document.getElementById('phone').addEventListener('blur', function() {
-            const phone = this.value;
-            if (phone && !/^\+20[0-9]{10}$/.test(phone)) {
-                alert('يرجى إدخال رقم هاتف مصري صحيح يبدأ بـ +20 ويتكون من 13 رقمًا');
-                this.focus();
-            }
-        });
-        
-        // دالة افتراضية لإرسال البيانات إلى الخادم
-        function sendDataToServer(formData, file) {
-            // هذه دالة افتراضية - تحتاج إلى ربطها بخادم حقيقي
-            console.log('بيانات النموذج:', formData);
-            console.log('ملف السيرة الذاتية:', file);
-            
-            // مثال على استخدام Fetch API لإرسال البيانات
-            /*
-            const data = new FormData();
-            data.append('name', formData.name);
-            data.append('phone', formData.phone);
-            data.append('cv', file);
-            
-            fetch('https://your-server.com/api/apply', {
-                method: 'POST',
-                body: data
-            })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch(error => console.error('Error:', error));
-            */
-        }
-    </script>const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const sqlite3 = require('sqlite3').verbose();
-const app = express();
-const PORT = 3000;
-
-// إنشاء مجلدات التخزين
-if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
-if (!fs.existsSync('database')) fs.mkdirSync('database');
-
-// إعداد قاعدة البيانات SQLite
-const db = new sqlite3.Database('./database/applications.db');
-
-// إنشاء جدول الطلبات
-db.run(`
-    CREATE TABLE IF NOT EXISTS applications (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        phone TEXT NOT NULL,
-        email TEXT NOT NULL,
-        governorate TEXT NOT NULL,
-        sector TEXT NOT NULL,
-        experience TEXT NOT NULL,
-        cv_filename TEXT NOT NULL,
-        message TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-`);
-
-// إعداد multer لرفع الملفات
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
-        cb(null, uniqueName);
-    }
-});
-
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
-    fileFilter: (req, file, cb) => {
-        const allowedTypes = ['.pdf', '.doc', '.docx'];
-        const ext = path.extname(file.originalname).toLowerCase();
-        if (allowedTypes.includes(ext)) {
-            cb(null, true);
-        } else {
-            cb(new Error('نوع الملف غير مدعوم. يرجى رفع ملف PDF أو Word فقط.'));
-        }
-    }
-});
-
-// إعداد CORS للسماح بالاتصال من الموقع
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
-
-app.use(express.json());
-app.use('/uploads', express.static('uploads'));
-
-// API لتسجيل طلب جديد
-app.post('/api/apply', upload.single('cv'), (req, res) => {
-    try {
-        const { name, phone, email, governorate, sector, experience, message } = req.body;
-        const cv_filename = req.file.filename;
-        
-        // حفظ في قاعدة البيانات
-        db.run(
-            `INSERT INTO applications (name, phone, email, governorate, sector, experience, cv_filename, message) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-            [name, phone, email, governorate, sector, experience, cv_filename, message || ''],
-            function(err) {
-                if (err) {
-                    console.error('خطأ في حفظ البيانات:', err);
-                    return res.status(500).json({ success: false, error: 'خطأ في حفظ البيانات' });
-                }
+                <div class="dashboard-stats" id="dashboardStats">
+                    <!-- سيتم تعبئتها بالجافاسكريبت -->
+                </div>
                 
-                const applicationId = this.lastID;
-                res.json({
-                    success: true,
-                    message: 'تم استلام طلبك بنجاح',
-                    applicationId: applicationId,
-                    data: {
-                        name, phone, email, governorate, sector, experience, cv_filename
-                    }
-                });
-            }
-        );
-    } catch (error) {
-        console.error('خطأ في معالجة الطلب:', error);
-        res.status(500).json({ success: false, error: 'خطأ في الخادم' });
-    }
-});
-
-// API لجلب جميع الطلبات
-app.get('/api/applications', (req, res) => {
-    db.all('SELECT * FROM applications ORDER BY created_at DESC', [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ success: false, error: 'خطأ في جلب البيانات' });
-        }
-        res.json({ success: true, applications: rows });
-    });
-});
-
-// API لجلب طلب معين
-app.get('/api/applications/:id', (req, res) => {
-    const id = req.params.id;
-    db.get('SELECT * FROM applications WHERE id = ?', [id], (err, row) => {
-        if (err) {
-            return res.status(500).json({ success: false, error: 'خطأ في جلب البيانات' });
-        }
-        if (!row) {
-            return res.status(404).json({ success: false, error: 'الطلب غير موجود' });
-        }
-        res.json({ success: true, application: row });
-    });
-});
-
-// حذف طلب
-app.delete('/api/applications/:id', (req, res) => {
-    const id = req.params.id;
-    
-    // أولاً: جلب اسم ملف السيرة الذاتية
-    db.get('SELECT cv_filename FROM applications WHERE id = ?', [id], (err, row) => {
-        if (err || !row) {
-            return res.status(404).json({ success: false, error: 'الطلب غير موجود' });
-        }
-        
-        // حذف الملف من المجلد
-        const filePath = path.join('uploads', row.cv_filename);
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
-        }
-        
-        // حذف من قاعدة البيانات
-        db.run('DELETE FROM applications WHERE id = ?', [id], function(err) {
-            if (err) {
-                return res.status(500).json({ success: false, error: 'خطأ في حذف البيانات' });
-            }
-            res.json({ success: true, message: 'تم حذف الطلب بنجاح' });
-        });
-    });
-});
-
-// لوحة التحكم (Dashboard) - واجهة ويب
-app.get('/admin', (req, res) => {
-    const dashboardHTML = `
-    <!DOCTYPE html>
-    <html dir="rtl" lang="ar">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>لوحة تحكم - Nile Workforce</title>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-        <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; }
-            .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-            .header { background: #0f3b5c; color: white; padding: 25px; border-radius: 12px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-            .header h1 { font-size: 1.8rem; }
-            .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-            .stat-card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center; border-top: 5px solid #1e88e5; }
-            .stat-card h3 { font-size: 2.5rem; color: #0f3b5c; margin-bottom: 10px; }
-            .applications-table { background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow: hidden; }
-            table { width: 100%; border-collapse: collapse; }
-            th { background: #0f3b5c; color: white; padding: 18px 15px; text-align: right; font-weight: 600; }
-            td { padding: 15px; border-bottom: 1px solid #eee; }
-            tr:hover { background: #f8fafc; }
-            .btn { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; margin: 2px; }
-            .btn-view { background: #1e88e5; color: white; }
-            .btn-download { background: #4CAF50; color: white; }
-            .btn-delete { background: #f44336; color: white; }
-            .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
-            .modal-content { background: white; width: 90%; max-width: 700px; margin: 50px auto; padding: 30px; border-radius: 12px; max-height: 80vh; overflow-y: auto; }
-            .close-modal { float: left; font-size: 1.8rem; cursor: pointer; color: #666; }
-            .loading { text-align: center; padding: 50px; font-size: 1.2rem; color: #666; }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h1><i class="fas fa-user-tie"></i> لوحة تحكم طلبات التوظيف - Nile Workforce</h1>
-                <div style="font-size: 1.1rem;"><i class="fas fa-clock"></i> ${new Date().toLocaleString('ar-EG')}</div>
-            </div>
-            
-            <div class="stats" id="statsContainer">
-                <div class="stat-card">
-                    <h3 id="totalApplications">0</h3>
-                    <p>إجمالي الطلبات</p>
-                </div>
-                <div class="stat-card">
-                    <h3 id="todayApplications">0</h3>
-                    <p>طلبات اليوم</p>
-                </div>
-                <div class="stat-card">
-                    <h3 id="hotelApplications">0</h3>
-                    <p>طلبات الفنادق</p>
-                </div>
-                <div class="stat-card">
-                    <h3 id="factoryApplications">0</h3>
-                    <p>طلبات المصانع</p>
-                </div>
-            </div>
-            
-            <div class="applications-table">
-                <div style="padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
-                    <h2><i class="fas fa-list"></i> جميع طلبات التوظيف</h2>
-                    <button onclick="refreshApplications()" style="background: #0f3b5c; color: white; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer;">
-                        <i class="fas fa-sync-alt"></i> تحديث البيانات
-                    </button>
-                </div>
-                <div id="applicationsContainer" class="loading">
-                    <i class="fas fa-spinner fa-spin"></i> جاري تحميل البيانات...
-                </div>
-            </div>
-        </div>
-        
-        <!-- نافذة عرض التفاصيل -->
-        <div id="detailModal" class="modal">
-            <div class="modal-content">
-                <span class="close-modal" onclick="closeModal()">&times;</span>
-                <div id="modalContent"></div>
-            </div>
-        </div>
-        
-        <script>
-            let applications = [];
-            
-            // تحميل البيانات عند فتح الصفحة
-            document.addEventListener('DOMContentLoaded', loadApplications);
-            
-            async function loadApplications() {
-                try {
-                    const response = await fetch('/api/applications');
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        applications = data.applications;
-                        displayApplications(applications);
-                        updateStats(applications);
-                    }
-                } catch (error) {
-                    document.getElementById('applicationsContainer').innerHTML = 
-                        '<div style="color: #f44336; text-align: center; padding: 30px;"><i class="fas fa-exclamation-triangle"></i> خطأ في تحميل البيانات</div>';
-                }
-            }
-            
-            function displayApplications(apps) {
-                const container = document.getElementById('applicationsContainer');
-                
-                if (apps.length === 0) {
-                    container.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">لا توجد طلبات توظيف بعد</div>';
-                    return;
-                }
-                
-                let html = `
-                    <table>
+                <div style="overflow-x: auto;">
+                    <table class="applications-table" id="applicationsTable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -828,169 +999,485 @@ app.get('/admin', (req, res) => {
                                 <th>المحافظة</th>
                                 <th>القطاع</th>
                                 <th>الخبرة</th>
-                                <th>تاريخ التقديم</th>
+                                <th>التاريخ</th>
                                 <th>الإجراءات</th>
                             </tr>
                         </thead>
-                        <tbody>
-                `;
+                        <tbody id="applicationsBody">
+                            <!-- سيتم تعبئتها بالجافاسكريبت -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- قسم الاتصال -->
+    <section class="section" id="contact">
+        <div class="container">
+            <h2 style="text-align: center;">اتصل بنا</h2>
+            <p style="text-align: center; color: var(--gray); margin-bottom: 30px;">نحن هنا لمساعدتك في جميع استفساراتك واحتياجاتك التوظيفية</p>
+            
+            <div class="contact-card">
+                <div class="contact-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <div>
+                        <h3 style="color: var(--primary); margin-bottom: 5px;">هاتف / واتساب</h3>
+                        <p style="font-size: 1.2rem;">+20 102 805 2445</p>
+                    </div>
+                </div>
                 
-                apps.forEach((app, index) => {
-                    const date = new Date(app.created_at).toLocaleString('ar-EG');
-                    html += `
-                        <tr>
-                            <td>${app.id}</td>
-                            <td><strong>${app.name}</strong><br><small>${app.email}</small></td>
-                            <td>${app.phone}</td>
-                            <td>${app.governorate}</td>
-                            <td><span style="background: #e8f0fe; padding: 4px 10px; border-radius: 4px; font-size: 0.9rem;">${app.sector}</span></td>
-                            <td>${app.experience}</td>
-                            <td><small>${date}</small></td>
-                            <td>
-                                <button class="btn btn-view" onclick="viewApplication(${app.id})">
-                                    <i class="fas fa-eye"></i> عرض
-                                </button>
-                                <button class="btn btn-download" onclick="downloadCV('${app.cv_filename}', '${app.name}')">
-                                    <i class="fas fa-download"></i> السيرة
-                                </button>
-                                <button class="btn btn-delete" onclick="deleteApplication(${app.id})">
-                                    <i class="fas fa-trash"></i> حذف
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <h3 style="color: var(--primary); margin-bottom: 5px;">البريد الإلكتروني</h3>
+                        <p style="font-size: 1.2rem;">hussienadly606@gmail.com</p>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <h3 style="color: var(--primary); margin-bottom: 5px;">خدمتنا</h3>
+                        <p style="font-size: 1.2rem;">تغطي جميع محافظات مصر</p>
+                    </div>
+                </div>
+                
+                <a href="https://wa.me/201028052445" target="_blank" class="btn btn-primary" style="margin-top: 20px;">
+                    <i class="fab fa-whatsapp"></i> تواصل معنا على واتساب
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- الفوتر -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h3>نيل ورك فورس</h3>
+                    <p style="color: #ccc; margin-bottom: 20px;">المنصة الموثوقة لتوظيف العمالة في الفنادق والمصانع والشركات في جميع أنحاء مصر.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>روابط سريعة</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">الرئيسية</a></li>
+                        <li><a href="#sectors">القطاعات</a></li>
+                        <li><a href="#application">التقديم للوظائف</a></li>
+                        <li><a href="#contact">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>القطاعات</h3>
+                    <ul class="footer-links">
+                        <li><a href="#application">الفنادق والمنتجعات</a></li>
+                        <li><a href="#application">المصانع والصناعات</a></li>
+                        <li><a href="#application">الشركات والمؤسسات</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>وسائل التواصل</h3>
+                    <div style="color: #ccc;">
+                        <p><i class="fas fa-phone" style="margin-left: 10px;"></i> +20 102 805 2445</p>
+                        <p><i class="fas fa-envelope" style="margin-left: 10px;"></i> hussienadly606@gmail.com</p>
+                        <p style="margin-top: 15px;"><i class="fas fa-clock" style="margin-left: 10px;"></i> خدمة عملاء 24/7</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2024 نيل ورك فورس. جميع الحقوق محفوظة. | لا نتقاضى أي رسوم من الباحثين عن عمل.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- نافذة عرض التفاصيل -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="color: var(--primary);"><i class="fas fa-user-circle"></i> تفاصيل طلب التوظيف</h2>
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modalContent">
+                <!-- سيتم تعبئتها بالجافاسكريبت -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ====== المتغيرات العامة ======
+        let applications = JSON.parse(localStorage.getItem('nileWorkforceApplications')) || [];
+        const adminPassword = "admin123"; // كلمة المرور للوصول للوحة التحكم
+        
+        // ====== تهيئة الصفحة ======
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحديث الإحصائيات
+            updateStats();
+            
+            // تفعيل رفع الملفات
+            document.getElementById('fileUploadArea').addEventListener('click', function() {
+                document.getElementById('cv').click();
+            });
+            
+            document.getElementById('cv').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                const uploadText = document.getElementById('fileUploadText');
+                const fileName = document.getElementById('fileName');
+                
+                if (file) {
+                    // التحقق من حجم الملف (5MB كحد أقصى)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('حجم الملف كبير جدًا. الحد الأقصى المسموح به هو 5MB.');
+                        e.target.value = '';
+                        uploadText.textContent = 'انقر لرفع السيرة الذاتية';
+                        fileName.textContent = '';
+                        return;
+                    }
+                    
+                    // التحقق من نوع الملف
+                    const allowedTypes = ['.pdf', '.doc', '.docx'];
+                    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+                    
+                    if (!allowedTypes.includes(fileExtension)) {
+                        alert('نوع الملف غير مدعوم. يرجى رفع ملف PDF أو Word.');
+                        e.target.value = '';
+                        uploadText.textContent = 'انقر لرفع السيرة الذاتية';
+                        fileName.textContent = '';
+                        return;
+                    }
+                    
+                    uploadText.textContent = 'تم اختيار الملف';
+                    fileName.innerHTML = `<i class="fas fa-check-circle"></i> ${file.name} (${formatFileSize(file.size)})`;
+                    document.getElementById('fileUploadArea').style.borderColor = '#4CAF50';
+                    document.getElementById('fileUploadArea').style.background = '#f0f9f0';
+                }
+            });
+            
+            // زر عرض/إخفاء لوحة التحكم
+            document.getElementById('adminToggle').addEventListener('click', function() {
+                const password = prompt('أدخل كلمة المرور للوصول إلى لوحة التحكم:');
+                if (password === adminPassword) {
+                    const dashboard = document.getElementById('dashboard');
+                    dashboard.style.display = dashboard.style.display === 'block' ? 'none' : 'block';
+                    if (dashboard.style.display === 'block') {
+                        loadApplicationsTable();
+                    }
+                } else if (password !== null) {
+                    alert('كلمة المرور غير صحيحة');
+                }
+            });
+            
+            // التمرير السلس للروابط
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
                 });
-                
-                html += '</tbody></table>';
-                container.innerHTML = html;
+            });
+        });
+        
+        // ====== معالجة نموذج التقديم ======
+        document.getElementById('jobApplicationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // التحقق من رفع الملف
+            const cvFile = document.getElementById('cv').files[0];
+            if (!cvFile) {
+                showMessage('يرجى رفع السيرة الذاتية', 'error');
+                return;
             }
             
-            function updateStats(apps) {
-                const today = new Date().toDateString();
-                const todayApps = apps.filter(app => new Date(app.created_at).toDateString() === today);
-                const hotelApps = apps.filter(app => app.sector.includes('فندق') || app.sector.includes('hotel'));
-                const factoryApps = apps.filter(app => app.sector.includes('مصنع') || app.sector.includes('factory'));
-                
-                document.getElementById('totalApplications').textContent = apps.length;
-                document.getElementById('todayApplications').textContent = todayApps.length;
-                document.getElementById('hotelApplications').textContent = hotelApps.length;
-                document.getElementById('factoryApplications').textContent = factoryApps.length;
+            // جمع بيانات النموذج
+            const application = {
+                id: Date.now(),
+                name: document.getElementById('fullName').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                governorate: document.getElementById('governorate').value,
+                sector: document.getElementById('sector').value,
+                experience: document.getElementById('experience').value,
+                cvFile: {
+                    name: cvFile.name,
+                    size: cvFile.size,
+                    type: cvFile.type,
+                    // في تطبيق حقيقي، سيتم رفع الملف للخادم
+                    // هنا نخزن معلومات الملف فقط
+                },
+                message: document.getElementById('message').value || 'لا يوجد',
+                date: new Date().toLocaleString('ar-EG'),
+                timestamp: Date.now()
+            };
+            
+            // إضافة الطلب للقائمة
+            applications.unshift(application);
+            
+            // حفظ في localStorage
+            localStorage.setItem('nileWorkforceApplications', JSON.stringify(applications));
+            
+            // عرض رسالة النجاح
+            const referenceNumber = 'NW-' + application.id.toString().slice(-6);
+            showMessage(`
+                <h3><i class="fas fa-check-circle"></i> تم إرسال طلبك بنجاح!</h3>
+                <p>رقم المرجع: <strong>${referenceNumber}</strong></p>
+                <p>شكرًا لك <strong>${application.name}</strong> على تقديم طلبك.</p>
+                <p>سنتواصل معك على الرقم <strong>${application.phone}</strong> في غضون 48 ساعة عمل.</p>
+            `, 'success');
+            
+            // تحديث الإحصائيات
+            updateStats();
+            
+            // تحديث الجدول إذا كان مفتوحًا
+            if (document.getElementById('dashboard').style.display === 'block') {
+                loadApplicationsTable();
             }
             
-            async function viewApplication(id) {
-                try {
-                    const response = await fetch('/api/applications/${id}');
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        const app = data.application;
-                        const date = new Date(app.created_at).toLocaleString('ar-EG');
-                        
-                        const modalContent = document.getElementById('modalContent');
-                        modalContent.innerHTML = \`
-                            <h2 style="color: #0f3b5c; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
-                                <i class="fas fa-user-circle"></i> تفاصيل طلب التوظيف #\${app.id}
-                            </h2>
-                            
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
-                                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
-                                    <h3 style="color: #555; margin-bottom: 15px;"><i class="fas fa-user"></i> المعلومات الشخصية</h3>
-                                    <p><strong>الاسم:</strong> \${app.name}</p>
-                                    <p><strong>الهاتف:</strong> \${app.phone}</p>
-                                    <p><strong>البريد الإلكتروني:</strong> \${app.email}</p>
-                                    <p><strong>المحافظة:</strong> \${app.governorate}</p>
-                                </div>
-                                
-                                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
-                                    <h3 style="color: #555; margin-bottom: 15px;"><i class="fas fa-briefcase"></i> المعلومات الوظيفية</h3>
-                                    <p><strong>القطاع:</strong> <span style="background: #e8f0fe; padding: 4px 10px; border-radius: 4px;">\${app.sector}</span></p>
-                                    <p><strong>الخبرة:</strong> \${app.experience}</p>
-                                    <p><strong>تاريخ التقديم:</strong> \${date}</p>
-                                    <p><strong>السيرة الذاتية:</strong> 
-                                        <button onclick="downloadCV('\${app.cv_filename}', '\${app.name}')" style="background: #4CAF50; color: white; padding: 6px 12px; border-radius: 4px; border: none; margin-right: 10px; cursor: pointer;">
-                                            <i class="fas fa-download"></i> تحميل الملف
-                                        </button>
-                                    </p>
-                                </div>
-                            </div>
-                            
-                            \${app.message ? \`
-                                <div style="background: #f0f9f0; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-right: 4px solid #4CAF50;">
-                                    <h3 style="color: #555; margin-bottom: 10px;"><i class="fas fa-comment"></i> الملاحظات الإضافية</h3>
-                                    <p>\${app.message}</p>
-                                </div>
-                            \` : ''}
-                            
-                            <div style="text-align: center; margin-top: 30px;">
-                                <button onclick="closeModal()" style="background: #666; color: white; padding: 10px 25px; border-radius: 6px; border: none; margin-left: 10px; cursor: pointer;">
-                                    <i class="fas fa-times"></i> إغلاق
+            // مسح النموذج بعد 5 ثوانٍ
+            setTimeout(() => {
+                document.getElementById('jobApplicationForm').reset();
+                document.getElementById('fileUploadText').textContent = 'انقر لرفع السيرة الذاتية';
+                document.getElementById('fileName').textContent = '';
+                document.getElementById('fileUploadArea').style.borderColor = '#ddd';
+                document.getElementById('fileUploadArea').style.background = '#f8f9fa';
+                document.getElementById('formMessage').style.display = 'none';
+            }, 8000);
+        });
+        
+        // ====== وظائف العرض ======
+        function showMessage(content, type) {
+            const messageDiv = document.getElementById('formMessage');
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = content;
+            messageDiv.style.display = 'block';
+            messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' بايت';
+            else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' كيلوبايت';
+            else return (bytes / 1048576).toFixed(1) + ' ميجابايت';
+        }
+        
+        function updateStats() {
+            // هذه الدالة ستحدث الإحصائيات في المستقبل
+            // حاليًا نعرض عدد الطلبات فقط
+            const total = applications.length;
+            const today = new Date().toDateString();
+            const todayApps = applications.filter(app => 
+                new Date(app.timestamp).toDateString() === today
+            ).length;
+            
+            // تحديث الإحصائيات في لوحة التحكم
+            const statsHTML = `
+                <div class="dashboard-stat">
+                    <h3>${total}</h3>
+                    <p>إجمالي الطلبات</p>
+                </div>
+                <div class="dashboard-stat">
+                    <h3>${todayApps}</h3>
+                    <p>طلبات اليوم</p>
+                </div>
+                <div class="dashboard-stat">
+                    <h3>${applications.filter(app => app.sector.includes('فندق')).length}</h3>
+                    <p>طلبات الفنادق</p>
+                </div>
+                <div class="dashboard-stat">
+                    <h3>${applications.filter(app => app.sector.includes('مصنع')).length}</h3>
+                    <p>طلبات المصانع</p>
+                </div>
+            `;
+            
+            document.getElementById('dashboardStats').innerHTML = statsHTML;
+        }
+        
+        // ====== لوحة التحكم ======
+        function loadApplicationsTable() {
+            const tbody = document.getElementById('applicationsBody');
+            
+            if (applications.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 40px; color: var(--gray);">
+                            <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 15px; display: block; opacity: 0.5;"></i>
+                            لا توجد طلبات توظيف بعد
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            applications.forEach((app, index) => {
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>
+                            <strong>${app.name}</strong><br>
+                            <small>${app.email}</small>
+                        </td>
+                        <td>${app.phone}</td>
+                        <td>${app.governorate}</td>
+                        <td><span style="background: #e8f0fe; padding: 4px 10px; border-radius: 4px;">${app.sector}</span></td>
+                        <td>${app.experience}</td>
+                        <td><small>${app.date}</small></td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="btn btn-primary" onclick="viewApplicationDetails(${app.id})" style="padding: 8px 12px;">
+                                    <i class="fas fa-eye"></i>
                                 </button>
-                                <button onclick="window.open('https://wa.me/\${app.phone.replace('+', '')}', '_blank')" style="background: #25D366; color: white; padding: 10px 25px; border-radius: 6px; border: none; cursor: pointer;">
-                                    <i class="fab fa-whatsapp"></i> التواصل عبر واتساب
+                                <button class="btn btn-success" onclick="contactApplicant('${app.phone}', '${app.name}')" style="padding: 8px 12px;">
+                                    <i class="fab fa-whatsapp"></i>
+                                </button>
+                                <button class="btn btn-danger" onclick="deleteApplication(${app.id})" style="padding: 8px 12px;">
+                                    <i class="fas fa-trash"></i>
                                 </button>
                             </div>
-                        \`;
-                        
-                        document.getElementById('detailModal').style.display = 'block';
-                    }
-                } catch (error) {
-                    alert('خطأ في تحميل تفاصيل الطلب');
-                }
-            }
+                        </td>
+                    </tr>
+                `;
+            });
             
-            function downloadCV(filename, applicantName) {
-                window.open('/uploads/' + encodeURIComponent(filename), '_blank');
-            }
+            tbody.innerHTML = html;
+        }
+        
+        function viewApplicationDetails(id) {
+            const application = applications.find(app => app.id === id);
+            if (!application) return;
             
-            async function deleteApplication(id) {
-                if (!confirm('هل أنت متأكد من حذف هذا الطلب؟ سيتم حذف جميع البيانات بما فيها السيرة الذاتية.')) {
-                    return;
-                }
-                
-                try {
-                    const response = await fetch('/api/applications/' + id, {
-                        method: 'DELETE'
-                    });
-                    const data = await response.json();
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px;">
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                        <h3 style="color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                            <i class="fas fa-user"></i> المعلومات الشخصية
+                        </h3>
+                        <p><strong>الاسم:</strong> ${application.name}</p>
+                        <p><strong>الهاتف:</strong> ${application.phone}</p>
+                        <p><strong>البريد الإلكتروني:</strong> ${application.email}</p>
+                        <p><strong>المحافظة:</strong> ${application.governorate}</p>
+                    </div>
                     
-                    if (data.success) {
-                        alert('تم حذف الطلب بنجاح');
-                        loadApplications();
-                    }
-                } catch (error) {
-                    alert('خطأ في حذف الطلب');
-                }
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                        <h3 style="color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                            <i class="fas fa-briefcase"></i> المعلومات الوظيفية
+                        </h3>
+                        <p><strong>القطاع:</strong> ${application.sector}</p>
+                        <p><strong>الخبرة:</strong> ${application.experience}</p>
+                        <p><strong>تاريخ التقديم:</strong> ${application.date}</p>
+                        <p><strong>السيرة الذاتية:</strong> ${application.cvFile.name} (${formatFileSize(application.cvFile.size)})</p>
+                    </div>
+                </div>
+                
+                ${application.message && application.message !== 'لا يوجد' ? `
+                    <div style="background: #f0f9f0; padding: 20px; border-radius: 10px; margin-bottom: 25px; border-right: 4px solid #4CAF50;">
+                        <h3 style="color: var(--primary); margin-bottom: 10px;">
+                            <i class="fas fa-comment"></i> الملاحظات الإضافية
+                        </h3>
+                        <p>${application.message}</p>
+                    </div>
+                ` : ''}
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="contactApplicant('${application.phone}', '${application.name}')" style="margin-left: 10px;">
+                        <i class="fab fa-whatsapp"></i> التواصل عبر واتساب
+                    </button>
+                    <button class="btn" onclick="closeModal()" style="background: #666; color: white;">
+                        <i class="fas fa-times"></i> إغلاق
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('detailModal').style.display = 'block';
+        }
+        
+        function contactApplicant(phone, name) {
+            const message = `مرحبًا ${name}، شكرًا لتقديمك على موقع نيل ورك فورس. نود التواصل معك بخصوص طلب التوظيف.`;
+            const whatsappUrl = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+        
+        function deleteApplication(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+                return;
             }
             
-            function closeModal() {
-                document.getElementById('detailModal').style.display = 'none';
+            applications = applications.filter(app => app.id !== id);
+            localStorage.setItem('nileWorkforceApplications', JSON.stringify(applications));
+            
+            // تحديث الجدول والإحصائيات
+            loadApplicationsTable();
+            updateStats();
+            
+            alert('تم حذف الطلب بنجاح');
+        }
+        
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+        
+        function exportData() {
+            if (applications.length === 0) {
+                alert('لا توجد بيانات للتصدير');
+                return;
             }
             
-            function refreshApplications() {
-                document.getElementById('applicationsContainer').innerHTML = 
-                    '<div class="loading"><i class="fas fa-spinner fa-spin"></i> جاري تحديث البيانات...</div>';
-                loadApplications();
+            // تحويل البيانات إلى تنسيق CSV
+            let csv = 'الاسم,الهاتف,البريد الإلكتروني,المحافظة,القطاع,الخبرة,التاريخ,الملاحظات\n';
+            
+            applications.forEach(app => {
+                const row = [
+                    `"${app.name}"`,
+                    `"${app.phone}"`,
+                    `"${app.email}"`,
+                    `"${app.governorate}"`,
+                    `"${app.sector}"`,
+                    `"${app.experience}"`,
+                    `"${app.date}"`,
+                    `"${app.message}"`
+                ].join(',');
+                
+                csv += row + '\n';
+            });
+            
+            // إنشاء ملف وتنزيله
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `طلبات_التوظيف_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert('تم تصدير البيانات بنجاح');
+        }
+        
+        function clearAllData() {
+            if (!confirm('هل أنت متأكد من مسح جميع البيانات؟ هذا الإجراء لا يمكن التراجع عنه.')) {
+                return;
             }
             
-            // إغلاق النافذة بالضغط خارجها
-            window.onclick = function(event) {
-                const modal = document.getElementById('detailModal');
-                if (event.target === modal) {
-                    closeModal();
-                }
-            }
-        </script>
-    </body>
-    </html>
-    `;
-    res.send(dashboardHTML);
-});
-
-// تشغيل الخادم
-app.listen(PORT, () => {
-    console.log(`✅ الخادم يعمل على http://localhost:${PORT}`);
-    console.log(`📊 لوحة التحكم: http://localhost:${PORT}/admin`);
-    console.log(`📤 API للتقديم: http://localhost:${PORT}/api/apply`);
-});
+            applications = [];
+            localStorage.removeItem('nileWorkforceApplications');
+            loadApplicationsTable();
+            updateStats();
+            
+            alert('تم مسح جميع البيانات بنجاح');
+        }
+    </script>
 </body>
 </html>
