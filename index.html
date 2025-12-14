@@ -1,34 +1,64 @@
-<!-- Professional rebuilt version will be delivered step-by-step.
-This file is the new base architecture.
-Uses Firebase Firestore + Storage.
-Author: Hussein Adly -->
+<!--
+Nile Workforce – FULL PROFESSIONAL VERSION
+Author: Hussein Adly
+Frontend: HTML + CSS
+Backend: Firebase Firestore + Storage
+This version restores FULL professional design + admin dashboard
+-->
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>Nile Workforce | نظام توظيف احترافي</title>
+  <title>Nile Workforce | شركة توظيف احترافية</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
   <style>
-    body{font-family:'Cairo',sans-serif;background:#f5f7fa;margin:0}
-    .container{max-width:1100px;margin:auto;padding:30px}
-    h1,h2{color:#0a2540}
-    .card{background:#fff;border-radius:14px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
-    label{display:block;margin:15px 0 5px;font-weight:700}
-    input,select,textarea,button{width:100%;padding:14px;border-radius:10px;border:1px solid #ccc;font-size:15px}
-    button{background:#0066cc;color:#fff;font-weight:700;border:none;cursor:pointer;margin-top:20px}
-    button:hover{background:#004fa3}
-    table{width:100%;border-collapse:collapse;margin-top:30px}
-    th,td{padding:14px;border-bottom:1px solid #eee;text-align:right}
-    th{background:#0a2540;color:#fff}
+    :root{
+      --primary:#0a2540;
+      --secondary:#0066cc;
+      --accent:#00a8e8;
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --radius:18px;
+      --shadow:0 15px 40px rgba(0,0,0,.08)
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:#222}
+    header{background:linear-gradient(135deg,var(--primary),#082136);color:#fff;padding:25px 0}
+    .container{max-width:1200px;margin:auto;padding:0 25px}
+    .hero{text-align:center;padding:80px 20px}
+    .hero h1{font-size:3rem;margin-bottom:20px}
+    .hero p{font-size:1.3rem;opacity:.9}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:35px;margin-bottom:40px}
+    h2{color:var(--primary);margin-bottom:25px}
+    label{font-weight:700;margin-top:20px;display:block}
+    input,select,textarea{width:100%;padding:16px;border-radius:14px;border:1px solid #ddd;margin-top:8px;font-size:15px}
+    button{background:linear-gradient(135deg,var(--secondary),var(--accent));color:#fff;border:none;padding:16px 35px;border-radius:14px;font-weight:800;font-size:16px;cursor:pointer;margin-top:25px}
+    button:hover{opacity:.9}
+    table{width:100%;border-collapse:collapse}
+    th{background:var(--primary);color:#fff;padding:18px}
+    td{padding:16px;border-bottom:1px solid #eee}
+    .admin{display:none}
+    .admin-btn{position:fixed;bottom:30px;left:30px;background:var(--primary);color:#fff;width:65px;height:65px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;box-shadow:var(--shadow)}
+    footer{text-align:center;padding:30px;color:#777}
   </style>
 </head>
 <body>
 
+<header>
+  <div class="container hero">
+    <h1>Nile Workforce</h1>
+    <p>شركة توظيف احترافية للفنادق – المصانع – الشركات</p>
+  </div>
+</header>
+
 <div class="container">
-  <h1>Nile Workforce – تقديم وظيفة</h1>
+
   <div class="card">
+    <h2><i class="fas fa-briefcase"></i> تقديم طلب وظيفة</h2>
     <form id="jobForm">
       <label>الاسم الكامل</label>
       <input id="name" required>
@@ -41,7 +71,7 @@ Author: Hussein Adly -->
 
       <label>القطاع</label>
       <select id="sector" required>
-        <option value="">اختر</option>
+        <option value="">اختر القطاع</option>
         <option>الفنادق</option>
         <option>المصانع</option>
         <option>الشركات</option>
@@ -50,32 +80,40 @@ Author: Hussein Adly -->
       <label>السيرة الذاتية</label>
       <input type="file" id="cv" accept=".pdf,.doc,.docx" required>
 
-      <button type="submit">إرسال الطلب</button>
+      <button type="submit"><i class="fas fa-paper-plane"></i> إرسال الطلب</button>
     </form>
   </div>
 
-  <h2 style="margin-top:60px">لوحة التحكم</h2>
-  <div class="card">
+  <div class="card admin" id="admin">
+    <h2><i class="fas fa-chart-line"></i> لوحة التحكم</h2>
     <table>
       <thead>
-        <tr><th>#</th><th>الاسم</th><th>الهاتف</th><th>القطاع</th><th>التاريخ</th></tr>
+        <tr>
+          <th>#</th><th>الاسم</th><th>الهاتف</th><th>القطاع</th><th>السيرة الذاتية</th>
+        </tr>
       </thead>
       <tbody id="apps"></tbody>
     </table>
   </div>
+
 </div>
 
-<!-- Firebase -->
+<div class="admin-btn" id="adminBtn"><i class="fas fa-lock"></i></div>
+
+<footer>
+  © 2025 Nile Workforce – Hussein Adly
+</footer>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "PUT_YOUR_KEY",
-  authDomain: "PUT_YOUR_DOMAIN",
-  projectId: "PUT_YOUR_ID",
-  storageBucket: "PUT_YOUR_BUCKET",
+  apiKey: "PUT_KEY",
+  authDomain: "PUT_DOMAIN",
+  projectId: "PUT_ID",
+  storageBucket: "PUT_BUCKET"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -87,33 +125,36 @@ const tbody = document.getElementById('apps');
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
-
   const file = cv.files[0];
-  const fileRef = ref(storage, 'cvs/' + Date.now() + '-' + file.name);
-  await uploadBytes(fileRef, file);
-  const url = await getDownloadURL(fileRef);
+  const refFile = ref(storage,'cvs/'+Date.now()+file.name);
+  await uploadBytes(refFile,file);
+  const url = await getDownloadURL(refFile);
 
-  await addDoc(collection(db, 'applications'), {
-    name: name.value,
-    phone: phone.value,
-    email: email.value,
-    sector: sector.value,
-    cv: url,
-    createdAt: serverTimestamp()
+  await addDoc(collection(db,'applications'),{
+    name:name.value,
+    phone:phone.value,
+    email:email.value,
+    sector:sector.value,
+    cv:url,
+    createdAt:serverTimestamp()
   });
 
-  form.reset();
   alert('تم الإرسال بنجاح');
+  form.reset();
 });
 
 onSnapshot(collection(db,'applications'), snap => {
-  tbody.innerHTML = '';
-  let i=1;
-  snap.forEach(doc => {
-    const d = doc.data();
-    tbody.innerHTML += `<tr><td>${i++}</td><td>${d.name}</td><td>${d.phone}</td><td>${d.sector}</td><td>—</td></tr>`;
+  tbody.innerHTML=''; let i=1;
+  snap.forEach(doc=>{
+    const d=doc.data();
+    tbody.innerHTML+=`<tr><td>${i++}</td><td>${d.name}</td><td>${d.phone}</td><td>${d.sector}</td><td><a href="${d.cv}" target="_blank">تحميل</a></td></tr>`;
   });
 });
+
+adminBtn.onclick=()=>{
+  const pass=prompt('كلمة المرور');
+  if(pass==='admin123') document.getElementById('admin').style.display='block';
+};
 </script>
 
 </body>
