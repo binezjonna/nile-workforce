@@ -67,4 +67,92 @@
         });
     </script>
 </body>
+</html><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - Nile Work Force</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* أنماط CSS هنا */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        button {
+            padding: 5px 10px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>لوحة التحكم - Nile Work Force</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>الاسم</th>
+                <th>الهاتف</th>
+                <th>البريد الإلكتروني</th>
+                <th>القطاع</th>
+                <th>التاريخ</th>
+                <th>الإجراءات</th>
+            </tr>
+        </thead>
+        <tbody id="applicationsTable">
+            <!-- سيتم تعبئة الجدول بالجافاسكريبت -->
+        </tbody>
+    </table>
+
+    <script>
+        const STORAGE_KEY = 'nileWorkForce_applications';
+        const adminPassword = 'admin123'; // كلمة المرور
+
+        // التحقق من كلمة المرور
+        const password = prompt('أدخل كلمة المرور:');
+        if (password !== adminPassword) {
+            alert('كلمة المرور غير صحيحة.');
+            window.location.href = '/'; // إعادة توجيه إلى الصفحة الرئيسية
+        }
+
+        // عرض البيانات
+        const applications = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        const tableBody = document.getElementById('applicationsTable');
+
+        if (applications.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="7">لا توجد طلبات.</td></tr>';
+        } else {
+            applications.forEach((app, index) => {
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${app.name}</td>
+                        <td>${app.phone}</td>
+                        <td>${app.email}</td>
+                        <td>${app.sector}</td>
+                        <td>${app.date}</td>
+                        <td>
+                            <button onclick="downloadCV('${app.cv}', '${app.name}')">تحميل السيرة الذاتية</button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // تنزيل السيرة الذاتية
+        function downloadCV(base64Data, name) {
+            const link = document.createElement('a');
+            link.href = base64Data;
+            link.download = `${name}_CV.pdf`;
+            link.click();
+        }
+    </script>
+</body>
 </html>
