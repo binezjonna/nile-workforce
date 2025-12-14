@@ -1,79 +1,394 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nile Work Force | التوظيف الاحترافي للفنادق والمصانع والشركات</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
-        
-        // استبدل بالـ config الحقيقي هنا
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",  // <--- غير ده بالحقيقي من Firebase Console
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        
-        try {
-            const app = initializeApp(firebaseConfig);
-            const db = getFirestore(app);
-            const storage = getStorage(app);
-            console.log('✅ Firebase مُعد بنجاح');
-            window.db = db;
-            window.storage = storage;
-        } catch (error) {
-            console.error('❌ خطأ في Firebase:', error);
-            alert('خطأ في إعداد Firebase. غير الـ config وجرب تاني.');
-        }
-    </script>
-    
-    <style>
-        /* الستايلات زي ما هي، بس للاختبار: أضفت لون أزرق لو الصفحة شغالة */
-        body {
-            background: linear-gradient(135deg, #f8fafc 0%, #e6f0ff 100%);
-            color: #000; /* عشان النصوص تظهر */
-        }
-    </style>
-</head>
-<body>
-    <!-- باقي الـ HTML زي ما هو (الـ header, hero, sections, form, dashboard, footer) -->
-    
-    <!-- للاختبار: أضف ده في البداية عشان تشوف إن الـ HTML شغال -->
-    <h1 style="text-align: center; color: red;">Testing - لو شايف ده، الصفحة شغالة بس Firebase مش مُعد</h1>
-    
-    <script type="module">
-        // باقي السكريبت زي ما هو، مع try-catch في الـ submit و loadDashboard
-        document.getElementById('jobApplicationForm').addEventListener('submit', async function(e) {
+<script>
+    // =========== متغيرات النظام ===========
+    const STORAGE_KEY = 'nileWorkForce_applications';
+    const ADMIN_PASSWORD = 'admin123';
+    const PHONE_NUMBER = '01028052445';
+    const WHATSAPP_NUMBER = '201028052445';
+
+    // =========== تهيئة النظام ===========
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('🚀 نظام Nile Work Force يعمل بنجاح');
+        setupFileUpload();
+        setupFormSubmission();
+        setupAdminDashboard();
+        setupSmoothScroll();
+        updateStats();
+    });
+
+    // =========== معالجة رفع الملفات ===========
+    function setupFileUpload() {
+        const fileInput = document.getElementById('cv');
+        const uploadArea = document.getElementById('fileUploadArea');
+        const uploadText = document.getElementById('fileUploadText');
+        const fileNameDisplay = document.getElementById('fileName');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // التحقق من الحجم (5MB كحد أقصى)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('حجم الملف كبير جدًا. الحد الأقصى المسموح به هو 5MB.');
+                resetFileInput(fileInput, uploadText, fileNameDisplay);
+                return;
+            }
+
+            // التحقق من نوع الملف
+            const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('نوع الملف غير مدعوم. يرجى رفع ملف PDF أو Word فقط.');
+                resetFileInput(fileInput, uploadText, fileNameDisplay);
+                return;
+            }
+
+            // تحديث الواجهة
+            uploadText.textContent = 'تم اختيار الملف';
+            fileNameDisplay.innerHTML = `<i class="fas fa-check-circle"></i> ${file.name} (${formatFileSize(file.size)})`;
+            uploadArea.style.borderColor = '#28a745';
+            uploadArea.style.background = '#f0fff4';
+        });
+    }
+
+    function resetFileInput(fileInput, uploadText, fileNameDisplay) {
+        fileInput.value = '';
+        uploadText.textContent = 'انقر لرفع السيرة الذاتية';
+        fileNameDisplay.textContent = '';
+    }
+
+    // =========== معالجة نموذج التقديم ===========
+    function setupFormSubmission() {
+        const form = document.getElementById('jobApplicationForm');
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            try {
-                // الكود زي ما هو
-            } catch (error) {
-                console.error('خطأ في الإرسال:', error);
-                showMessage('خطأ في الإرسال. تأكد من Firebase.', 'error');
+
+            // جمع البيانات
+            const cvFile = document.getElementById('cv').files[0];
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const governorate = document.getElementById('governorate').value;
+            const sector = document.getElementById('sector').value;
+            const experience = document.getElementById('experience').value;
+            const message = document.getElementById('message').value.trim();
+
+            // التحقق من البيانات الأساسية
+            if (!fullName || !phone || !email || !cvFile) {
+                showMessage('يرجى ملء جميع الحقول المطلوبة.', 'error');
+                return;
+            }
+
+            // التحقق من صحة البريد الإلكتروني
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('يرجى إدخال بريد إلكتروني صحيح.', 'error');
+                return;
+            }
+
+            // التحقق من صحة رقم الهاتف
+            const phoneRegex = /^01[0-2,5]{1}[0-9]{8}$/;
+            if (!phoneRegex.test(phone)) {
+                showMessage('يرجى إدخال رقم هاتف مصري صحيح (مثال: 01028052445).', 'error');
+                return;
+            }
+
+            // إنشاء كائن الطلب
+            const application = {
+                id: 'NWF-' + Date.now().toString().slice(-8),
+                name: fullName,
+                phone: phone,
+                email: email,
+                governorate: governorate,
+                sector: sector,
+                experience: experience,
+                cvFile: {
+                    name: cvFile.name,
+                    size: cvFile.size,
+                    type: cvFile.type,
+                },
+                message: message || 'لا يوجد',
+                date: new Date().toLocaleString('ar-EG', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
+                timestamp: Date.now(),
+                status: 'جديد'
+            };
+
+            // حفظ الطلب
+            saveApplication(application);
+
+            // عرض رسالة النجاح
+            showMessage(`
+                <div style="text-align: center;">
+                    <i class="fas fa-check-circle" style="font-size: 3.5rem; color: #28a745; margin-bottom: 20px;"></i>
+                    <h3 style="color: #155724; margin-bottom: 15px;">تم إرسال طلبك بنجاح!</h3>
+                    <p style="margin-bottom: 10px;">رقم المرجع: <strong style="color: var(--primary);">${application.id}</strong></p>
+                    <p>شكرًا لك <strong style="color: var(--secondary);">${application.name}</strong> على تقديم طلبك.</p>
+                    <p>سأتصل بك على الرقم <strong style="color: var(--secondary);">${application.phone}</strong> خلال 24-48 ساعة.</p>
+                </div>
+            `, 'success');
+
+            // إعادة تعيين النموذج
+            setTimeout(() => {
+                form.reset();
+                resetFileInput(document.getElementById('cv'), document.getElementById('fileUploadText'), document.getElementById('fileName'));
+            }, 5000);
+        });
+    }
+
+    // =========== إدارة البيانات ===========
+    function getApplications() {
+        try {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
+        } catch (error) {
+            console.error('خطأ في قراءة البيانات:', error);
+            return [];
+        }
+    }
+
+    function saveApplication(application) {
+        const applications = getApplications();
+        applications.unshift(application);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(applications));
+        updateStats();
+        console.log('✅ تم حفظ طلب جديد:', application.name);
+    }
+
+    // =========== لوحة التحكم ===========
+    function setupAdminDashboard() {
+        const adminToggle = document.getElementById('adminToggle');
+        adminToggle.addEventListener('click', () => {
+            const password = prompt('🔒 أدخل كلمة المرور للوصول إلى لوحة التحكم:');
+            if (password === ADMIN_PASSWORD) {
+                loadDashboard();
+                document.getElementById('dashboard').style.display = 'block';
+            } else if (password !== null) {
+                alert('❌ كلمة المرور غير صحيحة');
             }
         });
-        
-        async function loadDashboard() {
-            try {
-                // الكود زي ما هو
-            } catch (error) {
-                console.error('خطأ في التحميل:', error);
-                alert('خطأ في Firebase. غير الـ config.');
-            }
+    }
+
+    function loadDashboard() {
+        const applications = getApplications();
+        updateDashboardStats(applications);
+        updateApplicationsTable(applications);
+        document.getElementById('lastUpdate').textContent = `آخر تحديث: ${new Date().toLocaleString('ar-EG')}`;
+    }
+
+    function updateDashboardStats(applications) {
+        const today = new Date().toDateString();
+        const todayApps = applications.filter(app => new Date(app.timestamp).toDateString() === today).length;
+        const hotelApps = applications.filter(app => app.sector && app.sector.includes('فندق')).length;
+        const factoryApps = applications.filter(app => app.sector && app.sector.includes('مصنع')).length;
+        const companyApps = applications.filter(app => app.sector && app.sector.includes('شركات')).length;
+
+        document.getElementById('applicationsCount').textContent = `${applications.length} طلبات توظيف`;
+        document.getElementById('dashboardStats').innerHTML = `
+            <div class="dashboard-stat">
+                <h3>${applications.length}</h3>
+                <p>إجمالي الطلبات</p>
+            </div>
+            <div class="dashboard-stat">
+                <h3>${todayApps}</h3>
+                <p>طلبات اليوم</p>
+            </div>
+            <div class="dashboard-stat">
+                <h3>${hotelApps}</h3>
+                <p>طلبات الفنادق</p>
+            </div>
+            <div class="dashboard-stat">
+                <h3>${factoryApps}</h3>
+                <p>طلبات المصانع</p>
+            </div>
+            <div class="dashboard-stat">
+                <h3>${companyApps}</h3>
+                <p>طلبات الشركات</p>
+            </div>
+        `;
+    }
+
+    function updateApplicationsTable(applications) {
+        const tbody = document.getElementById('applicationsBody');
+        if (applications.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 50px; color: var(--gray);">
+                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 20px; display: block; opacity: 0.5;"></i>
+                        <h3 style="color: var(--gray); margin-bottom: 15px;">لا توجد طلبات توظيف بعد</h3>
+                        <p style="color: var(--gray);">سيظهر هنا جميع طلبات التوظيف التي يتم تقديمها</p>
+                    </td>
+                </tr>
+            `;
+            return;
         }
-        
-        // باقي الوظائف
-    </script>
-</body>
-</html>
+
+        tbody.innerHTML = applications.map((app, index) => `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${app.name}</td>
+                <td>${app.phone}</td>
+                <td>${app.governorate || 'غير محدد'}</td>
+                <td>${app.sector || 'غير محدد'}</td>
+                <td>${app.experience || 'غير محدد'}</td>
+                <td>${app.date || 'غير محدد'}</td>
+                <td>
+                    <button onclick="viewApplication('${app.id}')"><i class="fas fa-eye"></i> عرض</button>
+                    <button onclick="contactApplicant('${app.phone}', '${app.name}')"><i class="fab fa-whatsapp"></i> واتساب</button>
+                    <button onclick="deleteApplication('${app.id}')"><i class="fas fa-trash"></i> حذف</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function viewApplication(id) {
+        const applications = getApplications();
+        const app = applications.find(a => a.id === id);
+        if (!app) {
+            alert('الطلب غير موجود');
+            return;
+        }
+
+        const details = `
+            <div style="background: white; padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); max-width: 600px;">
+                <h3 style="color: var(--primary); margin-bottom: 25px;">تفاصيل طلب التوظيف</h3>
+                <p><strong>الاسم:</strong> ${app.name}</p>
+                <p><strong>الهاتف:</strong> ${app.phone}</p>
+                <p><strong>البريد:</strong> ${app.email}</p>
+                <p><strong>المحافظة:</strong> ${app.governorate}</p>
+                <p><strong>القطاع:</strong> ${app.sector}</p>
+                <p><strong>الخبرة:</strong> ${app.experience}</p>
+                <p><strong>التاريخ:</strong> ${app.date}</p>
+                <p><strong>الحالة:</strong> <span style="color: #28a745;">${app.status}</span></p>
+                <p><strong>السيرة الذاتية:</strong> <a href="${URL.createObjectURL(new Blob([app.cvFile]))}" download="${app.cvFile.name}">تنزيل</a></p>
+                ${app.message !== 'لا يوجد' ? `<p><strong>ملاحظات:</strong> ${app.message}</p>` : ''}
+            </div>
+        `;
+        alertWithHTML(details);
+    }
+
+    function contactApplicant(phone, name) {
+        const message = `مرحبًا ${name}، أنا حسين عدلي مدير موارد بشرية. شكرًا لتقديمك على موقع Nile Work Force. نود التواصل معك بخصوص طلب التوظيف.`;
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+    }
+
+    function deleteApplication(id) {
+        if (!confirm('هل أنت متأكد من حذف هذا الطلب؟')) return;
+        let applications = getApplications();
+        applications = applications.filter(app => app.id !== id);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(applications));
+        loadDashboard();
+        alert('تم حذف الطلب بنجاح');
+    }
+
+    function exportData() {
+        const applications = getApplications();
+        if (applications.length === 0) {
+            alert('لا توجد بيانات للتصدير');
+            return;
+        }
+
+        let csv = 'رقم المرجع,الاسم,الهاتف,البريد الإلكتروني,المحافظة,القطاع,الخبرة,التاريخ,الملاحظات\n';
+        applications.forEach(app => {
+            const row = [
+                `"${app.id}"`,
+                `"${app.name}"`,
+                `"${app.phone}"`,
+                `"${app.email}"`,
+                `"${app.governorate}"`,
+                `"${app.sector}"`,
+                `"${app.experience}"`,
+                `"${app.date}"`,
+                `"${app.message}"`
+            ].join(',');
+            csv += row + '\n';
+        });
+
+        const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `طلبات_التوظيف_${new Date().toISOString().slice(0, 10)}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        alert(`تم تصدير ${applications.length} طلب بنجاح`);
+    }
+
+    // =========== وظائف مساعدة ===========
+    function showMessage(content, type) {
+        const messageDiv = document.getElementById('formMessage');
+        messageDiv.className = `message ${type}`;
+        messageDiv.innerHTML = content;
+        messageDiv.style.display = 'block';
+        messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function alertWithHTML(html) {
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 2000;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+        `;
+        const content = document.createElement('div');
+        content.style.cssText = `
+            background: white; max-width: 600px; width: 100%;
+            max-height: 80vh; overflow-y: auto;
+            border-radius: var(--border-radius); padding: 30px;
+            position: relative;
+        `;
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '&times;';
+        closeBtn.style.cssText = `
+            position: absolute; top: 15px; left: 15px;
+            background: none; border: none; font-size: 2rem;
+            color: var(--gray); cursor: pointer;
+        `;
+        closeBtn.onclick = () => document.body.removeChild(modal);
+        content.innerHTML = html;
+        content.prepend(closeBtn);
+        modal.appendChild(content);
+        document.body.appendChild(modal);
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' بايت';
+        else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' كيلوبايت';
+        else return (bytes / 1048576).toFixed(1) + ' ميجابايت';
+    }
+
+    function updateStats() {
+        const applications = getApplications();
+        const uniqueGovernorates = new Set(applications.map(app => app.governorate));
+        document.getElementById('statHotels').textContent = `${Math.max(50, applications.filter(app => app.sector && app.sector.includes('فندق')).length * 5)}+`;
+        document.getElementById('statFactories').textContent = `${Math.max(30, applications.filter(app => app.sector && app.sector.includes('مصنع')).length * 3)}+`;
+        document.getElementById('statApplicants').textContent = `${applications.length}+`;
+        document.getElementById('statGovernorates').textContent = Math.max(15, uniqueGovernorates.size);
+    }
+
+    function setupSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    window.scrollTo({
+                        top: targetElement.offsetTop - headerHeight - 20,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    }
+</script>
