@@ -556,6 +556,441 @@
             .catch(error => console.error('Error:', error));
             */
         }
-    </script>
+    </script>const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const sqlite3 = require('sqlite3').verbose();
+const app = express();
+const PORT = 3000;
+
+// إنشاء مجلدات التخزين
+if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
+if (!fs.existsSync('database')) fs.mkdirSync('database');
+
+// إعداد قاعدة البيانات SQLite
+const db = new sqlite3.Database('./database/applications.db');
+
+// إنشاء جدول الطلبات
+db.run(`
+    CREATE TABLE IF NOT EXISTS applications (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        phone TEXT NOT NULL,
+        email TEXT NOT NULL,
+        governorate TEXT NOT NULL,
+        sector TEXT NOT NULL,
+        experience TEXT NOT NULL,
+        cv_filename TEXT NOT NULL,
+        message TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+`);
+
+// إعداد multer لرفع الملفات
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
+        cb(null, uniqueName);
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['.pdf', '.doc', '.docx'];
+        const ext = path.extname(file.originalname).toLowerCase();
+        if (allowedTypes.includes(ext)) {
+            cb(null, true);
+        } else {
+            cb(new Error('نوع الملف غير مدعوم. يرجى رفع ملف PDF أو Word فقط.'));
+        }
+    }
+});
+
+// إعداد CORS للسماح بالاتصال من الموقع
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
+app.use(express.json());
+app.use('/uploads', express.static('uploads'));
+
+// API لتسجيل طلب جديد
+app.post('/api/apply', upload.single('cv'), (req, res) => {
+    try {
+        const { name, phone, email, governorate, sector, experience, message } = req.body;
+        const cv_filename = req.file.filename;
+        
+        // حفظ في قاعدة البيانات
+        db.run(
+            `INSERT INTO applications (name, phone, email, governorate, sector, experience, cv_filename, message) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [name, phone, email, governorate, sector, experience, cv_filename, message || ''],
+            function(err) {
+                if (err) {
+                    console.error('خطأ في حفظ البيانات:', err);
+                    return res.status(500).json({ success: false, error: 'خطأ في حفظ البيانات' });
+                }
+                
+                const applicationId = this.lastID;
+                res.json({
+                    success: true,
+                    message: 'تم استلام طلبك بنجاح',
+                    applicationId: applicationId,
+                    data: {
+                        name, phone, email, governorate, sector, experience, cv_filename
+                    }
+                });
+            }
+        );
+    } catch (error) {
+        console.error('خطأ في معالجة الطلب:', error);
+        res.status(500).json({ success: false, error: 'خطأ في الخادم' });
+    }
+});
+
+// API لجلب جميع الطلبات
+app.get('/api/applications', (req, res) => {
+    db.all('SELECT * FROM applications ORDER BY created_at DESC', [], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ success: false, error: 'خطأ في جلب البيانات' });
+        }
+        res.json({ success: true, applications: rows });
+    });
+});
+
+// API لجلب طلب معين
+app.get('/api/applications/:id', (req, res) => {
+    const id = req.params.id;
+    db.get('SELECT * FROM applications WHERE id = ?', [id], (err, row) => {
+        if (err) {
+            return res.status(500).json({ success: false, error: 'خطأ في جلب البيانات' });
+        }
+        if (!row) {
+            return res.status(404).json({ success: false, error: 'الطلب غير موجود' });
+        }
+        res.json({ success: true, application: row });
+    });
+});
+
+// حذف طلب
+app.delete('/api/applications/:id', (req, res) => {
+    const id = req.params.id;
+    
+    // أولاً: جلب اسم ملف السيرة الذاتية
+    db.get('SELECT cv_filename FROM applications WHERE id = ?', [id], (err, row) => {
+        if (err || !row) {
+            return res.status(404).json({ success: false, error: 'الطلب غير موجود' });
+        }
+        
+        // حذف الملف من المجلد
+        const filePath = path.join('uploads', row.cv_filename);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
+        
+        // حذف من قاعدة البيانات
+        db.run('DELETE FROM applications WHERE id = ?', [id], function(err) {
+            if (err) {
+                return res.status(500).json({ success: false, error: 'خطأ في حذف البيانات' });
+            }
+            res.json({ success: true, message: 'تم حذف الطلب بنجاح' });
+        });
+    });
+});
+
+// لوحة التحكم (Dashboard) - واجهة ويب
+app.get('/admin', (req, res) => {
+    const dashboardHTML = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="ar">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>لوحة تحكم - Nile Workforce</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; }
+            .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+            .header { background: #0f3b5c; color: white; padding: 25px; border-radius: 12px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+            .header h1 { font-size: 1.8rem; }
+            .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+            .stat-card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center; border-top: 5px solid #1e88e5; }
+            .stat-card h3 { font-size: 2.5rem; color: #0f3b5c; margin-bottom: 10px; }
+            .applications-table { background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow: hidden; }
+            table { width: 100%; border-collapse: collapse; }
+            th { background: #0f3b5c; color: white; padding: 18px 15px; text-align: right; font-weight: 600; }
+            td { padding: 15px; border-bottom: 1px solid #eee; }
+            tr:hover { background: #f8fafc; }
+            .btn { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; margin: 2px; }
+            .btn-view { background: #1e88e5; color: white; }
+            .btn-download { background: #4CAF50; color: white; }
+            .btn-delete { background: #f44336; color: white; }
+            .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+            .modal-content { background: white; width: 90%; max-width: 700px; margin: 50px auto; padding: 30px; border-radius: 12px; max-height: 80vh; overflow-y: auto; }
+            .close-modal { float: left; font-size: 1.8rem; cursor: pointer; color: #666; }
+            .loading { text-align: center; padding: 50px; font-size: 1.2rem; color: #666; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1><i class="fas fa-user-tie"></i> لوحة تحكم طلبات التوظيف - Nile Workforce</h1>
+                <div style="font-size: 1.1rem;"><i class="fas fa-clock"></i> ${new Date().toLocaleString('ar-EG')}</div>
+            </div>
+            
+            <div class="stats" id="statsContainer">
+                <div class="stat-card">
+                    <h3 id="totalApplications">0</h3>
+                    <p>إجمالي الطلبات</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="todayApplications">0</h3>
+                    <p>طلبات اليوم</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="hotelApplications">0</h3>
+                    <p>طلبات الفنادق</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="factoryApplications">0</h3>
+                    <p>طلبات المصانع</p>
+                </div>
+            </div>
+            
+            <div class="applications-table">
+                <div style="padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                    <h2><i class="fas fa-list"></i> جميع طلبات التوظيف</h2>
+                    <button onclick="refreshApplications()" style="background: #0f3b5c; color: white; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer;">
+                        <i class="fas fa-sync-alt"></i> تحديث البيانات
+                    </button>
+                </div>
+                <div id="applicationsContainer" class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> جاري تحميل البيانات...
+                </div>
+            </div>
+        </div>
+        
+        <!-- نافذة عرض التفاصيل -->
+        <div id="detailModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+                <div id="modalContent"></div>
+            </div>
+        </div>
+        
+        <script>
+            let applications = [];
+            
+            // تحميل البيانات عند فتح الصفحة
+            document.addEventListener('DOMContentLoaded', loadApplications);
+            
+            async function loadApplications() {
+                try {
+                    const response = await fetch('/api/applications');
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        applications = data.applications;
+                        displayApplications(applications);
+                        updateStats(applications);
+                    }
+                } catch (error) {
+                    document.getElementById('applicationsContainer').innerHTML = 
+                        '<div style="color: #f44336; text-align: center; padding: 30px;"><i class="fas fa-exclamation-triangle"></i> خطأ في تحميل البيانات</div>';
+                }
+            }
+            
+            function displayApplications(apps) {
+                const container = document.getElementById('applicationsContainer');
+                
+                if (apps.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">لا توجد طلبات توظيف بعد</div>';
+                    return;
+                }
+                
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>الاسم</th>
+                                <th>الهاتف</th>
+                                <th>المحافظة</th>
+                                <th>القطاع</th>
+                                <th>الخبرة</th>
+                                <th>تاريخ التقديم</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                apps.forEach((app, index) => {
+                    const date = new Date(app.created_at).toLocaleString('ar-EG');
+                    html += `
+                        <tr>
+                            <td>${app.id}</td>
+                            <td><strong>${app.name}</strong><br><small>${app.email}</small></td>
+                            <td>${app.phone}</td>
+                            <td>${app.governorate}</td>
+                            <td><span style="background: #e8f0fe; padding: 4px 10px; border-radius: 4px; font-size: 0.9rem;">${app.sector}</span></td>
+                            <td>${app.experience}</td>
+                            <td><small>${date}</small></td>
+                            <td>
+                                <button class="btn btn-view" onclick="viewApplication(${app.id})">
+                                    <i class="fas fa-eye"></i> عرض
+                                </button>
+                                <button class="btn btn-download" onclick="downloadCV('${app.cv_filename}', '${app.name}')">
+                                    <i class="fas fa-download"></i> السيرة
+                                </button>
+                                <button class="btn btn-delete" onclick="deleteApplication(${app.id})">
+                                    <i class="fas fa-trash"></i> حذف
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                container.innerHTML = html;
+            }
+            
+            function updateStats(apps) {
+                const today = new Date().toDateString();
+                const todayApps = apps.filter(app => new Date(app.created_at).toDateString() === today);
+                const hotelApps = apps.filter(app => app.sector.includes('فندق') || app.sector.includes('hotel'));
+                const factoryApps = apps.filter(app => app.sector.includes('مصنع') || app.sector.includes('factory'));
+                
+                document.getElementById('totalApplications').textContent = apps.length;
+                document.getElementById('todayApplications').textContent = todayApps.length;
+                document.getElementById('hotelApplications').textContent = hotelApps.length;
+                document.getElementById('factoryApplications').textContent = factoryApps.length;
+            }
+            
+            async function viewApplication(id) {
+                try {
+                    const response = await fetch('/api/applications/${id}');
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        const app = data.application;
+                        const date = new Date(app.created_at).toLocaleString('ar-EG');
+                        
+                        const modalContent = document.getElementById('modalContent');
+                        modalContent.innerHTML = \`
+                            <h2 style="color: #0f3b5c; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                                <i class="fas fa-user-circle"></i> تفاصيل طلب التوظيف #\${app.id}
+                            </h2>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                                    <h3 style="color: #555; margin-bottom: 15px;"><i class="fas fa-user"></i> المعلومات الشخصية</h3>
+                                    <p><strong>الاسم:</strong> \${app.name}</p>
+                                    <p><strong>الهاتف:</strong> \${app.phone}</p>
+                                    <p><strong>البريد الإلكتروني:</strong> \${app.email}</p>
+                                    <p><strong>المحافظة:</strong> \${app.governorate}</p>
+                                </div>
+                                
+                                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                                    <h3 style="color: #555; margin-bottom: 15px;"><i class="fas fa-briefcase"></i> المعلومات الوظيفية</h3>
+                                    <p><strong>القطاع:</strong> <span style="background: #e8f0fe; padding: 4px 10px; border-radius: 4px;">\${app.sector}</span></p>
+                                    <p><strong>الخبرة:</strong> \${app.experience}</p>
+                                    <p><strong>تاريخ التقديم:</strong> \${date}</p>
+                                    <p><strong>السيرة الذاتية:</strong> 
+                                        <button onclick="downloadCV('\${app.cv_filename}', '\${app.name}')" style="background: #4CAF50; color: white; padding: 6px 12px; border-radius: 4px; border: none; margin-right: 10px; cursor: pointer;">
+                                            <i class="fas fa-download"></i> تحميل الملف
+                                        </button>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            \${app.message ? \`
+                                <div style="background: #f0f9f0; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-right: 4px solid #4CAF50;">
+                                    <h3 style="color: #555; margin-bottom: 10px;"><i class="fas fa-comment"></i> الملاحظات الإضافية</h3>
+                                    <p>\${app.message}</p>
+                                </div>
+                            \` : ''}
+                            
+                            <div style="text-align: center; margin-top: 30px;">
+                                <button onclick="closeModal()" style="background: #666; color: white; padding: 10px 25px; border-radius: 6px; border: none; margin-left: 10px; cursor: pointer;">
+                                    <i class="fas fa-times"></i> إغلاق
+                                </button>
+                                <button onclick="window.open('https://wa.me/\${app.phone.replace('+', '')}', '_blank')" style="background: #25D366; color: white; padding: 10px 25px; border-radius: 6px; border: none; cursor: pointer;">
+                                    <i class="fab fa-whatsapp"></i> التواصل عبر واتساب
+                                </button>
+                            </div>
+                        \`;
+                        
+                        document.getElementById('detailModal').style.display = 'block';
+                    }
+                } catch (error) {
+                    alert('خطأ في تحميل تفاصيل الطلب');
+                }
+            }
+            
+            function downloadCV(filename, applicantName) {
+                window.open('/uploads/' + encodeURIComponent(filename), '_blank');
+            }
+            
+            async function deleteApplication(id) {
+                if (!confirm('هل أنت متأكد من حذف هذا الطلب؟ سيتم حذف جميع البيانات بما فيها السيرة الذاتية.')) {
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/applications/' + id, {
+                        method: 'DELETE'
+                    });
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        alert('تم حذف الطلب بنجاح');
+                        loadApplications();
+                    }
+                } catch (error) {
+                    alert('خطأ في حذف الطلب');
+                }
+            }
+            
+            function closeModal() {
+                document.getElementById('detailModal').style.display = 'none';
+            }
+            
+            function refreshApplications() {
+                document.getElementById('applicationsContainer').innerHTML = 
+                    '<div class="loading"><i class="fas fa-spinner fa-spin"></i> جاري تحديث البيانات...</div>';
+                loadApplications();
+            }
+            
+            // إغلاق النافذة بالضغط خارجها
+            window.onclick = function(event) {
+                const modal = document.getElementById('detailModal');
+                if (event.target === modal) {
+                    closeModal();
+                }
+            }
+        </script>
+    </body>
+    </html>
+    `;
+    res.send(dashboardHTML);
+});
+
+// تشغيل الخادم
+app.listen(PORT, () => {
+    console.log(`✅ الخادم يعمل على http://localhost:${PORT}`);
+    console.log(`📊 لوحة التحكم: http://localhost:${PORT}/admin`);
+    console.log(`📤 API للتقديم: http://localhost:${PORT}/api/apply`);
+});
 </body>
 </html>
