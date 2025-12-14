@@ -1,191 +1,161 @@
+<!--
+Nile Workforce – FULL PROFESSIONAL VERSION
+Author: Hussein Adly
+Frontend: HTML + CSS
+Backend: Firebase Firestore + Storage
+This version restores FULL professional design + admin dashboard
+-->
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nile Work Force | التوظيف الاحترافي للفنادق والمصانع والشركات</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDK -->
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
-        
-        // Your web app's Firebase configuration
-        // Replace with your actual Firebase config from the console
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
-    </script>
-    
-    <style>
-        /* Existing styles remain unchanged */
-    </style>
+  <meta charset="UTF-8" />
+  <title>Nile Workforce | شركة توظيف احترافية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --primary:#0a2540;
+      --secondary:#0066cc;
+      --accent:#00a8e8;
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --radius:18px;
+      --shadow:0 15px 40px rgba(0,0,0,.08)
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:#222}
+    header{background:linear-gradient(135deg,var(--primary),#082136);color:#fff;padding:25px 0}
+    .container{max-width:1200px;margin:auto;padding:0 25px}
+    .hero{text-align:center;padding:80px 20px}
+    .hero h1{font-size:3rem;margin-bottom:20px}
+    .hero p{font-size:1.3rem;opacity:.9}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:35px;margin-bottom:40px}
+    h2{color:var(--primary);margin-bottom:25px}
+    label{font-weight:700;margin-top:20px;display:block}
+    input,select,textarea{width:100%;padding:16px;border-radius:14px;border:1px solid #ddd;margin-top:8px;font-size:15px}
+    button{background:linear-gradient(135deg,var(--secondary),var(--accent));color:#fff;border:none;padding:16px 35px;border-radius:14px;font-weight:800;font-size:16px;cursor:pointer;margin-top:25px}
+    button:hover{opacity:.9}
+    table{width:100%;border-collapse:collapse}
+    th{background:var(--primary);color:#fff;padding:18px}
+    td{padding:16px;border-bottom:1px solid #eee}
+    .admin{display:none}
+    .admin-btn{position:fixed;bottom:30px;left:30px;background:var(--primary);color:#fff;width:65px;height:65px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;box-shadow:var(--shadow)}
+    footer{text-align:center;padding:30px;color:#777}
+  </style>
 </head>
 <body>
-    <!-- Existing HTML structure remains unchanged -->
-    
-    <script type="module">
-        // =========== متغيرات النظام ===========
-        const ADMIN_PASSWORD = 'admin123';  // يمكنك تغيير كلمة المرور هنا إذا لزم الأمر
-        const PHONE_NUMBER = '01028052445';
-        const WHATSAPP_NUMBER = '201028052445';
-        const APPLICATIONS_COLLECTION = 'applications';
-        const CV_STORAGE_PATH = 'cvs';
-       
-        // =========== تهيئة النظام ===========
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 نظام Nile Work Force يعمل بنجاح مع Firebase');
-           
-            // تفعيل رفع الملفات
-            document.getElementById('fileUploadArea').addEventListener('click', function() {
-                document.getElementById('cv').click();
-            });
-           
-            document.getElementById('cv').addEventListener('change', handleFileUpload);
-           
-            // زر لوحة التحكم
-            document.getElementById('adminToggle').addEventListener('click', showAdminDashboard);
-           
-            // التمرير السلس
-            setupSmoothScroll();
-           
-            // تحديث الإحصائيات
-            updateStats();
-        });
-       
-        // =========== معالجة رفع الملفات ===========
-        function handleFileUpload(e) {
-            // Existing code remains unchanged
-        }
-       
-        // =========== معالجة نموذج التقديم ===========
-        document.getElementById('jobApplicationForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-           
-            // جمع البيانات (existing validation code remains)
-           
-            // ... validation ...
-           
-            try {
-                // رفع السيرة الذاتية إلى Firebase Storage
-                const cvFile = document.getElementById('cv').files[0];
-                const uniqueFileName = `${Date.now()}_${cvFile.name}`;
-                const storageRef = ref(storage, `${CV_STORAGE_PATH}/${uniqueFileName}`);
-                
-                const snapshot = await uploadBytes(storageRef, cvFile);
-                const cvUrl = await getDownloadURL(storageRef);
-                
-                // إنشاء كائن الطلب
-                const application = {
-                    name: fullName,
-                    phone: phone,
-                    email: email,
-                    governorate: document.getElementById('governorate').value,
-                    sector: document.getElementById('sector').value,
-                    experience: document.getElementById('experience').value,
-                    cvUrl: cvUrl,
-                    cvFileName: cvFile.name,
-                    cvFileType: cvFile.type,
-                    cvFileSize: cvFile.size,
-                    message: document.getElementById('message').value.trim() || 'لا يوجد',
-                    date: new Date().toLocaleString('ar-EG', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    }),
-                    timestamp: Date.now(),
-                    status: 'جديد'
-                };
-                
-                // حفظ في Firestore
-                const docRef = await addDoc(collection(db, APPLICATIONS_COLLECTION), application);
-                application.id = docRef.id;
-                
-                // عرض رسالة النجاح (existing code)
-                
-                // ... success message ...
-                
-                // تحديث لوحة التحكم إذا كانت مفتوحة
-                if (document.getElementById('dashboard').style.display === 'block') {
-                    loadDashboard();
-                }
-                
-                updateStats();
-            } catch (error) {
-                console.error('خطأ في حفظ الطلب:', error);
-                showMessage('حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.', 'error');
-            }
-        });
-       
-        // =========== لوحة التحكم ===========
-        async function loadDashboard() {
-            try {
-                const q = query(collection(db, APPLICATIONS_COLLECTION), orderBy('timestamp', 'desc'));
-                const querySnapshot = await getDocs(q);
-                
-                const applications = [];
-                querySnapshot.forEach((doc) => {
-                    applications.push({ id: doc.id, ...doc.data() });
-                });
-                
-                // Update UI with applications (existing code for count, stats, table)
-                
-                // ... existing update code ...
-            } catch (error) {
-                console.error('خطأ في تحميل البيانات:', error);
-                alert('حدث خطأ أثناء تحميل لوحة التحكم. يرجى المحاولة مرة أخرى.');
-            }
-        }
-       
-        function viewApplication(id) {
-            // Find app from loaded applications or fetch from db if needed
-            // In downloadCV, use cvUrl directly for href
-        }
-       
-        function downloadCV(id) {
-            const applications = // get from loaded data
-            const app = applications.find(a => a.id === id);
-           
-            if (app && app.cvUrl) {
-                window.open(app.cvUrl, '_blank');
-            } else {
-                alert('السيرة الذاتية غير متاحة لهذا الطلب.');
-            }
-        }
-       
-        // =========== إدارة البيانات ===========
-        async function getApplications() {
-            const q = query(collection(db, APPLICATIONS_COLLECTION), orderBy('timestamp', 'desc'));
-            const querySnapshot = await getDocs(q);
-            const applications = [];
-            querySnapshot.forEach((doc) => {
-                applications.push({ id: doc.id, ...doc.data() });
-            });
-            return applications;
-        }
-       
-        // Remove localStorage related functions
-        // Update other functions to use Firebase
-        
-        // ... rest of the script adapted for Firebase ...
-    </script>
+
+<header>
+  <div class="container hero">
+    <h1>Nile Workforce</h1>
+    <p>شركة توظيف احترافية للفنادق – المصانع – الشركات</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2><i class="fas fa-briefcase"></i> تقديم طلب وظيفة</h2>
+    <form id="jobForm">
+      <label>الاسم الكامل</label>
+      <input id="name" required>
+
+      <label>رقم الهاتف</label>
+      <input id="phone" required>
+
+      <label>البريد الإلكتروني</label>
+      <input id="email" type="email" required>
+
+      <label>القطاع</label>
+      <select id="sector" required>
+        <option value="">اختر القطاع</option>
+        <option>الفنادق</option>
+        <option>المصانع</option>
+        <option>الشركات</option>
+      </select>
+
+      <label>السيرة الذاتية</label>
+      <input type="file" id="cv" accept=".pdf,.doc,.docx" required>
+
+      <button type="submit"><i class="fas fa-paper-plane"></i> إرسال الطلب</button>
+    </form>
+  </div>
+
+  <div class="card admin" id="admin">
+    <h2><i class="fas fa-chart-line"></i> لوحة التحكم</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>الاسم</th><th>الهاتف</th><th>القطاع</th><th>السيرة الذاتية</th>
+        </tr>
+      </thead>
+      <tbody id="apps"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="admin-btn" id="adminBtn"><i class="fas fa-lock"></i></div>
+
+<footer>
+  © 2025 Nile Workforce | WhatsApp: 01028052445 | Email: hussienadly606@gmail.com
+</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "PUT_KEY",
+  authDomain: "PUT_DOMAIN",
+  projectId: "PUT_ID",
+  storageBucket: "PUT_BUCKET"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+const form = document.getElementById('jobForm');
+const tbody = document.getElementById('apps');
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const file = cv.files[0];
+  const refFile = ref(storage,'cvs/'+Date.now()+file.name);
+  await uploadBytes(refFile,file);
+  const url = await getDownloadURL(refFile);
+
+  await addDoc(collection(db,'applications'),{
+    name:name.value,
+    phone:phone.value,
+    email:email.value,
+    sector:sector.value,
+    cv:url,
+    createdAt:serverTimestamp()
+  });
+
+  alert('تم الإرسال بنجاح');
+  form.reset();
+});
+
+onSnapshot(collection(db,'applications'), snap => {
+  tbody.innerHTML=''; let i=1;
+  snap.forEach(doc=>{
+    const d=doc.data();
+    tbody.innerHTML+=`<tr><td>${i++}</td><td>${d.name}</td><td>${d.phone}</td><td>${d.sector}</td><td><a href="${d.cv}" target="_blank">تحميل</a></td></tr>`;
+  });
+});
+
+adminBtn.onclick=()=>{
+  const pass=prompt('كلمة المرور');
+  if(pass==='admin123') document.getElementById('admin').style.display='block';
+};
+</script>
+
 </body>
 </html>
