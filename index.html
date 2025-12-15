@@ -968,12 +968,12 @@
                     <!-- حقل رفع السيرة الذاتية -->
                     <div class="form-group">
                         <label for="cv">السيرة الذاتية (PDF أو Word) *</label>
-                        <label for="cv" class="file-upload" id="fileUploadArea">
+                        <div class="file-upload" id="fileUploadArea">
                             <i class="fas fa-cloud-upload-alt"></i>
                             <span id="fileUploadText" style="font-size: 1.1rem; font-weight: 600;">انقر لرفع السيرة الذاتية</span>
                             <p style="margin-top: 15px; color: var(--gray);">المسموح: PDF, DOC, DOCX (الحد الأقصى: 5MB)</p>
-                        </label>
-                        <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required>
+                            <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required>
+                        </div>
                         <div id="fileName" class="file-name"></div>
                     </div>
                    
@@ -1152,6 +1152,10 @@
             console.log('🚀 نظام Nile Work Force يعمل بنجاح');
            
             // تفعيل رفع الملفات
+            document.getElementById('fileUploadArea').addEventListener('click', function() {
+                document.getElementById('cv').click();
+            });
+           
             document.getElementById('cv').addEventListener('change', handleFileUpload);
            
             // زر لوحة التحكم
@@ -1204,7 +1208,7 @@
         }
        
         // =========== معالجة نموذج التقديم ===========
-        document.getElementById('jobApplicationForm').addEventListener('submit', function(e) {
+        document.getElementById('jobApplicationForm').addEventListener('submit', async function(e) {
             e.preventDefault();
            
             // جمع البيانات
@@ -1239,60 +1243,71 @@
                 return;
             }
            
-            // إنشاء كائن الطلب
-            const application = {
-                id: 'NWF-' + Date.now().toString().slice(-8),
-                name: fullName,
-                phone: phone,
-                email: email,
-                governorate: document.getElementById('governorate').value,
-                sector: document.getElementById('sector').value,
-                experience: document.getElementById('experience').value,
-                cvFile: {
-                    name: cvFile.name,
-                    size: cvFile.size,
-                    type: cvFile.type
-                    // Note: لا نخزن الملف نفسه بل معلومات عنه فقط
-                },
-                message: document.getElementById('message').value.trim() || 'لا يوجد',
-                date: new Date().toLocaleString('ar-EG', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }),
-                timestamp: Date.now(),
-                status: 'جديد'
+            // قراءة الملف كـ base64 لتخزينه
+            const reader = new FileReader();
+           
+            reader.onload = function(e) {
+                // إنشاء كائن الطلب
+                const application = {
+                    id: 'NWF-' + Date.now().toString().slice(-8),
+                    name: fullName,
+                    phone: phone,
+                    email: email,
+                    governorate: document.getElementById('governorate').value,
+                    sector: document.getElementById('sector').value,
+                    experience: document.getElementById('experience').value,
+                    cvFile: {
+                        name: cvFile.name,
+                        size: cvFile.size,
+                        type: cvFile.type,
+                        data: e.target.result // حفظ الملف كـ base64
+                    },
+                    message: document.getElementById('message').value.trim() || 'لا يوجد',
+                    date: new Date().toLocaleString('ar-EG', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }),
+                    timestamp: Date.now(),
+                    status: 'جديد'
+                };
+               
+                // حفظ الطلب
+                saveApplication(application);
+               
+                // عرض رسالة النجاح
+                const refNumber = application.id;
+                showMessage(`
+                    <div style="text-align: center;">
+                        <i class="fas fa-check-circle" style="font-size: 3.5rem; color: #28a745; margin-bottom: 20px;"></i>
+                        <h3 style="color: #155724; margin-bottom: 15px;">تم إرسال طلبك بنجاح!</h3>
+                        <p style="margin-bottom: 10px;">رقم المرجع: <strong style="color: var(--primary);">${refNumber}</strong></p>
+                        <p style="margin-bottom: 10px;">شكرًا لك <strong style="color: var(--secondary);">${application.name}</strong> على تقديم طلبك.</p>
+                        <p style="margin-bottom: 15px;">سأتصل بك على الرقم <strong style="color: var(--secondary);">${application.phone}</strong> خلال 24-48 ساعة.</p>
+                        <p style="font-size: 0.9rem; color: #666;">للاستفسار الفوري: <strong style="color: var(--primary);">${PHONE_NUMBER}</strong></p>
+                        <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">ملاحظة: تم حفظ السيرة الذاتية بنجاح في النظام</p>
+                    </div>
+                `, 'success');
+               
+                // مسح النموذج بعد 8 ثوان
+                setTimeout(() => {
+                    resetForm();
+                    document.getElementById('formMessage').style.display = 'none';
+                }, 8000);
+               
+                // تحديث لوحة التحكم إذا كانت مفتوحة
+                if (document.getElementById('dashboard').style.display === 'block') {
+                    loadDashboard();
+                }
             };
            
-            // حفظ الطلب (بدون الملف نفسه)
-            saveApplication(application);
+            reader.onerror = function() {
+                showMessage('حدث خطأ أثناء قراءة السيرة الذاتية. يرجى المحاولة مرة أخرى.', 'error');
+            };
            
-            // عرض رسالة النجاح
-            const refNumber = application.id;
-            showMessage(`
-                <div style="text-align: center;">
-                    <i class="fas fa-check-circle" style="font-size: 3.5rem; color: #28a745; margin-bottom: 20px;"></i>
-                    <h3 style="color: #155724; margin-bottom: 15px;">تم إرسال طلبك بنجاح!</h3>
-                    <p style="margin-bottom: 10px;">رقم المرجع: <strong style="color: var(--primary);">${refNumber}</strong></p>
-                    <p style="margin-bottom: 10px;">شكرًا لك <strong style="color: var(--secondary);">${application.name}</strong> على تقديم طلبك.</p>
-                    <p style="margin-bottom: 15px;">سأتصل بك على الرقم <strong style="color: var(--secondary);">${application.phone}</strong> خلال 24-48 ساعة.</p>
-                    <p style="font-size: 0.9rem; color: #666;">للاستفسار الفوري: <strong style="color: var(--primary);">${PHONE_NUMBER}</strong></p>
-                    <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">ملاحظة: تم حفظ معلومات السيرة الذاتية باسم "${cvFile.name}"</p>
-                </div>
-            `, 'success');
-           
-            // مسح النموذج بعد 8 ثوان
-            setTimeout(() => {
-                resetForm();
-                document.getElementById('formMessage').style.display = 'none';
-            }, 8000);
-           
-            // تحديث لوحة التحكم إذا كانت مفتوحة
-            if (document.getElementById('dashboard').style.display === 'block') {
-                loadDashboard();
-            }
+            reader.readAsDataURL(cvFile);
         });
        
         // =========== إعادة تعيين النموذج ===========
@@ -1440,6 +1455,9 @@
                                 <button class="btn" onclick="viewApplication('${app.id}')" style="background: var(--primary); color: white; padding: 8px 12px; font-size: 0.9rem;">
                                     <i class="fas fa-eye"></i>
                                 </button>
+                                <button class="btn" onclick="downloadCV('${app.id}')" style="background: var(--accent); color: white; padding: 8px 12px; font-size: 0.9rem;" title="تحميل السيرة الذاتية">
+                                    <i class="fas fa-download"></i>
+                                </button>
                                 <button class="btn" onclick="contactApplicant('${app.phone}', '${app.name}')" style="background: #25D366; color: white; padding: 8px 12px; font-size: 0.9rem;">
                                     <i class="fab fa-whatsapp"></i>
                                 </button>
@@ -1490,6 +1508,9 @@
                         <p><strong>اسم الملف:</strong> ${app.cvFile.name}</p>
                         <p><strong>حجم الملف:</strong> ${formatFileSize(app.cvFile.size)}</p>
                         <p><strong>نوع الملف:</strong> ${app.cvFile.type}</p>
+                        <button class="btn btn-primary" onclick="downloadCV('${app.id}')" style="margin-top: 15px; width: 100%;">
+                            <i class="fas fa-download"></i> تحميل السيرة الذاتية
+                        </button>
                     </div>
                    
                     ${app.message !== 'لا يوجد' ? `
@@ -1508,6 +1529,27 @@
             `;
            
             alertWithHTML(details);
+        }
+       
+        function downloadCV(id) {
+            const applications = getApplications();
+            const app = applications.find(a => a.id === id);
+           
+            if (app && app.cvFile && app.cvFile.data) {
+                // إنشاء رابط تحميل
+                const link = document.createElement('a');
+                link.href = app.cvFile.data;
+                link.download = app.cvFile.name;
+                
+                // إضافة الرابط للصفحة والنقر عليه
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                alert(`تم بدء تحميل السيرة الذاتية: ${app.cvFile.name}`);
+            } else {
+                alert('عذراً، السيرة الذاتية غير متاحة للتحميل.');
+            }
         }
        
         function contactApplicant(phone, name) {
