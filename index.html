@@ -1,422 +1,790 @@
-// كود JavaScript للوحة التحكم
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const session = require('express-session');
+const multer = require('multer');
+const path = require('path');
+const bcrypt = require('bcryptjs');
 
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // التحقق من حالة تسجيل الدخول
-    checkLoginStatus();
-    
-    // تهيئة الأحداث
-    initializeEvents();
-    
-    // تحميل وتحديث البيانات
-    loadApplications();
-    
-    // إعداد التهيئة الافتراضية
-    setupDefaultLogin();
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// اتصال بقاعدة البيانات
+mongoose.connect(process.env.MONGODB_URI, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
+})
+.then(() => console.log('✅ اتصال بقاعدة البيانات ناجح'))
+.catch(err => console.error('❌ خطأ في الاتصال:', err));
+
+// إعدادات أساسية
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.set('view engine', 'ejs');
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 24 * 60 * 60 * 1000 } // 24 ساعة
+}));
+
+// مسارات التطبيق
+app.use('/', require('./routes/auth'));
+app.use('/jobs', require('./routes/jobs'));
+app.use('/admin', require('./routes/admin'));
+
+// الصفحة الرئيسية
+app.get('/', (req, res) => {
+  res.render('index', { 
+    user: req.session.user,
+    message: req.query.applied ? 'تم تقديم الطلب بنجاح!' : null
+  });
 });
 
-// تهيئة الأحداث
-function initializeEvents() {
-    // زر تسجيل الدخول
-    const loginBtn = document.getElementById('loginBtn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', handleLogin);
-    }
-    
-    // زر تسجيل الخروج
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', handleLogout);
-    }
-    
-    // زر البحث
-    const searchBtn = document.getElementById('searchBtn');
-    const searchInput = document.getElementById('searchInput');
-    if (searchBtn) {
-        searchBtn.addEventListener('click', () => filterApplications());
-    }
-    if (searchInput) {
-        searchInput.addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') filterApplications();
-        });
-    }
-    
-    // الفلاتر
-    const sectorFilter = document.getElementById('sectorFilter');
-    const governorateFilter = document.getElementById('governorateFilter');
-    if (sectorFilter) {
-        sectorFilter.addEventListener('change', filterApplications);
-    }
-    if (governorateFilter) {
-        governorateFilter.addEventListener('change', filterApplications);
-    }
-    
-    // زر التحديث
-    const refreshBtn = document.getElementById('refreshBtn');
-    if (refreshBtn) {
-        refreshBtn.addEventListener('click', loadApplications);
-    }
-    
-    // زر تصدير البيانات
-    const exportBtn = document.getElementById('exportBtn');
-    if (exportBtn) {
-        exportBtn.addEventListener('click', exportData);
-    }
-}
+// تشغيل السيرفر
+app.listen(PORT, () => {
+  console.log(`🚀 الموقع يعمل على: http://localhost:${PORT}`);
+});const mongoose = require('mongoose');
 
-// التحقق من حالة تسجيل الدخول
-function checkLoginStatus() {
-    const isLoggedIn = localStorage.getItem('nileAdminLoggedIn') === 'true';
-    const loginModal = document.getElementById('loginModal');
+const UserSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: { 
+    type: String, 
+    enum: ['job_seeker', 'employer', 'admin'], 
+    default: 'job_seeker' 
+  },
+  company: String,
+  location: { 
+    type: String, 
+    enum: ['القاهرة', 'الإسكندرية', 'شرم الشيخ', 'الغردقة', 'أسوان', 'الأقصر', 'الإسماعيلية', 'السويس'] 
+  },
+  phone: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now }
+});
+
+// تشفير كلمة المرور
+UserSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+// مقارنة كلمة المرور
+UserSchema.methods.matchPassword = async function(password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+module.exports = mongoose.model('User', UserSchema);
+const mongoose = require('mongoose');
+
+const JobSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  company: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  location: { 
+    type: String, 
+    enum: ['القاهرة', 'الإسكندرية', 'شرم الشيخ', 'الغردقة', 'أسوان', 'الأقصر', 'الإسماعيلية', 'السويس'] 
+  },
+  sector: { 
+    type: String, 
+    enum: ['hotels', 'resorts', 'companies', 'factories'],
+    required: true
+  },
+  createdAt: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model('Job', JobSchema);
+const mongoose = require('mongoose');
+
+const ApplicationSchema = new mongoose.Schema({
+  job: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' },
+  applicant: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  resume: { type: String, required: true },
+  coverLetter: String,
+  appliedAt: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model('Application', ApplicationSchema);
+const express = require('express');
+const router = express.Router();
+const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+
+// عرض نموذج التسجيل
+router.get('/register', (req, res) => {
+  res.render('register', { error: null });
+});
+
+// معالجة التسجيل
+router.post('/register', async (req, res) => {
+  try {
+    const { name, email, password, role, company, location, phone } = req.body;
     
-    if (!isLoggedIn && loginModal) {
-        loginModal.style.display = 'flex';
-    } else if (loginModal) {
-        loginModal.style.display = 'none';
+    // التحقق من وجود البريد الإلكتروني
+    let user = await User.findOne({ email });
+    if (user) return res.render('register', { error: 'البريد الإلكتروني مسجل مسبقاً' });
+
+    // إنشاء مستخدم جديد
+    user = new User({
+      name,
+      email,
+      password,
+      role,
+      company: role === 'employer' ? company : undefined,
+      location: role === 'job_seeker' ? location : undefined,
+      phone
+    });
+
+    await user.save();
+
+    // تسجيل الدخول تلقائياً
+    req.session.user = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+    };
+
+    res.redirect('/');
+  } catch (err) {
+    res.render('register', { error: 'حدث خطأ أثناء التسجيل' });
+  }
+});
+
+// عرض نموذج الدخول
+router.get('/login', (req, res) => {
+  res.render('login', { error: null });
+});
+
+// معالجة الدخول
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    
+    if (!user || !(await user.matchPassword(password))) {
+      return res.render('login', { error: 'البريد أو كلمة المرور غير صحيحة' });
     }
-}
 
-// إعداد بيانات الدخول الافتراضية
-function setupDefaultLogin() {
-    // تخزين بيانات الدخول الافتراضية إذا لم تكن موجودة
-    if (!localStorage.getItem('adminCredentials')) {
-        const defaultCredentials = {
-            username: 'admin',
-            password: 'nile2024'
-        };
-        localStorage.setItem('adminCredentials', JSON.stringify(defaultCredentials));
-    }
-}
+    req.session.user = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+    };
 
-// معالجة تسجيل الدخول
-function handleLogin() {
-    const username = document.getElementById('adminUsername').value.trim();
-    const password = document.getElementById('adminPassword').value;
-    
-    // الحصول على بيانات الاعتماد المخزنة
-    const storedCredentials = JSON.parse(localStorage.getItem('adminCredentials'));
-    
-    if (username === storedCredentials.username && password === storedCredentials.password) {
-        // تسجيل الدخول الناجح
-        localStorage.setItem('nileAdminLoggedIn', 'true');
-        
-        // إخفاء نافذة تسجيل الدخول
-        const loginModal = document.getElementById('loginModal');
-        if (loginModal) {
-            loginModal.style.display = 'none';
-        }
-        
-        // تحميل البيانات
-        loadApplications();
-        
-        // عرض رسالة ترحيب
-        alert('مرحباً بك في لوحة تحكم Nile Work Force!');
-    } else {
-        alert('اسم المستخدم أو كلمة المرور غير صحيحة');
-    }
-}
+    res.redirect('/');
+  } catch (err) {
+    res.render('login', { error: 'حدث خطأ أثناء الدخول' });
+  }
+});
 
-// معالجة تسجيل الخروج
-function handleLogout(event) {
-    event.preventDefault();
-    
-    if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
-        localStorage.removeItem('nileAdminLoggedIn');
-        window.location.reload();
-    }
-}
+// تسجيل الخروج
+router.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.clearCookie('connect.sid');
+  res.redirect('/');
+});
 
-// تحميل طلبات التوظيف
-function loadApplications() {
-    // الحصول على البيانات من LocalStorage
-    const applications = JSON.parse(localStorage.getItem('nileWorkForceApplications')) || [];
-    
-    // تحديث الإحصائيات
-    updateStatistics(applications);
-    
-    // عرض البيانات في الجدول
-    displayApplications(applications);
-}
+module.exports = router;
+const express = require('express');
+const router = express.Router();
+const Job = require('../models/Job');
+const Application = require('../models/Application');
+const User = require('../models/User');
+const upload = multer({ dest: 'public/uploads/' });
 
-// تحديث الإحصائيات
-function updateStatistics(applications) {
-    const total = applications.length;
-    const today = new Date().toLocaleDateString('ar-EG');
+// عرض جميع الوظائف
+router.get('/', async (req, res) => {
+  try {
+    const jobs = await Job.find()
+      .populate('company', 'name company')
+      .sort({ createdAt: -1 });
     
-    // حساب الإحصائيات
-    const hotelSector = applications.filter(app => app.jobSector === 'الفنادق').length;
-    const resortSector = applications.filter(app => app.jobSector === 'المنتجعات').length;
-    const todayApplications = applications.filter(app => {
-        const appDate = new Date(app.submissionDate || app.id).toLocaleDateString('ar-EG');
-        return appDate === today;
-    }).length;
-    
-    // تحديث الواجهة
-    document.getElementById('totalApplications').textContent = total;
-    document.getElementById('hotelSector').textContent = hotelSector;
-    document.getElementById('resortSector').textContent = resortSector;
-    document.getElementById('todayApplications').textContent = todayApplications;
-}
+    res.render('jobs', { 
+      jobs, 
+      user: req.session.user,
+      sectors: [
+        { value: 'hotels', name: 'الفنادق' },
+        { value: 'resorts', name: 'المنتجعات' },
+        { value: 'companies', name: 'الشركات' },
+        { value: 'factories', name: 'المصانع' }
+      ]
+    });
+  } catch (err) {
+    console.error(err);
+    res.redirect('/');
+  }
+});
 
-// عرض الطلبات في الجدول
-function displayApplications(applications) {
-    const tableBody = document.getElementById('applicationsTableBody');
-    if (!tableBody) return;
+// نموذج التقديم على وظيفة
+router.get('/apply/:id', async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id).populate('company', 'name');
+    if (!job) return res.redirect('/jobs');
     
-    // مسح المحتوى الحالي
-    tableBody.innerHTML = '';
+    res.render('apply', { 
+      job, 
+      user: req.session.user,
+      error: null
+    });
+  } catch (err) {
+    res.redirect('/jobs');
+  }
+});
+
+// حفظ طلب التقديم
+router.post('/apply/:id', upload.single('resume'), async (req, res) => {
+  try {
+    const { coverLetter } = req.body;
+    const job = await Job.findById(req.params.id);
     
-    if (applications.length === 0) {
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="9" style="text-align: center; padding: 40px;">
-                    <i class="fas fa-inbox" style="font-size: 48px; color: #ddd; margin-bottom: 15px;"></i>
-                    <p>لا توجد طلبات توظيف حتى الآن</p>
-                </td>
-            </tr>
-        `;
-        return;
-    }
+    if (!job) return res.redirect('/jobs');
     
-    // عرض كل طلب في صف
-    applications.forEach((app, index) => {
-        const row = document.createElement('tr');
-        
-        // تنسيق التاريخ
-        const date = app.submissionDate ? 
-            new Date(app.submissionDate).toLocaleDateString('ar-EG') : 
-            new Date(app.id).toLocaleDateString('ar-EG');
-        
-        row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${app.fullName || 'غير محدد'}</td>
-            <td>${app.nationalId || 'غير محدد'}</td>
-            <td>${app.phone || 'غير محدد'}</td>
-            <td>${app.governorate || 'غير محدد'}</td>
-            <td><span class="sector-badge">${app.jobSector || 'غير محدد'}</span></td>
-            <td>${app.experience || 'غير محدد'}</td>
-            <td>${date}</td>
-            <td>
-                <button class="action-btn view-btn" data-id="${app.id}">
-                    <i class="fas fa-eye"></i> عرض
-                </button>
-                <button class="action-btn delete delete-btn" data-id="${app.id}">
-                    <i class="fas fa-trash"></i> حذف
-                </button>
-            </td>
-        `;
-        
-        tableBody.appendChild(row);
+    const application = new Application({
+      job: job._id,
+      applicant: req.session.user._id,
+      resume: req.file.path.replace('public/', ''),
+      coverLetter
     });
     
-    // إضافة أحداث للأزرار
-    addTableEvents();
-}
+    await application.save();
+    res.redirect('/jobs?applied=true');
+  } catch (err) {
+    console.error(err);
+    res.redirect(`/jobs/apply/${req.params.id}?error=حدث خطأ`);
+  }
+});
 
-// إضافة أحداث لأزرار الجدول
-function addTableEvents() {
-    // أزرار العرض
-    document.querySelectorAll('.view-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const appId = this.getAttribute('data-id');
-            showApplicationDetails(appId);
-        });
+// نشر وظيفة جديدة (للموظفين فقط)
+router.post('/new', async (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'employer') {
+    return res.redirect('/login');
+  }
+  
+  try {
+    const job = new Job({
+      ...req.body,
+      company: req.session.user._id
     });
+    await job.save();
+    res.redirect('/jobs');
+  } catch (err) {
+    console.error(err);
+    res.redirect('/jobs?error=حدث خطأ');
+  }
+});
+
+module.exports = router;
+const express = require('express');
+const router = express.Router();
+const Application = require('../models/Application');
+const Job = require('../models/Job');
+const User = require('../models/User');
+
+// عرض لوحة التحكم (للمسؤول فقط)
+router.get('/dashboard', async (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'admin') {
+    return res.redirect('/login');
+  }
+  
+  try {
+    const applications = await Application.find()
+      .populate('job', 'title')
+      .populate('applicant', 'name email phone location')
+      .sort({ appliedAt: -1 });
     
-    // أزرار الحذف
-    document.querySelectorAll('.delete-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const appId = this.getAttribute('data-id');
-            deleteApplication(appId);
-        });
+    res.render('admin/dashboard', { 
+      applications,
+      user: req.session.user 
     });
-}
+  } catch (err) {
+    console.error(err);
+    res.redirect('/');
+  }
+});
 
 // عرض تفاصيل المتقدم
-function showApplicationDetails(appId) {
-    const applications = JSON.parse(localStorage.getItem('nileWorkForceApplications')) || [];
-    const application = applications.find(app => app.id == appId);
+router.get('/applicant/:id', async (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'admin') {
+    return res.redirect('/login');
+  }
+  
+  try {
+    const applicant = await User.findById(req.params.id);
+    const applications = await Application.find({ applicant: req.params.id })
+      .populate('job', 'title');
     
-    if (!application) {
-        document.getElementById('detailsContent').innerHTML = '<p>لم يتم العثور على بيانات المتقدم</p>';
-        return;
-    }
+    res.render('admin/applicant', { 
+      applicant,
+      applications,
+      user: req.session.user 
+    });
+  } catch (err) {
+    console.error(err);
+    res.redirect('/admin/dashboard');
+  }
+});
+
+module.exports = router;
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nile Work Force - منصة التوظيف المصرية</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Nile Work Force</h1>
+      <nav>
+        <% if (user) { %>
+          <span>مرحباً، <%= user.name %></span>
+          <a href="/logout">تسجيل خروج</a>
+          <% if (user.role === 'employer') { %>
+            <a href="/jobs#post-job">نشر وظيفة</a>
+          <% } %>
+        <% } else { %>
+          <a href="/login">تسجيل دخول</a>
+          <a href="/register">إنشاء حساب</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <% if (message) { %>
+      <div class="alert success"><%= message %></div>
+    <% } %>
+
+    <section class="hero">
+      <h2>أكبر منصة توظيف في مصر لقطاعات</h2>
+      <div class="sectors">
+        <div class="sector">الفنادق</div>
+        <div class="sector">المنتجعات</div>
+        <div class="sector">الشركات</div>
+        <div class="sector">المصانع</div>
+      </div>
+      <p>بدون أي رسوم على الباحثين عن العمل</p>
+      
+      <% if (!user) { %>
+        <div class="cta">
+          <a href="/register" class="btn primary">ابدأ الآن مجاناً</a>
+        </div>
+      <% } %>
+    </section>
+
+    <section id="post-job" class="post-job">
+      <% if (user && user.role === 'employer') { %>
+        <h2>نشر وظيفة جديدة</h2>
+        <form action="/jobs/new" method="POST">
+          <div class="form-group">
+            <label>المسمى الوظيفي</label>
+            <input type="text" name="title" required>
+          </div>
+          
+          <div class="form-group">
+            <label>القطاع</label>
+            <select name="sector" required>
+              <option value="hotels">الفنادق</option>
+              <option value="resorts">المنتجعات</option>
+              <option value="companies">الشركات</option>
+              <option value="factories">المصانع</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>المدينة</label>
+            <select name="location" required>
+              <option value="القاهرة">القاهرة</option>
+              <option value="الإسكندرية">الإسكندرية</option>
+              <option value="شرم الشيخ">شرم الشيخ</option>
+              <option value="الغردقة">الغردقة</option>
+              <option value="أسوان">أسوان</option>
+              <option value="الأقصر">الأقصر</option>
+              <option value="الإسماعيلية">الإسماعيلية</option>
+              <option value="السويس">السويس</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>الوصف</label>
+            <textarea name="description" rows="5" required></textarea>
+          </div>
+          
+          <button type="submit" class="btn primary">نشر الوظيفة</button>
+        </form>
+      <% } else if (user) { %>
+        <p class="info">يمكنك نشر وظائف فقط إذا كنت مسجلاً كشركة. <a href="/logout">غير الحساب</a></p>
+      <% } else { %>
+        <p class="info">يجب <a href="/login">تسجيل الدخول</a> كشركة لنشر وظائف</p>
+      <% } %>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Nile Work Force - جميع الحقوق محفوظة</p>
+    </div>
+  </footer>
+</body>
+      </html>
+          <!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>إنشاء حساب - Nile Work Force</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="logo">Nile Work Force</div>
     
-    // تنسيق التفاصيل
-    const detailsContent = document.getElementById('detailsContent');
-    detailsContent.innerHTML = `
-        <div class="detail-item">
-            <div class="detail-label"><i class="fas fa-user"></i> المعلومات الشخصية</div>
-            <p><strong>الاسم:</strong> ${application.fullName || 'غير محدد'}</p>
-            <p><strong>الرقم القومي:</strong> ${application.nationalId || 'غير محدد'}</p>
-            <p><strong>تاريخ الميلاد:</strong> ${application.birthDate || 'غير محدد'}</p>
-            <p><strong>الجنس:</strong> ${application.gender || 'غير محدد'}</p>
-        </div>
-        
-        <div class="detail-item">
-            <div class="detail-label"><i class="fas fa-phone"></i> معلومات التواصل</div>
-            <p><strong>الهاتف:</strong> ${application.phone || 'غير محدد'}</p>
-            <p><strong>البريد الإلكتروني:</strong> ${application.email || 'غير محدد'}</p>
-            <p><strong>العنوان:</strong> ${application.address || 'غير محدد'}</p>
-            <p><strong>المحافظة:</strong> ${application.governorate || 'غير محدد'}</p>
-        </div>
-        
-        <div class="detail-item">
-            <div class="detail-label"><i class="fas fa-briefcase"></i> المعلومات المهنية</div>
-            <p><strong>المؤهل الدراسي:</strong> ${application.education || 'غير محدد'}</p>
-            <p><strong>التخصص:</strong> ${application.specialization || 'غير محدد'}</p>
-            <p><strong>سنوات الخبرة:</strong> ${application.experience || 'غير محدد'}</p>
-            <p><strong>القطاع المطلوب:</strong> ${application.jobSector || 'غير محدد'}</p>
-            <p><strong>الوظائف السابقة:</strong> ${application.previousJobs || 'لا توجد'}</p>
-            <p><strong>المهارات:</strong> ${application.skills || 'لا توجد'}</p>
-        </div>
-        
-        <div class="detail-item">
-            <div class="detail-label"><i class="fas fa-info-circle"></i> معلومات إضافية</div>
-            <p><strong>الراتب المتوقع:</strong> ${application.expectedSalary ? application.expectedSalary + ' جنيه' : 'غير محدد'}</p>
-            <p><strong>متاح للبدء:</strong> ${application.availability || 'غير محدد'}</p>
-            <p><strong>ملاحظات:</strong> ${application.notes || 'لا توجد'}</p>
-            <p><strong>تاريخ التقديم:</strong> ${application.submissionDate || 'غير محدد'}</p>
-        </div>
-        
-        <div class="action-buttons">
-            <button class="btn contact-btn" onclick="contactApplicant('${application.phone}', '${application.fullName}')">
-                <i class="fas fa-phone"></i> الاتصال بالمتقدم
-            </button>
-        </div>
-    `;
+    <h2>إنشاء حساب جديد</h2>
     
-    // تمرير إلى الأعلى لعرض التفاصيل
-    detailsContent.scrollIntoView({ behavior: 'smooth' });
+    <% if (error) { %>
+      <div class="alert error"><%= error %></div>
+    <% } %>
+    
+    <form action="/register" method="POST">
+      <div class="form-group">
+        <label>الاسم الكامل</label>
+        <input type="text" name="name" required>
+      </div>
+      
+      <div class="form-group">
+        <label>البريد الإلكتروني</label>
+        <input type="email" name="email" required>
+      </div>
+      
+      <div class="form-group">
+        <label>كلمة المرور</label>
+        <input type="password" name="password" required>
+      </div>
+      
+      <div class="form-group">
+        <label>رقم الهاتف</label>
+        <input type="tel" name="phone" required pattern="[0-9]{11}" 
+               title="يجب أن يكون 11 رقماً مصرياً">
+      </div>
+      
+      <div class="form-group">
+        <label>النوع</label>
+        <select name="role" id="role" required>
+          <option value="job_seeker">باحث عن عمل</option>
+          <option value="employer">شركة/مؤسسة</option>
+        </select>
+      </div>
+      
+      <div id="employer-fields" style="display:none;">
+        <div class="form-group">
+          <label>اسم الشركة</label>
+          <input type="text" name="company">
+        </div>
+      </div>
+      
+      <div id="job-seeker-fields" style="display:none;">
+        <div class="form-group">
+          <label>المدينة</label>
+          <select name="location">
+            <option value="القاهرة">القاهرة</option>
+            <option value="الإسكندرية">الإسكندرية</option>
+            <option value="شرم الشيخ">شرم الشيخ</option>
+            <option value="الغردقة">الغردقة</option>
+            <option value="أسوان">أسوان</option>
+            <option value="الأقصر">الأقصر</option>
+            <option value="الإسماعيلية">الإسماعيلية</option>
+            <option value="السويس">السويس</option>
+          </select>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn primary">إنشاء الحساب</button>
+      
+      <p>لديك حساب بالفعل؟ <a href="/login">سجل دخول</a></p>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('role').addEventListener('change', function() {
+      const employerFields = document.getElementById('employer-fields');
+      const jobSeekerFields = document.getElementById('job-seeker-fields');
+      
+      if (this.value === 'employer') {
+        employerFields.style.display = 'block';
+        jobSeekerFields.style.display = 'none';
+      } else {
+        employerFields.style.display = 'none';
+        jobSeekerFields.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة التحكم - Nile Work Force</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Nile Work Force - لوحة التحكم</h1>
+      <a href="/logout" class="btn secondary">تسجيل خروج</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>طلبات التقديم</h2>
+    
+    <table class="applications-table">
+      <thead>
+        <tr>
+          <th>الاسم</th>
+          <th>البريد الإلكتروني</th>
+          <th>الوظيفة</th>
+          <th>القطاع</th>
+          <th>المدينة</th>
+          <th>التاريخ</th>
+          <th>السيرة الذاتية</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% applications.forEach(app => { %>
+          <tr>
+            <td><a href="/admin/applicant/<%= app.applicant._id %>"><%= app.applicant.name %></a></td>
+            <td><%= app.applicant.email %></td>
+            <td><%= app.job.title %></td>
+            <td>
+              <% 
+                const sectors = {
+                  'hotels': 'الفنادق',
+                  'resorts': 'المنتجعات',
+                  'companies': 'الشركات',
+                  'factories': 'المصانع'
+                };
+                %>
+                <%= sectors[app.job.sector] %>
+            </td>
+            <td><%= app.job.location %></td>
+            <td><%= new Date(app.appliedAt).toLocaleDateString('ar-EG') %></td>
+            <td>
+              <a href="/<%= app.resume %>" target="_blank" class="btn small">تنزيل</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>/* Reset عام */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-// حذف طلب التوظيف
-function deleteApplication(appId) {
-    if (!confirm('هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.')) {
-        return;
-    }
-    
-    let applications = JSON.parse(localStorage.getItem('nileWorkForceApplications')) || [];
-    applications = applications.filter(app => app.id != appId);
-    
-    localStorage.setItem('nileWorkForceApplications', JSON.stringify(applications));
-    
-    // تحديث العرض
-    loadApplications();
-    
-    // مسح تفاصيل الطلب إذا كان معروضاً
-    document.getElementById('detailsContent').innerHTML = '<p>انقر على أي متقدم لعرض التفاصيل الكاملة</p>';
-    
-    alert('تم حذف الطلب بنجاح');
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+  direction: rtl;
 }
 
-// تصفية الطلبات
-function filterApplications() {
-    let applications = JSON.parse(localStorage.getItem('nileWorkForceApplications')) || [];
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const sectorFilter = document.getElementById('sectorFilter').value;
-    const governorateFilter = document.getElementById('governorateFilter').value;
-    
-    // تطبيق الفلاتر
-    let filteredApplications = applications;
-    
-    // فلترة البحث
-    if (searchTerm) {
-        filteredApplications = filteredApplications.filter(app => 
-            (app.fullName && app.fullName.toLowerCase().includes(searchTerm)) ||
-            (app.nationalId && app.nationalId.includes(searchTerm)) ||
-            (app.governorate && app.governorate.includes(searchTerm)) ||
-            (app.phone && app.phone.includes(searchTerm))
-        );
-    }
-    
-    // فلترة القطاع
-    if (sectorFilter) {
-        filteredApplications = filteredApplications.filter(app => 
-            app.jobSector === sectorFilter
-        );
-    }
-    
-    // فلترة المحافظة
-    if (governorateFilter) {
-        filteredApplications = filteredApplications.filter(app => 
-            app.governorate === governorateFilter
-        );
-    }
-    
-    // تحديث العرض
-    updateStatistics(filteredApplications);
-    displayApplications(filteredApplications);
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
 }
 
-// تصدير البيانات
-function exportData() {
-    const applications = JSON.parse(localStorage.getItem('nileWorkForceApplications')) || [];
-    
-    if (applications.length === 0) {
-        alert('لا توجد بيانات للتصدير');
-        return;
-    }
-    
-    // تحويل البيانات إلى CSV
-    const headers = ['الاسم', 'الرقم القومي', 'الهاتف', 'البريد الإلكتروني', 'المحافظة', 'القطاع', 'الخبرة', 'التاريخ'];
-    
-    const csvRows = [
-        headers.join(','),
-        ...applications.map(app => [
-            app.fullName || '',
-            app.nationalId || '',
-            app.phone || '',
-            app.email || '',
-            app.governorate || '',
-            app.jobSector || '',
-            app.experience || '',
-            app.submissionDate || ''
-        ].join(','))
-    ];
-    
-    const csvString = csvRows.join('\n');
-    
-    // إنشاء ملف وتنزيله
-    const blob = new Blob(['\uFEFF' + csvString], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    
-    link.setAttribute('href', url);
-    link.setAttribute('download', `nile-workforce-applications-${new Date().toISOString().slice(0,10)}.csv`);
-    link.style.visibility = 'hidden';
-    
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    alert('تم تصدير البيانات بنجاح');
+/* الهيدر */
+header {
+  background-color: #0056b3;
+  color: white;
+  padding: 15px 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-// الاتصال بالمتقدم
-function contactApplicant(phone, name) {
-    if (confirm(`هل تريد الاتصال بـ ${name} على الرقم ${phone}؟`)) {
-        window.open(`tel:${phone}`, '_blank');
-    }
+header h1 {
+  font-size: 1.5rem;
+  margin: 0;
 }
 
-// دالة لتغيير كلمة المرور (يمكن إضافتها في نسخة مطورة)
-function changePassword() {
-    const currentPassword = prompt('أدخل كلمة المرور الحالية:');
-    const storedCredentials = JSON.parse(localStorage.getItem('adminCredentials'));
-    
-    if (currentPassword === storedCredentials.password) {
-        const newPassword = prompt('أدخل كلمة المرور الجديدة:');
-        const confirmPassword = prompt('أكد كلمة المرور الجديدة:');
-        
-        if (newPassword === confirmPassword) {
-            storedCredentials.password = newPassword;
-            localStorage.setItem('adminCredentials', JSON.stringify(storedCredentials));
-            alert('تم تغيير كلمة المرور بنجاح');
-        } else {
-            alert('كلمات المرور غير متطابقة');
-        }
-    } else {
-        alert('كلمة المرور الحالية غير صحيحة');
-    }
+header nav {
+  display: flex;
+  gap: 15px;
+}
+
+header a {
+  color: white;
+  text-decoration: none;
+}
+
+/* الأزرار */
+.btn {
+  display: inline-block;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.btn.primary {
+  background-color: #0056b3;
+  color: white;
+}
+
+.btn.primary:hover {
+  background-color: #004494;
+}
+
+.btn.secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn.small {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+}
+
+/* النماذج */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* الجداول */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: right;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #0056b3;
+  color: white;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* التنبيهات */
+.alert {
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.alert.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.alert.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* الصفحة الرئيسية */
+.hero {
+  text-align: center;
+  padding: 40px 0;
+  background: white;
+  border-radius: 8px;
+  margin: 20px 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.sectors {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.sector {
+  background: #e9ecef;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.post-job {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-top: 30px;
+}
+
+/* نموذج المصادقة */
+.auth-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo {
+  text-align: center;
+  font-size: 2rem;
+  color: #0056b3;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* الفوتر */
+footer {
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: 40px;
+}
+
+/* التصميم للشاشات الصغيرة */
+@media (max-width: 768px) {
+  header nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .sectors {
+    flex-direction: column;
+  }
 }
