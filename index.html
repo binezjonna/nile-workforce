@@ -1,1048 +1,340 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nile Work Force - توظيف الكوادر المصرية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title data-i18n="title">Nile Work Force - Egypt's Premier Job Portal</title>
+    <!-- Google Fonts for Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CDN (default LTR; toggled via JS) -->
+    <link id="bootstrap-css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-        /* التنسيقات العامة */
-        :root {
-            --primary: #1a5276;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --success: #27ae60;
-            --warning: #f39c12;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --gray: #7f8c8d;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.7;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        /* التصميم العام */
-        .header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 20px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .logo i {
-            font-size: 40px;
-            color: #fff;
-        }
-        
-        .logo h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-        
-        .logo p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            list-style: none;
-        }
-        
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: all 0.3s;
-            font-weight: bold;
-        }
-        
-        .nav-links a:hover {
-            background-color: rgba(255,255,255,0.2);
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .btn:hover {
-            background-color: #c0392b;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        /* الصفحة الرئيسية */
-        .hero {
-            padding: 80px 0;
-            background: linear-gradient(rgba(26, 82, 118, 0.9), rgba(52, 152, 219, 0.9)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-        }
-        
-        .hero h2 {
-            font-size: 42px;
-            margin-bottom: 20px;
-        }
-        
-        .hero p {
-            font-size: 18px;
-            max-width: 700px;
-            margin: 0 auto 30px;
-        }
-        
-        .sectors {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin: 40px 0;
-        }
-        
-        .sector-card {
-            background: rgba(255,255,255,0.15);
-            padding: 20px;
-            border-radius: 10px;
-            width: 200px;
-            backdrop-filter: blur(5px);
-        }
-        
-        .sector-card i {
-            font-size: 40px;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-        
-        /* نموذج التقديم */
-        .application-container {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
-            margin: 40px auto;
-        }
-        
-        .form-section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .form-section h3 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #555;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 20px;
-        }
-        
-        /* لوحة التحكم */
-        .dashboard {
-            padding: 40px 0;
-        }
-        
-        .dashboard-controls {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
-        }
-        
-        .search-box {
-            flex: 1;
-            min-width: 300px;
-            display: flex;
-        }
-        
-        .search-box input {
-            flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px 0 0 5px;
-        }
-        
-        .search-box button {
-            background: var(--secondary);
-            color: white;
-            border: none;
-            padding: 0 20px;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-        }
-        
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-        
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-        }
-        
-        .stat-card h3 {
-            font-size: 36px;
-            color: var(--secondary);
-            margin-bottom: 10px;
-        }
-        
-        .applications-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-        }
-        
-        .applications-table th {
-            background: var(--primary);
-            color: white;
-            padding: 15px;
-            text-align: right;
-        }
-        
-        .applications-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .applications-table tr:hover {
-            background-color: #f9f9f9;
-        }
-        
-        /* الفوتر */
-        .footer {
-            background: var(--dark);
-            color: white;
-            padding: 50px 0 20px;
-            margin-top: 60px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .footer-section h3 {
-            margin-bottom: 20px;
-            color: var(--light);
-        }
-        
-        .footer-section a {
-            color: #bdc3c7;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 10px;
-        }
-        
-        .copyright {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            color: #bdc3c7;
-        }
-        
-        /* التجاوب مع الشاشات الصغيرة */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
-            
-            .nav-links {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-            
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-            
-            .application-container {
-                padding: 20px;
-            }
-            
-            .hero h2 {
-                font-size: 32px;
-            }
-        }
-        
-        /* الرسائل */
-        .message {
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-            display: none;
-        }
-        
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
+        body { font-family: 'Arial', sans-serif, 'Noto Sans Arabic'; background-color: #f8f9fa; }
+        .hero { background: linear-gradient(to right, #007bff, #00bfff); color: white; padding: 100px 0; text-align: center; }
+        .job-card { margin-bottom: 20px; }
+        section { padding: 50px 0; }
+        #jobs, #apply, #admin { display: none; } /* Home shows by default */
+        .form-control { margin-bottom: 15px; }
+        footer { background: #007bff; color: white; padding: 20px; text-align: center; }
+        [dir="rtl"] { text-align: right; font-family: 'Noto Sans Arabic', sans-serif; }
     </style>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
 </head>
-<body>
-    <!-- الهيدر -->
-    <header class="header">
+<body dir="ltr">
+    <header class="bg-light py-3">
         <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-building"></i>
-                    <div>
-                        <h1>Nile Work Force</h1>
-                        <p>توظيف الكوادر المصرية في الفنادق والمنتجعات والشركات والمصانع</p>
-                    </div>
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="#">Nile Work Force</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" onclick="showSection('home')" data-i18n="home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="showSection('jobs')" data-i18n="jobs">Jobs</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="showSection('apply')" data-i18n="apply">Apply</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="showSection('admin')" data-i18n="admin">Admin</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="changeLanguage('en')">English</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="changeLanguage('ar')">عربي</a></li>
+                    </ul>
                 </div>
-                <ul class="nav-links">
-                    <li><a href="#home" onclick="showPage('home')"><i class="fas fa-home"></i> الرئيسية</a></li>
-                    <li><a href="#apply" onclick="showPage('apply')"><i class="fas fa-user-plus"></i> التقديم للوظائف</a></li>
-                    <li><a href="#dashboard" onclick="showPage('dashboard')"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
-                </ul>
-            </div>
+            </nav>
         </div>
     </header>
 
-    <!-- الصفحة الرئيسية -->
-    <section id="home-page" class="page">
-        <div class="hero">
-            <div class="container">
-                <h2>ابحث عن أفضل المواهب المصرية</h2>
-                <p>نحن متخصصون في توظيف الكوادر البشرية المتميزة في قطاعات الفنادق والمنتجعات والشركات والمصانع داخل مصر. جميع خدماتنا مجانية للباحثين عن العمل.</p>
-                <a href="#apply" onclick="showPage('apply')" class="btn">تقديم طلب توظيف الآن</a>
-                
-                <div class="sectors">
-                    <div class="sector-card">
-                        <i class="fas fa-hotel"></i>
-                        <h3>الفنادق</h3>
-                        <p>طاقم العمل والإدارة</p>
-                    </div>
-                    <div class="sector-card">
-                        <i class="fas fa-umbrella-beach"></i>
-                        <h3>المنتجعات</h3>
-                        <p>خدمات الضيافة والترفيه</p>
-                    </div>
-                    <div class="sector-card">
-                        <i class="fas fa-building"></i>
-                        <h3>الشركات</h3>
-                        <p>الموظفين والإداريين</p>
-                    </div>
-                    <div class="sector-card">
-                        <i class="fas fa-industry"></i>
-                        <h3>المصانع</h3>
-                        <p>العمالة الفنية والإشرافية</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="container" style="padding: 60px 0;">
-            <div style="text-align: center; margin-bottom: 40px;">
-                <h2 style="color: var(--primary); margin-bottom: 15px;">لماذا تختار Nile Work Force؟</h2>
-                <p style="max-width: 800px; margin: 0 auto;">نوفر لك أفضل الكوادر المؤهلة والمدربة للعمل في مختلف المجالات</p>
-            </div>
-            
-            <div class="stats-cards">
-                <div class="stat-card">
-                    <i class="fas fa-users" style="font-size: 40px; color: var(--secondary); margin-bottom: 15px;"></i>
-                    <h3>+500</h3>
-                    <p>متقدم للوظائف</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-briefcase" style="font-size: 40px; color: var(--success); margin-bottom: 15px;"></i>
-                    <h3>+200</h3>
-                    <p>وظيفة شاغرة</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-handshake" style="font-size: 40px; color: var(--warning); margin-bottom: 15px;"></i>
-                    <h3>+150</h3>
-                    <p>توظيف ناجح</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-map-marker-alt" style="font-size: 40px; color: var(--accent); margin-bottom: 15px;"></i>
-                    <h3>27</h3>
-                    <p>محافظة مصرية</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- صفحة التقديم -->
-    <section id="apply-page" class="page" style="display: none;">
+    <section id="home" class="hero">
         <div class="container">
-            <div class="application-container">
-                <h2 style="color: var(--primary); margin-bottom: 10px; text-align: center;">
-                    <i class="fas fa-edit"></i> تقديم طلب توظيف
-                </h2>
-                <p style="text-align: center; margin-bottom: 30px; color: var(--gray);">
-                    املأ النموذج التالي للتقديم على الوظائف المتاحة. جميع البيانات تبقى سرية.
-                </p>
-                
-                <form id="applicationForm">
-                    <div class="form-section">
-                        <h3><i class="fas fa-user"></i> المعلومات الشخصية</h3>
-                        
-                        <div class="form-group">
-                            <label for="fullName">الاسم بالكامل *</label>
-                            <input type="text" id="fullName" required>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="nationalId">الرقم القومي *</label>
-                                <input type="text" id="nationalId" required maxlength="14">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="birthDate">تاريخ الميلاد *</label>
-                                <input type="date" id="birthDate" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="phone">رقم الهاتف *</label>
-                                <input type="tel" id="phone" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="email">البريد الإلكتروني</label>
-                                <input type="email" id="email">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-section">
-                        <h3><i class="fas fa-map-marker-alt"></i> العنوان</h3>
-                        
-                        <div class="form-group">
-                            <label for="governorate">المحافظة *</label>
-                            <select id="governorate" required>
-                                <option value="">اختر المحافظة</option>
-                                <option value="القاهرة">القاهرة</option>
-                                <option value="الجيزة">الجيزة</option>
-                                <option value="الإسكندرية">الإسكندرية</option>
-                                <option value="الأسكندرية">الأسكندرية</option>
-                                <option value="الدقهلية">الدقهلية</option>
-                                <option value="البحر الأحمر">البحر الأحمر</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="address">العنوان التفصيلي *</label>
-                            <textarea id="address" rows="3" required></textarea>
-                        </div>
-                    </div>
-                    
-                    <div class="form-section">
-                        <h3><i class="fas fa-briefcase"></i> المؤهلات والخبرات</h3>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="education">المؤهل الدراسي *</label>
-                                <select id="education" required>
-                                    <option value="">اختر المؤهل</option>
-                                    <option value="ثانوية عامة">ثانوية عامة</option>
-                                    <option value="دبلوم">دبلوم</option>
-                                    <option value="بكالوريوس">بكالوريوس</option>
-                                    <option value="ماجستير">ماجستير</option>
-                                    <option value="دكتوراه">دكتوراه</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="experience">سنوات الخبرة *</label>
-                                <select id="experience" required>
-                                    <option value="">اختر سنوات الخبرة</option>
-                                    <option value="لا يوجد">لا يوجد خبرة</option>
-                                    <option value="أقل من سنة">أقل من سنة</option>
-                                    <option value="1-3 سنوات">1-3 سنوات</option>
-                                    <option value="3-5 سنوات">3-5 سنوات</option>
-                                    <option value="أكثر من 5 سنوات">أكثر من 5 سنوات</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="jobSector">القطاع المطلوب *</label>
-                            <select id="jobSector" required>
-                                <option value="">اختر القطاع</option>
-                                <option value="الفنادق">الفنادق</option>
-                                <option value="المنتجعات">المنتجعات</option>
-                                <option value="الشركات">الشركات</option>
-                                <option value="المصانع">المصانع</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="skills">المهارات</label>
-                            <textarea id="skills" rows="3" placeholder="اذكر مهاراتك مفصولة بفواصل"></textarea>
-                        </div>
-                    </div>
-                    
-                    <div id="formMessage" class="message"></div>
-                    
-                    <div style="text-align: center; margin-top: 30px;">
-                        <button type="submit" class="btn" style="padding: 15px 40px; font-size: 18px;">
-                            <i class="fas fa-paper-plane"></i> تقديم الطلب
-                        </button>
-                        <button type="reset" class="btn" style="background-color: var(--gray); margin-right: 15px;">
-                            <i class="fas fa-redo"></i> إعادة تعيين
-                        </button>
-                    </div>
-                </form>
-            </div>
+            <h1 data-i18n="welcome">Welcome to Nile Work Force</h1>
+            <p data-i18n="gateway">Your free gateway to jobs in Egypt's hotels, resorts, companies, and factories. No fees for job seekers!</p>
+            <button class="btn btn-light" onclick="showSection('jobs')" data-i18n="browse_jobs">Browse Jobs</button>
         </div>
     </section>
 
-    <!-- لوحة التحكم -->
-    <section id="dashboard-page" class="page" style="display: none;">
-        <div class="dashboard">
-            <div class="container">
-                <div style="text-align: center; margin-bottom: 40px;">
-                    <h2 style="color: var(--primary);"><i class="fas fa-tachometer-alt"></i> لوحة تحكم Nile Work Force</h2>
-                    <p style="color: var(--gray);">عرض وإدارة طلبات التوظيف المقدمة</p>
-                </div>
-                
-                <!-- فلاتر البحث -->
-                <div class="dashboard-controls">
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="ابحث بالاسم أو الرقم القومي...">
-                        <button onclick="filterApplications()"><i class="fas fa-search"></i></button>
-                    </div>
-                    
-                    <select id="sectorFilter" style="padding: 10px; border-radius: 5px; border: 1px solid #ddd;">
-                        <option value="">جميع القطاعات</option>
-                        <option value="الفنادق">الفنادق</option>
-                        <option value="المنتجعات">المنتجعات</option>
-                        <option value="الشركات">الشركات</option>
-                        <option value="المصانع">المصانع</option>
-                    </select>
-                    
-                    <button onclick="exportData()" class="btn" style="background-color: var(--success);">
-                        <i class="fas fa-file-export"></i> تصدير البيانات
-                    </button>
-                    
-                    <button onclick="loadApplications()" class="btn">
-                        <i class="fas fa-sync-alt"></i> تحديث
-                    </button>
-                </div>
-                
-                <!-- الإحصائيات -->
-                <div class="stats-cards">
-                    <div class="stat-card">
-                        <h3 id="totalApps">0</h3>
-                        <p>إجمالي الطلبات</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3 id="hotelApps">0</h3>
-                        <p>طلبات الفنادق</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3 id="resortApps">0</h3>
-                        <p>طلبات المنتجعات</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3 id="todayApps">0</h3>
-                        <p>طلبات اليوم</p>
-                    </div>
-                </div>
-                
-                <!-- جدول الطلبات -->
-                <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 3px 15px rgba(0,0,0,0.08); margin-top: 30px;">
-                    <h3 style="margin-bottom: 20px; color: var(--primary);">
-                        <i class="fas fa-list"></i> قائمة المتقدمين
-                    </h3>
-                    
-                    <div style="overflow-x: auto;">
-                        <table class="applications-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>الاسم</th>
-                                    <th>الهاتف</th>
-                                    <th>المحافظة</th>
-                                    <th>القطاع</th>
-                                    <th>الخبرة</th>
-                                    <th>التاريخ</th>
-                                    <th>الإجراءات</th>
-                                </tr>
-                            </thead>
-                            <tbody id="applicationsTable">
-                                <!-- سيتم ملؤها بالبيانات -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <!-- تفاصيل المتقدم -->
-                <div id="detailsPanel" style="background: white; border-radius: 10px; padding: 25px; margin-top: 30px; box-shadow: 0 3px 15px rgba(0,0,0,0.08); display: none;">
-                    <h3 style="color: var(--primary); margin-bottom: 20px;">
-                        <i class="fas fa-user-circle"></i> تفاصيل المتقدم
-                    </h3>
-                    <div id="applicationDetails">
-                        <!-- سيتم ملؤها بالبيانات -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- الفوتر -->
-    <footer class="footer">
+    <section id="jobs">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Nile Work Force</h3>
-                    <p>وكالة توظيف مصرية متخصصة في قطاعات الفنادق والمنتجعات والشركات والمصانع داخل مصر.</p>
-                    <p>جميع خدماتنا مجانية للباحثين عن العمل.</p>
+            <h2 data-i18n="available_jobs">Available Jobs in Egypt</h2>
+            <div class="row">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card job-card">
+                        <div class="card-body">
+                            <h5 class="card-title" data-i18n="hotel_manager_title">Hotel Manager - Cairo Hotel Group</h5>
+                            <p class="card-text" data-i18n="hotel_manager_desc">Sector: Hotels | Location: Cairo | 5+ years exp.</p>
+                            <button class="btn btn-primary" onclick="showApply('Hotel Manager')" data-i18n="apply">Apply</button>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="footer-section">
-                    <h3>روابط سريعة</h3>
-                    <a href="#home" onclick="showPage('home')">الرئيسية</a>
-                    <a href="#apply" onclick="showPage('apply')">التقديم للوظائف</a>
-                    <a href="#dashboard" onclick="showPage('dashboard')">لوحة التحكم</a>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card job-card">
+                        <div class="card-body">
+                            <h5 class="card-title" data-i18n="resort_coordinator_title">Resort Coordinator - Sharm El Sheikh Resorts</h5>
+                            <p class="card-text" data-i18n="resort_coordinator_desc">Sector: Resorts | Location: Sharm El Sheikh | Multilingual preferred.</p>
+                            <button class="btn btn-primary" onclick="showApply('Resort Coordinator')" data-i18n="apply">Apply</button>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="footer-section">
-                    <h3>معلومات التواصل</h3>
-                    <p><i class="fas fa-envelope"></i> info@nileworkforce.com</p>
-                    <p><i class="fas fa-phone"></i> +20 100 000 0000</p>
-                    <p><i class="fas fa-map-marker-alt"></i> القاهرة، مصر</p>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card job-card">
+                        <div class="card-body">
+                            <h5 class="card-title" data-i18n="factory_supervisor_title">Factory Supervisor - Nile Manufacturing</h5>
+                            <p class="card-text" data-i18n="factory_supervisor_desc">Sector: Factories | Location: Alexandria | Safety certs required.</p>
+                            <button class="btn btn-primary" onclick="showApply('Factory Supervisor')" data-i18n="apply">Apply</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="copyright">
-                <p>© 2024 Nile Work Force. جميع الحقوق محفوظة.</p>
-                <p>تصميم وتطوير خاص لوكالة توظيف الكوادر المصرية</p>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card job-card">
+                        <div class="card-body">
+                            <h5 class="card-title" data-i18n="corporate_analyst_title">Corporate Analyst - Egyptian Tech Co.</h5>
+                            <p class="card-text" data-i18n="corporate_analyst_desc">Sector: Companies | Location: Giza | Analytical skills.</p>
+                            <button class="btn btn-primary" onclick="showApply('Corporate Analyst')" data-i18n="apply">Apply</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
+
+    <section id="apply">
+        <div class="container">
+            <h2 data-i18n="apply_job">Apply for a Job</h2>
+            <form id="applicationForm">
+                <input type="text" id="name" class="form-control" data-i18n-placeholder="name_placeholder" placeholder="Name" required>
+                <input type="email" id="email" class="form-control" data-i18n-placeholder="email_placeholder" placeholder="Email" required>
+                <input type="tel" id="phone" class="form-control" data-i18n-placeholder="phone_placeholder" placeholder="Phone">
+                <input type="url" id="resume" class="form-control" data-i18n-placeholder="resume_placeholder" placeholder="Resume Link" required>
+                <input type="text" id="job" class="form-control" data-i18n-placeholder="job_placeholder" placeholder="Applying for" required>
+                <button type="submit" class="btn btn-primary" data-i18n="submit">Submit</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="admin">
+        <div class="container">
+            <h2 data-i18n="admin_dashboard">Admin Dashboard</h2>
+            <div id="loginForm">
+                <input type="email" id="adminEmail" class="form-control" data-i18n-placeholder="admin_email_placeholder" placeholder="Admin Email" required>
+                <input type="password" id="adminPassword" class="form-control" data-i18n-placeholder="password_placeholder" placeholder="Password" required>
+                <button onclick="adminLogin()" class="btn btn-primary" data-i18n="login">Login</button>
+            </div>
+            <div id="applicants" style="display:none;">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th data-i18n="name">Name</th>
+                            <th data-i18n="email">Email</th>
+                            <th data-i18n="phone">Phone</th>
+                            <th data-i18n="resume">Resume</th>
+                            <th data-i18n="job">Job</th>
+                            <th data-i18n="timestamp">Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="applicantsTableBody"></tbody>
+                </table>
+                <button onclick="adminLogout()" class="btn btn-secondary" data-i18n="logout">Logout</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p data-i18n="copyright">&copy; 2025 Nile Work Force. Focused on Egypt. All rights reserved.</p>
     </footer>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
-        // البيانات التخزينية
-        let applications = JSON.parse(localStorage.getItem('nileWorkForceApplications')) || [];
-        
-        // إظهار وإخفاء الصفحات
-        function showPage(pageId) {
-            // إخفاء جميع الصفحات
-            document.querySelectorAll('.page').forEach(page => {
-                page.style.display = 'none';
-            });
-            
-            // إظهار الصفحة المطلوبة
-            document.getElementById(pageId + '-page').style.display = 'block';
-            
-            // إذا كانت صفحة لوحة التحكم، تحميل البيانات
-            if (pageId === 'dashboard') {
-                loadApplications();
+        // Translations object
+        const translations = {
+            en: {
+                title: "Nile Work Force - Egypt's Premier Job Portal",
+                home: "Home",
+                jobs: "Jobs",
+                apply: "Apply",
+                admin: "Admin",
+                welcome: "Welcome to Nile Work Force",
+                gateway: "Your free gateway to jobs in Egypt's hotels, resorts, companies, and factories. No fees for job seekers!",
+                browse_jobs: "Browse Jobs",
+                available_jobs: "Available Jobs in Egypt",
+                hotel_manager_title: "Hotel Manager - Cairo Hotel Group",
+                hotel_manager_desc: "Sector: Hotels | Location: Cairo | 5+ years exp.",
+                resort_coordinator_title: "Resort Coordinator - Sharm El Sheikh Resorts",
+                resort_coordinator_desc: "Sector: Resorts | Location: Sharm El Sheikh | Multilingual preferred.",
+                factory_supervisor_title: "Factory Supervisor - Nile Manufacturing",
+                factory_supervisor_desc: "Sector: Factories | Location: Alexandria | Safety certs required.",
+                corporate_analyst_title: "Corporate Analyst - Egyptian Tech Co.",
+                corporate_analyst_desc: "Sector: Companies | Location: Giza | Analytical skills.",
+                apply_job: "Apply for a Job",
+                name_placeholder: "Name",
+                email_placeholder: "Email",
+                phone_placeholder: "Phone",
+                resume_placeholder: "Resume Link",
+                job_placeholder: "Applying for",
+                submit: "Submit",
+                admin_dashboard: "Admin Dashboard",
+                admin_email_placeholder: "Admin Email",
+                password_placeholder: "Password",
+                login: "Login",
+                name: "Name",
+                email: "Email",
+                phone: "Phone",
+                resume: "Resume",
+                job: "Job",
+                timestamp: "Timestamp",
+                logout: "Logout",
+                copyright: "&copy; 2025 Nile Work Force. Focused on Egypt. All rights reserved."
+            },
+            ar: {
+                title: "قوة عمل النيل - بوابة التوظيف الرائدة في مصر",
+                home: "الرئيسية",
+                jobs: "الوظائف",
+                apply: "تقدم",
+                admin: "الإدارة",
+                welcome: "مرحبا بك في قوة عمل النيل",
+                gateway: "بوابتك المجانية للوظائف في فنادق مصر والمنتجعات والشركات والمصانع. مجاني للباحثين عن عمل!",
+                browse_jobs: "تصفح الوظائف",
+                available_jobs: "الوظائف المتاحة في مصر",
+                hotel_manager_title: "مدير فندق - مجموعة فنادق القاهرة",
+                hotel_manager_desc: "القطاع: الفنادق | الموقع: القاهرة | خبرة 5+ سنوات.",
+                resort_coordinator_title: "منسق منتجع - منتجعات شرم الشيخ",
+                resort_coordinator_desc: "القطاع: المنتجعات | الموقع: شرم الشيخ | متعدد اللغات مفضل.",
+                factory_supervisor_title: "مشرف مصنع - تصنيع النيل",
+                factory_supervisor_desc: "القطاع: المصانع | الموقع: الإسكندرية | شهادات السلامة مطلوبة.",
+                corporate_analyst_title: "محلل شركات - شركة التكنولوجيا المصرية",
+                corporate_analyst_desc: "القطاع: الشركات | الموقع: الجيزة | مهارات تحليلية.",
+                apply_job: "تقدم لوظيفة",
+                name_placeholder: "الاسم",
+                email_placeholder: "البريد الإلكتروني",
+                phone_placeholder: "الهاتف",
+                resume_placeholder: "رابط السيرة الذاتية",
+                job_placeholder: "التقدم لـ",
+                submit: "إرسال",
+                admin_dashboard: "لوحة الإدارة",
+                admin_email_placeholder: "بريد الإدارة",
+                password_placeholder: "كلمة المرور",
+                login: "تسجيل الدخول",
+                name: "الاسم",
+                email: "البريد الإلكتروني",
+                phone: "الهاتف",
+                resume: "السيرة الذاتية",
+                job: "الوظيفة",
+                timestamp: "الطابع الزمني",
+                logout: "تسجيل الخروج",
+                copyright: "&copy; 2025 قوة عمل النيل. مركز على مصر. جميع الحقوق محفوظة."
             }
-        }
-        
-        // تحميل المحافظات
-        function loadGovernorates() {
-            const governorates = [
-                'القاهرة', 'الجيزة', 'الإسكندرية', 'الدقهلية', 'البحر الأحمر', 
-                'البحيرة', 'الفيوم', 'الغربية', 'الإسماعيلية', 'المنوفية',
-                'المنيا', 'القليوبية', 'الوادي الجديد', 'السويس', 'أسوان',
-                'أسيوط', 'بني سويف', 'بورسعيد', 'دمياط', 'سوهاج',
-                'جنوب سيناء', 'كفر الشيخ', 'مطروح', 'الأقصر', 'قنا',
-                'شمال سيناء'
-            ];
-            
-            const select = document.getElementById('governorate');
-            governorates.forEach(gov => {
-                const option = document.createElement('option');
-                option.value = gov;
-                option.textContent = gov;
-                select.appendChild(option);
+        };
+
+        // Function to update content and placeholders
+        function updateContent(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.innerHTML = translations[lang][key];
             });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                el.placeholder = translations[lang][key];
+            });
+            document.title = translations[lang].title;
         }
-        
-        // معالجة نموذج التقديم
-        document.getElementById('applicationForm').addEventListener('submit', function(e) {
+
+        // Change language
+        function changeLanguage(lang) {
+            localStorage.setItem('language', lang);
+            const bootstrapLink = document.getElementById('bootstrap-css');
+            if (lang === 'ar') {
+                document.documentElement.lang = 'ar';
+                document.body.dir = 'rtl';
+                bootstrapLink.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css';
+            } else {
+                document.documentElement.lang = 'en';
+                document.body.dir = 'ltr';
+                bootstrapLink.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css';
+            }
+            updateContent(lang);
+        }
+
+        // On load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('language') || 'en';
+            changeLanguage(savedLang);
+            showSection('home');
+        });
+
+        // Firebase Config - Replace with yours
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function showApply(jobTitle) {
+            showSection('apply');
+            document.getElementById('job').value = jobTitle;
+        }
+
+        document.getElementById('applicationForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            // جمع البيانات من النموذج
-            const application = {
-                id: Date.now(),
-                fullName: document.getElementById('fullName').value,
-                nationalId: document.getElementById('nationalId').value,
-                birthDate: document.getElementById('birthDate').value,
-                phone: document.getElementById('phone').value,
+            const data = {
+                name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
-                governorate: document.getElementById('governorate').value,
-                address: document.getElementById('address').value,
-                education: document.getElementById('education').value,
-                experience: document.getElementById('experience').value,
-                jobSector: document.getElementById('jobSector').value,
-                skills: document.getElementById('skills').value,
-                submissionDate: new Date().toLocaleString('ar-EG')
+                phone: document.getElementById('phone').value,
+                resume: document.getElementById('resume').value,
+                job: document.getElementById('job').value,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
-            
-            // التحقق من البيانات
-            if (!validateApplication(application)) {
-                return;
-            }
-            
-            // إضافة الطلب للقائمة
-            applications.push(application);
-            
-            // حفظ في التخزين المحلي
-            localStorage.setItem('nileWorkForceApplications', JSON.stringify(applications));
-            
-            // عرض رسالة النجاح
-            showMessage('تم تقديم طلبك بنجاح! سنتواصل معك قريباً.', 'success');
-            
-            // إعادة تعيين النموذج
-            document.getElementById('applicationForm').reset();
-            
-            // الانتقال للصفحة الرئيسية بعد 3 ثواني
-            setTimeout(() => {
-                showPage('home');
-            }, 3000);
+            db.collection('applications').add(data).then(() => {
+                alert(translations[document.documentElement.lang].submitted || 'Submitted!');
+                showSection('home');
+            }).catch(err => alert('Error: ' + err.message));
         });
-        
-        // التحقق من صحة البيانات
-        function validateApplication(app) {
-            const messageDiv = document.getElementById('formMessage');
-            
-            if (!app.fullName || app.fullName.trim().length < 3) {
-                showMessage('يرجى إدخال اسم صحيح مكون من 3 أحرف على الأقل', 'error');
-                return false;
-            }
-            
-            if (!app.nationalId || app.nationalId.length !== 14 || !/^\d+$/.test(app.nationalId)) {
-                showMessage('يرجى إدخال رقم قومي صحيح مكون من 14 رقم', 'error');
-                return false;
-            }
-            
-            if (!app.phone || app.phone.length < 10) {
-                showMessage('يرجى إدخال رقم هاتف صحيح', 'error');
-                return false;
-            }
-            
-            return true;
+
+        function adminLogin() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            auth.signInWithEmailAndPassword(email, password).then(() => {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('applicants').style.display = 'block';
+                loadApplicants();
+            }).catch(err => alert('Login failed: ' + err.message));
         }
-        
-        // عرض رسالة
-        function showMessage(text, type) {
-            const messageDiv = document.getElementById('formMessage');
-            messageDiv.textContent = text;
-            messageDiv.className = 'message ' + type;
-            messageDiv.style.display = 'block';
-            
-            setTimeout(() => {
-                messageDiv.style.display = 'none';
-            }, 5000);
+
+        function loadApplicants() {
+            const tbody = document.getElementById('applicantsTableBody');
+            tbody.innerHTML = '';
+            db.collection('applications').orderBy('timestamp', 'desc').get().then(snapshot => {
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const row = `<tr>
+                        <td>${data.name}</td>
+                        <td>${data.email}</td>
+                        <td>${data.phone || 'N/A'}</td>
+                        <td><a href="${data.resume}" target="_blank">View</a></td>
+                        <td>${data.job}</td>
+                        <td>${data.timestamp ? data.timestamp.toDate().toLocaleString() : 'N/A'}</td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            }).catch(err => alert('Error: ' + err.message));
         }
-        
-        // تحميل طلبات التوظيف في لوحة التحكم
-        function loadApplications() {
-            // تحديث الإحصائيات
-            updateStatistics();
-            
-            // عرض الطلبات في الجدول
-            displayApplications(applications);
-        }
-        
-        // تحديث الإحصائيات
-        function updateStatistics() {
-            const today = new Date().toLocaleDateString('ar-EG');
-            
-            const total = applications.length;
-            const hotel = applications.filter(app => app.jobSector === 'الفنادق').length;
-            const resort = applications.filter(app => app.jobSector === 'المنتجعات').length;
-            const todayApps = applications.filter(app => {
-                const appDate = new Date(app.id).toLocaleDateString('ar-EG');
-                return appDate === today;
-            }).length;
-            
-            document.getElementById('totalApps').textContent = total;
-            document.getElementById('hotelApps').textContent = hotel;
-            document.getElementById('resortApps').textContent = resort;
-            document.getElementById('todayApps').textContent = todayApps;
-        }
-        
-        // عرض الطلبات في الجدول
-        function displayApplications(apps) {
-            const tableBody = document.getElementById('applicationsTable');
-            tableBody.innerHTML = '';
-            
-            if (apps.length === 0) {
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="8" style="text-align: center; padding: 30px;">
-                            <i class="fas fa-inbox" style="font-size: 40px; color: #ddd; margin-bottom: 10px;"></i>
-                            <p>لا توجد طلبات توظيف حتى الآن</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            apps.forEach((app, index) => {
-                const row = document.createElement('tr');
-                const date = new Date(app.id).toLocaleDateString('ar-EG');
-                
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${app.fullName}</td>
-                    <td>${app.phone}</td>
-                    <td>${app.governorate}</td>
-                    <td>${app.jobSector}</td>
-                    <td>${app.experience}</td>
-                    <td>${date}</td>
-                    <td>
-                        <button onclick="showDetails(${app.id})" style="background: var(--secondary); color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-left: 5px;">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button onclick="deleteApplication(${app.id})" style="background: var(--accent); color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                
-                tableBody.appendChild(row);
+
+        function adminLogout() {
+            auth.signOut().then(() => {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('applicants').style.display = 'none';
             });
         }
-        
-        // تصفية الطلبات
-        function filterApplications() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const sectorFilter = document.getElementById('sectorFilter').value;
-            
-            let filtered = applications;
-            
-            if (searchTerm) {
-                filtered = filtered.filter(app => 
-                    app.fullName.toLowerCase().includes(searchTerm) ||
-                    app.nationalId.includes(searchTerm) ||
-                    app.phone.includes(searchTerm)
-                );
-            }
-            
-            if (sectorFilter) {
-                filtered = filtered.filter(app => app.jobSector === sectorFilter);
-            }
-            
-            displayApplications(filtered);
-            updateFilteredStatistics(filtered);
-        }
-        
-        // تحديث إحصائيات التصفية
-        function updateFilteredStatistics(filteredApps) {
-            document.getElementById('totalApps').textContent = filteredApps.length;
-        }
-        
-        // عرض تفاصيل المتقدم
-        function showDetails(appId) {
-            const app = applications.find(a => a.id === appId);
-            if (!app) return;
-            
-            const detailsDiv = document.getElementById('applicationDetails');
-            detailsDiv.innerHTML = `
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                    <div>
-                        <h4 style="color: var(--primary); margin-bottom: 10px;">المعلومات الشخصية</h4>
-                        <p><strong>الاسم:</strong> ${app.fullName}</p>
-                        <p><strong>الرقم القومي:</strong> ${app.nationalId}</p>
-                        <p><strong>تاريخ الميلاد:</strong> ${app.birthDate}</p>
-                        <p><strong>الهاتف:</strong> ${app.phone}</p>
-                        <p><strong>البريد الإلكتروني:</strong> ${app.email || 'غير محدد'}</p>
-                    </div>
-                    
-                    <div>
-                        <h4 style="color: var(--primary); margin-bottom: 10px;">المعلومات الوظيفية</h4>
-                        <p><strong>المحافظة:</strong> ${app.governorate}</p>
-                        <p><strong>العنوان:</strong> ${app.address}</p>
-                        <p><strong>المؤهل الدراسي:</strong> ${app.education}</p>
-                        <p><strong>الخبرة:</strong> ${app.experience}</p>
-                        <p><strong>القطاع:</strong> ${app.jobSector}</p>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 20px;">
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">المهارات</h4>
-                    <p>${app.skills || 'لا توجد مهارات محددة'}</p>
-                </div>
-                
-                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
-                    <p><strong>تاريخ التقديم:</strong> ${app.submissionDate}</p>
-                    <button onclick="contactApplicant('${app.phone}', '${app.fullName}')" class="btn" style="margin-top: 10px;">
-                        <i class="fas fa-phone"></i> الاتصال بالمتقدم
-                    </button>
-                </div>
-            `;
-            
-            document.getElementById('detailsPanel').style.display = 'block';
-            document.getElementById('detailsPanel').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // حذف طلب التوظيف
-        function deleteApplication(appId) {
-            if (!confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
-                return;
-            }
-            
-            applications = applications.filter(app => app.id !== appId);
-            localStorage.setItem('nileWorkForceApplications', JSON.stringify(applications));
-            
-            loadApplications();
-            document.getElementById('detailsPanel').style.display = 'none';
-            
-            showMessage('تم حذف الطلب بنجاح', 'success');
-        }
-        
-        // تصدير البيانات
-        function exportData() {
-            if (applications.length === 0) {
-                alert('لا توجد بيانات للتصدير');
-                return;
-            }
-            
-            // تحويل البيانات إلى CSV
-            const headers = ['الاسم', 'الرقم القومي', 'الهاتف', 'البريد الإلكتروني', 'المحافظة', 'القطاع', 'الخبرة', 'التاريخ'];
-            const csvRows = [
-                headers.join(','),
-                ...applications.map(app => [
-                    app.fullName,
-                    app.nationalId,
-                    app.phone,
-                    app.email || '',
-                    app.governorate,
-                    app.jobSector,
-                    app.experience,
-                    app.submissionDate
-                ].join(','))
-            ];
-            
-            const csvString = csvRows.join('\n');
-            const blob = new Blob(['\uFEFF' + csvString], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            
-            link.setAttribute('href', url);
-            link.setAttribute('download', `nile-workforce-${new Date().toISOString().slice(0,10)}.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            alert('تم تصدير البيانات بنجاح');
-        }
-        
-        // الاتصال بالمتقدم
-        function contactApplicant(phone, name) {
-            if (confirm(`هل تريد الاتصال بـ ${name} على الرقم ${phone}؟`)) {
-                window.open(`tel:${phone}`, '_blank');
-            }
-        }
-        
-        // التهيئة عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', function() {
-            loadGovernorates();
-            showPage('home');
-            
-            // ضبط التاريخ الحالي كحد أقصى لتاريخ الميلاد
-            const today = new Date();
-            const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
-            document.getElementById('birthDate').max = maxDate.toISOString().split('T')[0];
-            
-            // تحميل التطبيقات إذا كانت موجودة
-            if (applications.length > 0) {
-                console.log('تم تحميل ' + applications.length + ' طلب توظيف');
-            }
-        });
     </script>
 </body>
 </html>
