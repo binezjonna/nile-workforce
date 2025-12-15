@@ -3,808 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nile Work Force | توظيف احترافي</title>
+    <title>Nile Work Force | نظام التوظيف</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
+        /* الأنماط العامة */
+        body {
+            font-family: 'Cairo', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-        
-        body {
-            background: #f5f7fa;
+            background: #f9f9f9;
             color: #333;
-            line-height: 1.6;
         }
-        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-        
-        header {
-            background: #1a365d;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .hero {
-            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
-            color: white;
-            padding: 80px 0;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .form-container {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-        }
-        
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #1a365d;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #4299e1;
-        }
-        
-        .file-upload {
-            border: 2px dashed #cbd5e0;
-            padding: 40px;
-            text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .file-upload:hover {
-            border-color: #4299e1;
-            background: #ebf8ff;
-        }
-        
-        .btn {
-            background: #38a169;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            font-weight: bold;
-        }
-        
-        .btn:hover {
-            background: #2f855a;
-            transform: translateY(-2px);
-        }
-        
-        .message {
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            display: none;
-        }
-        
-        .message.success {
-            background: #c6f6d5;
-            color: #22543d;
-            border: 2px solid #9ae6b4;
-        }
-        
-        .dashboard {
+        form {
             background: white;
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            display: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        
-        .applications-table {
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 12px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        
-        .applications-table th,
-        .applications-table td {
-            padding: 15px;
-            text-align: right;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .applications-table th {
-            background: #1a365d;
-            color: white;
-        }
-        
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            background: #25D366;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            text-decoration: none;
-            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-            z-index: 1000;
-        }
-        
-        .admin-float {
-            position: fixed;
-            bottom: 100px;
-            left: 30px;
-            background: #1a365d;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(26, 54, 93, 0.4);
-            z-index: 1000;
-        }
-        
-        footer {
-            background: #1a365d;
-            color: white;
-            padding: 30px 0;
+        th, td {
+            padding: 12px;
             text-align: center;
-            margin-top: 40px;
+            border: 1px solid #ddd;
         }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .form-container {
-                padding: 20px;
-            }
-            
-            .applications-table {
-                display: block;
-                overflow-x: auto;
-            }
+        .dashboard {
+            display: none;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
-    <!-- زر واتساب عائم -->
-    <a href="https://wa.me/201028052445" target="_blank" class="whatsapp-float">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-    
-    <!-- زر لوحة التحكم -->
-    <div class="admin-float" id="adminToggle">
-        <i class="fas fa-chart-line"></i>
-    </div>
-
-    <!-- الهيدر -->
-    <header>
-        <div class="container">
-            <div class="logo">Nile Work Force</div>
-            <p>مدير موارد بشرية - حسين عدلي</p>
-        </div>
-    </header>
-
-    <!-- القسم الرئيسي -->
-    <section class="hero">
-        <div class="container">
-            <h1 style="font-size: 36px; margin-bottom: 20px;">خدمات التوظيف الاحترافية</h1>
-            <p style="font-size: 20px; max-width: 800px; margin: 0 auto;">
-                أقدم خدمات التوظيف للفنادق والمصانع والشركات في جميع محافظات مصر
-            </p>
-        </div>
-    </section>
-
-    <!-- نموذج التقديم -->
     <div class="container">
-        <div class="form-container">
-            <h2 style="color: #1a365d; margin-bottom: 30px; text-align: center; font-size: 28px;">تقديم طلب توظيف</h2>
-            
-            <form id="jobApplicationForm">
-                <div class="form-group">
-                    <label for="fullName">الاسم بالكامل *</label>
-                    <input type="text" id="fullName" name="fullName" required placeholder="أدخل اسمك الثلاثي">
-                </div>
+        <!-- قسم التقديم -->
+        <h1>تقديم طلب التوظيف</h1>
+        <form id="jobApplicationForm">
+            <input type="text" id="fullName" placeholder="الاسم بالكامل" required>
+            <input type="tel" id="phone" placeholder="رقم الهاتف" required>
+            <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+            <select id="sector" required>
+                <option value="">اختر القطاع</option>
+                <option value="الفنادق">الفنادق</option>
+                <option value="المصانع">المصانع</option>
+                <option value="الشركات">الشركات</option>
+            </select>
+            <input type="file" id="cv" accept=".pdf,.doc,.docx" required>
+            <button type="submit">إرسال الطلب</button>
+        </form>
+        <div id="formMessage" class="message"></div>
 
-                <div class="form-group">
-                    <label for="phone">رقم الهاتف *</label>
-                    <input type="tel" id="phone" name="phone" required placeholder="مثال: 01028052445">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">البريد الإلكتروني *</label>
-                    <input type="email" id="email" name="email" required placeholder="example@email.com">
-                </div>
-
-                <div class="form-group">
-                    <label for="governorate">المحافظة *</label>
-                    <select id="governorate" name="governorate" required>
-                        <option value="">اختر المحافظة</option>
-                        <option value="القاهرة">القاهرة</option>
-                        <option value="الجيزة">الجيزة</option>
-                        <option value="الإسكندرية">الإسكندرية</option>
-                        <option value="الشرقية">الشرقية</option>
-                        <option value="الدقهلية">الدقهلية</option>
-                        <option value="أخرى">محافظة أخرى</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="sector">القطاع المرغوب *</label>
-                    <select id="sector" name="sector" required>
-                        <option value="">اختر القطاع</option>
-                        <option value="الفنادق والمنتجعات">الفنادق والمنتجعات</option>
-                        <option value="المصانع والصناعات">المصانع والصناعات</option>
-                        <option value="الشركات والمؤسسات">الشركات والمؤسسات</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="cv">السيرة الذاتية *</label>
-                    <div class="file-upload" onclick="document.getElementById('cv').click()">
-                        <i class="fas fa-cloud-upload-alt" style="font-size: 40px; color: #4299e1; margin-bottom: 15px;"></i>
-                        <p id="fileText" style="margin-bottom: 10px;">انقر لرفع السيرة الذاتية (PDF أو Word)</p>
-                        <small style="color: #718096;">الحجم الأقصى: 5MB</small>
-                        <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" style="display: none;">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="notes">ملاحظات إضافية (اختياري)</label>
-                    <textarea id="notes" name="notes" rows="4" placeholder="أي معلومات إضافية تود إضافتها..."></textarea>
-                </div>
-
-                <button type="submit" class="btn">
-                    <i class="fas fa-paper-plane"></i> إرسال طلب التوظيف
-                </button>
-            </form>
-
-            <div id="formMessage" class="message"></div>
-        </div>
+        <!-- زر لفتح لوحة التحكم -->
+        <button onclick="openAdminDashboard()" style="margin-top: 20px; padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            لوحة التحكم
+        </button>
 
         <!-- لوحة التحكم -->
-        <div class="dashboard" id="dashboard">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <h2 style="color: #1a365d; font-size: 28px;">لوحة تحكم مدير الموارد البشرية</h2>
-                <div style="background: #4299e1; color: white; padding: 15px 30px; border-radius: 8px; display: inline-block; margin-top: 15px;">
-                    <i class="fas fa-users"></i> إجمالي الطلبات: <span id="totalApplications" style="font-weight: bold;">0</span>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 20px;">
-                <button onclick="exportData()" style="background: #38a169; color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-left: 10px;">
-                    <i class="fas fa-download"></i> تصدير البيانات
-                </button>
-                
-                <button onclick="clearAllData()" style="background: #e53e3e; color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                    <i class="fas fa-trash"></i> مسح الكل
-                </button>
-            </div>
-
-            <table class="applications-table" id="applicationsTable">
+        <div class="dashboard" id="adminDashboard">
+            <h2>لوحة التحكم - Nile Work Force</h2>
+            <table>
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>الاسم</th>
                         <th>الهاتف</th>
-                        <th>المحافظة</th>
+                        <th>البريد الإلكتروني</th>
                         <th>القطاع</th>
                         <th>التاريخ</th>
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
-                <tbody id="applicationsBody">
-                    <!-- سيتم تعبئته بالبيانات -->
+                <tbody id="applicationsTable">
+                    <!-- سيتم تعبئتها بالجافاسكريبت -->
                 </tbody>
             </table>
-            
-            <div id="noDataMessage" style="text-align: center; padding: 50px; color: #718096; display: block;">
-                <i class="fas fa-inbox" style="font-size: 60px; margin-bottom: 20px; opacity: 0.5;"></i>
-                <h3>لا توجد طلبات توظيف بعد</h3>
-                <p>سيظهر هنا جميع الطلبات التي يتم تقديمها على الموقع</p>
-            </div>
         </div>
     </div>
 
-    <!-- الفوتر -->
-    <footer>
-        <div class="container">
-            <h3 style="margin-bottom: 15px;">Nile Work Force</h3>
-            <p style="margin-bottom: 10px;">مدير موارد بشرية - حسين عدلي</p>
-            <p style="margin-bottom: 10px;">الهاتف: 01028052445</p>
-            <p>البريد: hussienadly606@gmail.com</p>
-            <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">جميع الحقوق محفوظة © 2024</p>
-        </div>
-    </footer>
-
     <script>
-        // متغيرات النظام
-        const STORAGE_KEY = 'nile_workforce_applications';
+        const STORAGE_KEY = 'nileWorkForce_applications';
         const ADMIN_PASSWORD = 'admin123';
-        const WHATSAPP_NUMBER = '201028052445';
-        
-        // تهيئة النظام عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('✅ النظام جاهز للعمل');
-            
-            // استمع لتغيرات الملف
-            document.getElementById('cv').addEventListener('change', function(e) {
-                if (e.target.files[0]) {
-                    document.getElementById('fileText').textContent = e.target.files[0].name;
-                }
-            });
-            
-            // زر لوحة التحكم
-            document.getElementById('adminToggle').addEventListener('click', showDashboard);
-            
-            // تحميل أي بيانات موجودة عند البدء
-            loadApplications();
-        });
-        
-        // عرض لوحة التحكم
-        function showDashboard() {
-            const password = prompt('🔒 أدخل كلمة المرور للوصول إلى لوحة التحكم:');
-            if (password === ADMIN_PASSWORD) {
-                document.getElementById('dashboard').style.display = 'block';
-                loadApplications();
-                document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
-            } else if (password !== null) {
-                alert('❌ كلمة المرور غير صحيحة');
-            }
-        }
-        
+
         // معالجة نموذج التقديم
-        document.getElementById('jobApplicationForm').addEventListener('submit', function(e) {
+        document.getElementById('jobApplicationForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            
-            // التحقق من البيانات
-            const name = document.getElementById('fullName').value.trim();
+
+            const fullName = document.getElementById('fullName').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const email = document.getElementById('email').value.trim();
-            const file = document.getElementById('cv').files[0];
-            
-            if (!name || !phone || !email || !file) {
-                showMessage('❌ يرجى ملء جميع الحقول المطلوبة ورفع السيرة الذاتية', 'error');
+            const sector = document.getElementById('sector').value;
+            const cvFile = document.getElementById('cv').files[0];
+
+            if (!fullName || !phone || !email || !sector || !cvFile) {
+                showMessage('يرجى ملء جميع الحقول.', 'error');
                 return;
             }
-            
-            // إنشاء كائن الطلب
-            const application = {
-                id: Date.now() + Math.floor(Math.random() * 1000), // معرف فريد
-                name: name,
-                phone: phone,
-                email: email,
-                governorate: document.getElementById('governorate').value,
-                sector: document.getElementById('sector').value,
-                notes: document.getElementById('notes').value.trim(),
-                cvName: file.name,
-                cvSize: formatFileSize(file.size),
-                date: new Date().toLocaleString('ar-EG', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }),
-                timestamp: Date.now()
-            };
-            
-            // حفظ الطلب
-            saveApplication(application);
-            
-            // عرض رسالة النجاح
-            showMessage(`
-                <div style="text-align: center;">
-                    <i class="fas fa-check-circle" style="color: #38a169; font-size: 50px; margin-bottom: 20px;"></i>
-                    <h3 style="color: #22543d;">🎉 تم إرسال طلبك بنجاح!</h3>
-                    <p style="margin: 10px 0;">شكرًا لك <strong>${application.name}</strong></p>
-                    <p style="margin: 10px 0;">رقم المرجع: <strong>NWF-${application.id.toString().slice(-6)}</strong></p>
-                    <p style="margin: 10px 0;">سأتصل بك على الرقم <strong>${application.phone}</strong> خلال 24 ساعة</p>
-                    <p style="margin-top: 20px; font-size: 14px; color: #4a5568;">
-                        للاستفسار: 01028052445
-                    </p>
-                </div>
-            `, 'success');
-            
-            // مسح النموذج بعد 5 ثوان
-            setTimeout(() => {
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('يرجى إدخال بريد إلكتروني صحيح.', 'error');
+                return;
+            }
+
+            const phoneRegex = /^01[0-2,5]{1}[0-9]{8}$/;
+            if (!phoneRegex.test(phone)) {
+                showMessage('يرجى إدخال رقم هاتف مصري صحيح.', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const application = {
+                    id: 'NWF-' + Date.now(),
+                    name: fullName,
+                    phone: phone,
+                    email: email,
+                    sector: sector,
+                    cv: event.target.result, // السيرة الذاتية بصيغة Base64
+                    date: new Date().toLocaleString('ar-EG')
+                };
+
+                let applications = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                applications.push(application);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(applications));
+
+                showMessage('تم إرسال طلبك بنجاح!', 'success');
                 document.getElementById('jobApplicationForm').reset();
-                document.getElementById('fileText').textContent = 'انقر لرفع السيرة الذاتية (PDF أو Word)';
-                document.getElementById('formMessage').style.display = 'none';
-            }, 5000);
-            
-            // تحديث لوحة التحكم إذا كانت مفتوحة
-            if (document.getElementById('dashboard').style.display === 'block') {
-                loadApplications();
-            }
+            };
+            reader.readAsDataURL(cvFile);
         });
-        
-        // =========== إدارة البيانات ===========
-        
-        // الحصول على جميع الطلبات
-        function getApplications() {
-            try {
-                const data = localStorage.getItem(STORAGE_KEY);
-                if (data) {
-                    return JSON.parse(data);
-                }
-            } catch (error) {
-                console.error('خطأ في قراءة البيانات:', error);
-            }
-            return [];
+
+        // عرض رسالة للمستخدم
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('formMessage');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
         }
-        
-        // حفظ طلب جديد
-        function saveApplication(application) {
-            const applications = getApplications();
-            applications.unshift(application); // إضافة في البداية
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(applications));
-            console.log('💾 تم حفظ طلب جديد:', application.name);
-        }
-        
-        // تحميل وعرض الطلبات
-        function loadApplications() {
-            const applications = getApplications();
-            const tbody = document.getElementById('applicationsBody');
-            const noDataMessage = document.getElementById('noDataMessage');
-            
-            // تحديث العداد
-            document.getElementById('totalApplications').textContent = applications.length;
-            
-            // إذا لم توجد طلبات
-            if (applications.length === 0) {
-                tbody.innerHTML = '';
-                noDataMessage.style.display = 'block';
+
+        // فتح لوحة التحكم
+        function openAdminDashboard() {
+            const password = prompt('أدخل كلمة المرور:');
+            if (password !== ADMIN_PASSWORD) {
+                alert('كلمة المرور غير صحيحة.');
                 return;
             }
-            
-            // إخفاء رسالة "لا توجد بيانات"
-            noDataMessage.style.display = 'none';
-            
-            // إنشاء الجدول
-            let html = '';
-            applications.forEach((app, index) => {
-                html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>
-                            <strong style="color: #1a365d;">${app.name}</strong><br>
-                            <small style="color: #718096;">${app.email}</small>
-                        </td>
-                        <td style="direction: ltr; text-align: left;">${app.phone}</td>
-                        <td><span style="background: #e6fffa; color: #234e52; padding: 5px 12px; border-radius: 20px; font-size: 14px;">${app.governorate}</span></td>
-                        <td><span style="background: #ebf8ff; color: #2c5282; padding: 5px 12px; border-radius: 20px; font-size: 14px;">${app.sector}</span></td>
-                        <td><small style="color: #718096;">${app.date}</small></td>
-                        <td>
-                            <button onclick="viewApplication(${app.id})" style="background: #4299e1; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-left: 5px; font-size: 14px;">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button onclick="contactApplicant('${app.phone}', '${app.name}')" style="background: #25D366; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-left: 5px; font-size: 14px;">
-                                <i class="fab fa-whatsapp"></i>
-                            </button>
-                            <button onclick="deleteApplication(${app.id})" style="background: #e53e3e; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px;">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            tbody.innerHTML = html;
-        }
-        
-        // عرض تفاصيل الطلب
-        function viewApplication(id) {
-            const applications = getApplications();
-            const app = applications.find(a => a.id === id);
-            
-            if (!app) {
-                alert('الطلب غير موجود');
-                return;
-            }
-            
-            const details = `
-                <div style="background: white; padding: 30px; border-radius: 10px; max-width: 600px; margin: 20px auto;">
-                    <h3 style="color: #1a365d; margin-bottom: 25px; text-align: center;">
-                        <i class="fas fa-user-tie"></i> تفاصيل طلب التوظيف
-                    </h3>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
-                        <div>
-                            <p><strong>👤 الاسم:</strong> ${app.name}</p>
-                            <p><strong>📞 الهاتف:</strong> ${app.phone}</p>
-                            <p><strong>📧 البريد:</strong> ${app.email}</p>
-                        </div>
-                        <div>
-                            <p><strong>📍 المحافظة:</strong> ${app.governorate}</p>
-                            <p><strong>🏢 القطاع:</strong> ${app.sector}</p>
-                            <p><strong>📅 التاريخ:</strong> ${app.date}</p>
-                        </div>
-                    </div>
-                    
-                    ${app.notes ? `
-                        <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                            <h4 style="color: #1a365d; margin-bottom: 10px;">
-                                <i class="fas fa-sticky-note"></i> ملاحظات المتقدم
-                            </h4>
-                            <p>${app.notes}</p>
-                        </div>
-                    ` : ''}
-                    
-                    <div style="background: #f0fff4; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                        <h4 style="color: #1a365d; margin-bottom: 10px;">
-                            <i class="fas fa-file"></i> السيرة الذاتية
-                        </h4>
-                        <p><strong>اسم الملف:</strong> ${app.cvName}</p>
-                        <p><strong>حجم الملف:</strong> ${app.cvSize}</p>
-                    </div>
-                    
-                    <div style="text-align: center; margin-top: 25px;">
-                        <button onclick="contactApplicant('${app.phone}', '${app.name}')" style="background: #25D366; color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-left: 10px;">
-                            <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
-                        </button>
-                        <button onclick="window.print()" style="background: #718096; color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                            <i class="fas fa-print"></i> طباعة
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            alertWithHTML(details);
-        }
-        
-        // التواصل مع المتقدم
-        function contactApplicant(phone, name) {
-            const message = `مرحبًا ${name}، أنا حسين عدلي مدير موارد بشرية. شكرًا لتقديمك على موقع Nile Work Force. نود التواصل معك بخصوص طلب التوظيف.`;
-            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        }
-        
-        // حذف طلب
-        function deleteApplication(id) {
-            if (!confirm('⚠️ هل أنت متأكد من حذف هذا الطلب؟')) {
-                return;
-            }
-            
-            const applications = getApplications();
-            const filteredApplications = applications.filter(app => app.id !== id);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(filteredApplications));
-            
-            showNotification('✅ تم حذف الطلب بنجاح');
+
+            const dashboard = document.getElementById('adminDashboard');
+            dashboard.style.display = 'block';
             loadApplications();
         }
-        
-        // تصدير البيانات
-        function exportData() {
-            const applications = getApplications();
-            
+
+        // تحميل البيانات في لوحة التحكم
+        function loadApplications() {
+            const applications = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            const tableBody = document.getElementById('applicationsTable');
+
             if (applications.length === 0) {
-                alert('📭 لا توجد بيانات للتصدير');
+                tableBody.innerHTML = '<tr><td colspan="7">لا توجد طلبات.</td></tr>';
                 return;
             }
-            
-            let csv = 'رقم المرجع,الاسم,الهاتف,البريد الإلكتروني,المحافظة,القطاع,التاريخ,الملاحظات\n';
-            
-            applications.forEach(app => {
-                const row = [
-                    `"NWF-${app.id.toString().slice(-6)}"`,
-                    `"${app.name}"`,
-                    `"${app.phone}"`,
-                    `"${app.email}"`,
-                    `"${app.governorate}"`,
-                    `"${app.sector}"`,
-                    `"${app.date}"`,
-                    `"${app.notes || 'لا يوجد'}"`
-                ].join(',');
-                
-                csv += row + '\n';
-            });
-            
-            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+
+            tableBody.innerHTML = applications.map((app, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${app.name}</td>
+                    <td>${app.phone}</td>
+                    <td>${app.email}</td>
+                    <td>${app.sector}</td>
+                    <td>${app.date}</td>
+                    <td>
+                        <button onclick="downloadCV('${app.cv}', '${app.name}')">تحميل السيرة الذاتية</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // تنزيل السيرة الذاتية
+        function downloadCV(base64Data, name) {
             const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `طلبات_التوظيف_${new Date().toISOString().slice(0,10)}.csv`;
-            document.body.appendChild(link);
+            link.href = base64Data;
+            link.download = `${name}_CV.pdf`;
             link.click();
-            document.body.removeChild(link);
-            
-            alert(`✅ تم تصدير ${applications.length} طلب بنجاح`);
         }
-        
-        // مسح جميع البيانات
-        function clearAllData() {
-            if (!confirm('⚠️ تحذير: هذا الإجراء سيمسح جميع البيانات ولا يمكن التراجع عنه. هل أنت متأكد؟')) {
-                return;
-            }
-            
-            if (confirm('❌ تأكيد نهائي: هل أنت متأكد تمامًا من مسح جميع الطلبات؟')) {
-                localStorage.removeItem(STORAGE_KEY);
-                showNotification('🗑️ تم مسح جميع البيانات بنجاح');
-                loadApplications();
-            }
-        }
-        
-        // =========== وظائف مساعدة ===========
-        
-        // عرض رسالة
-        function showMessage(content, type) {
-            const messageDiv = document.getElementById('formMessage');
-            messageDiv.innerHTML = content;
-            messageDiv.className = `message ${type}`;
-            messageDiv.style.display = 'block';
-            messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-        
-        // عرض إشعار
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                left: 20px;
-                background: #38a169;
-                color: white;
-                padding: 15px 25px;
-                border-radius: 8px;
-                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-                z-index: 2000;
-                font-weight: bold;
-                font-size: 16px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                transform: translateX(-400px);
-                transition: transform 0.5s;
-            `;
-            
-            notification.innerHTML = `
-                <i class="fas fa-check-circle"></i>
-                <span>${message}</span>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 10);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(-400px)';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 500);
-            }, 3000);
-        }
-        
-        // عرض نافذة تفاعلية
-        function alertWithHTML(html) {
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.7);
-                z-index: 2000;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 20px;
-            `;
-            
-            const content = document.createElement('div');
-            content.style.cssText = `
-                background: white;
-                max-width: 700px;
-                width: 100%;
-                max-height: 80vh;
-                overflow-y: auto;
-                border-radius: 10px;
-                padding: 30px;
-                position: relative;
-                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            `;
-            
-            const closeBtn = document.createElement('button');
-            closeBtn.innerHTML = '&times;';
-            closeBtn.style.cssText = `
-                position: absolute;
-                top: 15px;
-                left: 15px;
-                background: #e53e3e;
-                color: white;
-                border: none;
-                width: 35px;
-                height: 35px;
-                border-radius: 50%;
-                font-size: 20px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            `;
-            closeBtn.onclick = () => document.body.removeChild(modal);
-            
-            content.innerHTML = html;
-            content.prepend(closeBtn);
-            modal.appendChild(content);
-            document.body.appendChild(modal);
-        }
-        
-        // تنسيق حجم الملف
-        function formatFileSize(bytes) {
-            if (bytes < 1024) return bytes + ' بايت';
-            else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' كيلوبايت';
-            else return (bytes / 1048576).toFixed(1) + ' ميجابايت';
-        }
-        
-        // إرشادات الاستخدام
-        console.log(`
-            🚀 نظام Nile Work Force يعمل بنجاح!
-            
-            📋 إرشادات الاستخدام:
-            1. لتقديم طلب توظيف: املأ النموذج واضغط إرسال
-            2. لعرض الطلبات: اضغط على زر لوحة التحكم (الزر العائم)
-            3. كلمة المرور: admin123
-            4. لتصدير البيانات: اضغط "تصدير البيانات" في لوحة التحكم
-            
-            🔍 لفحص البيانات المخزنة:
-            1. اضغط F12 لفتح أدوات المطور
-            2. انتقل إلى Application → Local Storage
-            3. ابحث عن مفتاح: nile_workforce_applications
-            
-            📞 للتواصل: 01028052445
-        `);
     </script>
 </body>
 </html>
