@@ -1,42 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="title">Nile Work Force - Egypt's Premier Job Portal</title>
-    <!-- Google Fonts for Arabic -->
+    <title>Nile Work Force - Updated</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap CDN (default LTR; toggled via JS) -->
-    <link id="bootstrap-css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link id="bootstrap-css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Arial', sans-serif, 'Noto Sans Arabic'; background-color: #f8f9fa; }
-        .hero { background: linear-gradient(to right, #007bff, #00bfff); color: white; padding: 100px 0; text-align: center; }
+        body { font-family: 'Noto Sans Arabic', 'Arial', sans-serif; background-color: #f8f9fa; }
+        .hero { background: linear-gradient(90deg, #007bff, #00bfff); color: white; padding: 80px 0; text-align: center; }
         .job-card { margin-bottom: 20px; }
-        section { padding: 50px 0; }
-        #jobs, #apply, #admin { display: none; } /* Home shows by default */
-        .form-control { margin-bottom: 15px; }
+        section { padding: 40px 0; }
+        .form-control { margin-bottom: 12px; }
         footer { background: #007bff; color: white; padding: 20px; text-align: center; }
-        [dir="rtl"] { text-align: right; font-family: 'Noto Sans Arabic', sans-serif; }
+        #adminNavButton { position: fixed; bottom: 16px; left: 16px; z-index: 2000; }
+        .hidden { display: none !important; }
+        .small-muted { font-size: 0.85rem; color: #6c757d; }
     </style>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+
+    <!-- Firebase compat SDKs (uses compat so old-style code works) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
 </head>
-<body dir="ltr">
+<body dir="rtl">
     <header class="bg-light py-3">
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light">
-                <a class="navbar-brand" href="#">Nile Work Force</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" href="#">قوة عمل النيل</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" onclick="showSection('home')" data-i18n="home">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" onclick="showSection('jobs')" data-i18n="jobs">Jobs</a></li>
-                        <li class="nav-item"><a class="nav-link" onclick="showSection('apply')" data-i18n="apply">Apply</a></li>
-                        <li class="nav-item"><a class="nav-link" onclick="showSection('admin')" data-i18n="admin">Admin</a></li>
+                    <ul class="navbar-nav ms-auto" id="mainNav">
+                        <li class="nav-item"><a class="nav-link" onclick="showSection('home')">الرئيسية</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="showSection('jobs')">الوظائف</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="showSection('apply')">التقديم</a></li>
+                        <li class="nav-item hidden" id="adminNav"><a class="nav-link" onclick="showSection('admin')">الإدارة</a></li>
                         <li class="nav-item"><a class="nav-link" onclick="changeLanguage('en')">English</a></li>
                         <li class="nav-item"><a class="nav-link" onclick="changeLanguage('ar')">عربي</a></li>
                     </ul>
@@ -47,221 +48,93 @@
 
     <section id="home" class="hero">
         <div class="container">
-            <h1 data-i18n="welcome">Welcome to Nile Work Force</h1>
-            <p data-i18n="gateway">Your free gateway to jobs in Egypt's hotels, resorts, companies, and factories. No fees for job seekers!</p>
-            <button class="btn btn-light" onclick="showSection('jobs')" data-i18n="browse_jobs">Browse Jobs</button>
+            <h1>مرحبا بك في قوة عمل النيل</h1>
+            <p>بوابتك المجانية للوظائف في فنادق مصر والمنتجعات والشركات والمصانع. مجاني للباحثين عن عمل!</p>
+            <button class="btn btn-light" onclick="showSection('jobs')">تصفح الوظائف</button>
         </div>
     </section>
 
     <section id="jobs">
         <div class="container">
-            <h2 data-i18n="available_jobs">Available Jobs in Egypt</h2>
-            <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    <div class="card job-card">
-                        <div class="card-body">
-                            <h5 class="card-title" data-i18n="hotel_manager_title">Hotel Manager - Cairo Hotel Group</h5>
-                            <p class="card-text" data-i18n="hotel_manager_desc">Sector: Hotels | Location: Cairo | 5+ years exp.</p>
-                            <button class="btn btn-primary" onclick="showApply('Hotel Manager')" data-i18n="apply">Apply</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="card job-card">
-                        <div class="card-body">
-                            <h5 class="card-title" data-i18n="resort_coordinator_title">Resort Coordinator - Sharm El Sheikh Resorts</h5>
-                            <p class="card-text" data-i18n="resort_coordinator_desc">Sector: Resorts | Location: Sharm El Sheikh | Multilingual preferred.</p>
-                            <button class="btn btn-primary" onclick="showApply('Resort Coordinator')" data-i18n="apply">Apply</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="card job-card">
-                        <div class="card-body">
-                            <h5 class="card-title" data-i18n="factory_supervisor_title">Factory Supervisor - Nile Manufacturing</h5>
-                            <p class="card-text" data-i18n="factory_supervisor_desc">Sector: Factories | Location: Alexandria | Safety certs required.</p>
-                            <button class="btn btn-primary" onclick="showApply('Factory Supervisor')" data-i18n="apply">Apply</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="card job-card">
-                        <div class="card-body">
-                            <h5 class="card-title" data-i18n="corporate_analyst_title">Corporate Analyst - Egyptian Tech Co.</h5>
-                            <p class="card-text" data-i18n="corporate_analyst_desc">Sector: Companies | Location: Giza | Analytical skills.</p>
-                            <button class="btn btn-primary" onclick="showApply('Corporate Analyst')" data-i18n="apply">Apply</button>
-                        </div>
-                    </div>
-                </div>
+            <h2>الوظائف المتاحة في مصر</h2>
+            <div class="row" id="jobsList">
+                <!-- job cards will be dynamically loaded if needed -->
             </div>
         </div>
     </section>
 
-    <section id="apply">
+    <section id="apply" class="hidden">
         <div class="container">
-            <h2 data-i18n="apply_job">Apply for a Job</h2>
+            <h2>التقدم لوظيفة</h2>
             <form id="applicationForm">
-                <input type="text" id="name" class="form-control" data-i18n-placeholder="name_placeholder" placeholder="Name" required>
-                <input type="email" id="email" class="form-control" data-i18n-placeholder="email_placeholder" placeholder="Email" required>
-                <input type="tel" id="phone" class="form-control" data-i18n-placeholder="phone_placeholder" placeholder="Phone">
-                <input type="url" id="resume" class="form-control" data-i18n-placeholder="resume_placeholder" placeholder="Resume Link" required>
-                <input type="text" id="job" class="form-control" data-i18n-placeholder="job_placeholder" placeholder="Applying for" required>
-                <button type="submit" class="btn btn-primary" data-i18n="submit">Submit</button>
+                <input type="text" id="name" class="form-control" placeholder="الاسم" required>
+                <input type="email" id="email" class="form-control" placeholder="البريد الإلكتروني" required>
+                <input type="tel" id="phone" class="form-control" placeholder="الهاتف">
+
+                <!-- Allow either resume link or file upload. File upload preferred. -->
+                <label class="small-muted">ارفق السيرة الذاتية (ملف PDF أو DOC أو رابط)</label>
+                <input type="file" id="resumeFile" class="form-control" accept=".pdf,.doc,.docx">
+                <input type="url" id="resumeLink" class="form-control" placeholder="أو ضع رابط السيرة (اختياري)">
+
+                <input type="text" id="job" class="form-control" placeholder="التقدم لـ" required>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">إرسال</button>
+                    <button type="button" class="btn btn-secondary" id="clearForm">مسح</button>
+                </div>
+                <div id="uploadStatus" class="small-muted mt-2"></div>
             </form>
         </div>
     </section>
 
-    <section id="admin">
+    <section id="admin" class="hidden">
         <div class="container">
-            <h2 data-i18n="admin_dashboard">Admin Dashboard</h2>
+            <h2>لوحة الإدارة</h2>
+
             <div id="loginForm">
-                <input type="email" id="adminEmail" class="form-control" data-i18n-placeholder="admin_email_placeholder" placeholder="Admin Email" required>
-                <input type="password" id="adminPassword" class="form-control" data-i18n-placeholder="password_placeholder" placeholder="Password" required>
-                <button onclick="adminLogin()" class="btn btn-primary" data-i18n="login">Login</button>
+                <input type="email" id="adminEmail" class="form-control" placeholder="البريد الإداري" required>
+                <input type="password" id="adminPassword" class="form-control" placeholder="كلمة المرور" required>
+                <button onclick="adminLogin()" class="btn btn-primary">تسجيل الدخول</button>
             </div>
-            <div id="applicants" style="display:none;">
+
+            <div id="applicantsPanel" class="hidden mt-3">
+                <div class="d-flex justify-content-between mb-2">
+                    <div>
+                        <button class="btn btn-success" onclick="exportCSV()">تصدير CSV</button>
+                        <label class="btn btn-outline-primary mb-0">
+                            استيراد CSV <input type="file" id="importCsv" accept=".csv" hidden onchange="importCSVFile(event)">
+                        </label>
+                    </div>
+                    <button class="btn btn-secondary" onclick="adminLogout()">تسجيل الخروج</button>
+                </div>
+
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th data-i18n="name">Name</th>
-                            <th data-i18n="email">Email</th>
-                            <th data-i18n="phone">Phone</th>
-                            <th data-i18n="resume">Resume</th>
-                            <th data-i18n="job">Job</th>
-                            <th data-i18n="timestamp">Timestamp</th>
+                            <th>الاسم</th>
+                            <th>البريد</th>
+                            <th>الهاتف</th>
+                            <th>السيرة</th>
+                            <th>الوظيفة</th>
+                            <th>وقت التقديم</th>
                         </tr>
                     </thead>
                     <tbody id="applicantsTableBody"></tbody>
                 </table>
-                <button onclick="adminLogout()" class="btn btn-secondary" data-i18n="logout">Logout</button>
             </div>
         </div>
     </section>
 
+    <button id="adminNavButton" class="btn btn-dark" onclick="unlockAdmin()">🔒 إظهار لوحة الإدارة (خاص)</button>
+
     <footer>
-        <p data-i18n="copyright">&copy; 2025 Nile Work Force. Focused on Egypt. All rights reserved.</p>
+        <p>&copy; 2025 قوة عمل النيل. مركز على مصر. جميع الحقوق محفوظة.</p>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Translations object
-        const translations = {
-            en: {
-                title: "Nile Work Force - Egypt's Premier Job Portal",
-                home: "Home",
-                jobs: "Jobs",
-                apply: "Apply",
-                admin: "Admin",
-                welcome: "Welcome to Nile Work Force",
-                gateway: "Your free gateway to jobs in Egypt's hotels, resorts, companies, and factories. No fees for job seekers!",
-                browse_jobs: "Browse Jobs",
-                available_jobs: "Available Jobs in Egypt",
-                hotel_manager_title: "Hotel Manager - Cairo Hotel Group",
-                hotel_manager_desc: "Sector: Hotels | Location: Cairo | 5+ years exp.",
-                resort_coordinator_title: "Resort Coordinator - Sharm El Sheikh Resorts",
-                resort_coordinator_desc: "Sector: Resorts | Location: Sharm El Sheikh | Multilingual preferred.",
-                factory_supervisor_title: "Factory Supervisor - Nile Manufacturing",
-                factory_supervisor_desc: "Sector: Factories | Location: Alexandria | Safety certs required.",
-                corporate_analyst_title: "Corporate Analyst - Egyptian Tech Co.",
-                corporate_analyst_desc: "Sector: Companies | Location: Giza | Analytical skills.",
-                apply_job: "Apply for a Job",
-                name_placeholder: "Name",
-                email_placeholder: "Email",
-                phone_placeholder: "Phone",
-                resume_placeholder: "Resume Link",
-                job_placeholder: "Applying for",
-                submit: "Submit",
-                admin_dashboard: "Admin Dashboard",
-                admin_email_placeholder: "Admin Email",
-                password_placeholder: "Password",
-                login: "Login",
-                name: "Name",
-                email: "Email",
-                phone: "Phone",
-                resume: "Resume",
-                job: "Job",
-                timestamp: "Timestamp",
-                logout: "Logout",
-                copyright: "&copy; 2025 Nile Work Force. Focused on Egypt. All rights reserved."
-            },
-            ar: {
-                title: "قوة عمل النيل - بوابة التوظيف الرائدة في مصر",
-                home: "الرئيسية",
-                jobs: "الوظائف",
-                apply: "تقدم",
-                admin: "الإدارة",
-                welcome: "مرحبا بك في قوة عمل النيل",
-                gateway: "بوابتك المجانية للوظائف في فنادق مصر والمنتجعات والشركات والمصانع. مجاني للباحثين عن عمل!",
-                browse_jobs: "تصفح الوظائف",
-                available_jobs: "الوظائف المتاحة في مصر",
-                hotel_manager_title: "مدير فندق - مجموعة فنادق القاهرة",
-                hotel_manager_desc: "القطاع: الفنادق | الموقع: القاهرة | خبرة 5+ سنوات.",
-                resort_coordinator_title: "منسق منتجع - منتجعات شرم الشيخ",
-                resort_coordinator_desc: "القطاع: المنتجعات | الموقع: شرم الشيخ | متعدد اللغات مفضل.",
-                factory_supervisor_title: "مشرف مصنع - تصنيع النيل",
-                factory_supervisor_desc: "القطاع: المصانع | الموقع: الإسكندرية | شهادات السلامة مطلوبة.",
-                corporate_analyst_title: "محلل شركات - شركة التكنولوجيا المصرية",
-                corporate_analyst_desc: "القطاع: الشركات | الموقع: الجيزة | مهارات تحليلية.",
-                apply_job: "تقدم لوظيفة",
-                name_placeholder: "الاسم",
-                email_placeholder: "البريد الإلكتروني",
-                phone_placeholder: "الهاتف",
-                resume_placeholder: "رابط السيرة الذاتية",
-                job_placeholder: "التقدم لـ",
-                submit: "إرسال",
-                admin_dashboard: "لوحة الإدارة",
-                admin_email_placeholder: "بريد الإدارة",
-                password_placeholder: "كلمة المرور",
-                login: "تسجيل الدخول",
-                name: "الاسم",
-                email: "البريد الإلكتروني",
-                phone: "الهاتف",
-                resume: "السيرة الذاتية",
-                job: "الوظيفة",
-                timestamp: "الطابع الزمني",
-                logout: "تسجيل الخروج",
-                copyright: "&copy; 2025 قوة عمل النيل. مركز على مصر. جميع الحقوق محفوظة."
-            }
-        };
-
-        // Function to update content and placeholders
-        function updateContent(lang) {
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                el.innerHTML = translations[lang][key];
-            });
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                el.placeholder = translations[lang][key];
-            });
-            document.title = translations[lang].title;
-        }
-
-        // Change language
-        function changeLanguage(lang) {
-            localStorage.setItem('language', lang);
-            const bootstrapLink = document.getElementById('bootstrap-css');
-            if (lang === 'ar') {
-                document.documentElement.lang = 'ar';
-                document.body.dir = 'rtl';
-                bootstrapLink.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css';
-            } else {
-                document.documentElement.lang = 'en';
-                document.body.dir = 'ltr';
-                bootstrapLink.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css';
-            }
-            updateContent(lang);
-        }
-
-        // On load
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('language') || 'en';
-            changeLanguage(savedLang);
-            showSection('home');
-        });
-
-        // Firebase Config - Replace with yours
+        /***************************
+         *  CONFIG - ضع بياناتك هنا
+         ***************************/
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -270,71 +143,242 @@
             messagingSenderId: "YOUR_SENDER_ID",
             appId: "YOUR_APP_ID"
         };
+        // UID of the Firebase user that is the real admin (set after creating the admin user in Firebase Auth)
+        const ADMIN_UID = "PUT_ADMIN_UID_HERE"; // ضع uid الخاص بك هنا بعد إنشاء مستخدم
+
+        // Local owner password (used only to reveal the admin link on your device) - غيّره لكلمة سر قوية
+        const OWNER_PASSWORD = "change_this_owner_password";
+
+        /***************************
+         *  INIT Firebase (compat)
+         ***************************/
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
         const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
 
-        function showSection(sectionId) {
-            document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
-            document.getElementById(sectionId).style.display = 'block';
+        // UI helpers
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            window.scrollTo({top:0,behavior:'smooth'});
         }
 
-        function showApply(jobTitle) {
-            showSection('apply');
-            document.getElementById('job').value = jobTitle;
+        // Language helper (kept simple)
+        function changeLanguage(lang) {
+            if (lang === 'en') {
+                document.documentElement.lang = 'en'; document.body.dir = 'ltr';
+                document.getElementById('bootstrap-css').href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css';
+            } else {
+                document.documentElement.lang = 'ar'; document.body.dir = 'rtl';
+                document.getElementById('bootstrap-css').href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css';
+            }
         }
 
-        document.getElementById('applicationForm').addEventListener('submit', (e) => {
+        // Show admin nav if local owner flag set or if logged-in admin
+        function updateAdminNavVisibility() {
+            const nav = document.getElementById('adminNav');
+            const isOwner = localStorage.getItem('isOwner') === 'true';
+            if (isOwner) nav.classList.remove('hidden'); else nav.classList.add('hidden');
+        }
+
+        // Unlock admin link locally (client-side) - set your OWNER_PASSWORD above
+        function unlockAdmin() {
+            const p = prompt('أدخل كلمة السر الخاصة بلوحة الإدارة لإظهارها على هذا الجهاز:');
+            if (!p) return;
+            if (p === OWNER_PASSWORD) {
+                localStorage.setItem('isOwner','true');
+                updateAdminNavVisibility();
+                alert('تم إظهار رابط الإدارة على هذا الجهاز. لتسجيل الدخول استخدم بيانات Firebase Auth.');
+            } else alert('كلمة السر غير صحيحة.');
+        }
+
+        // Application form handling with resume upload to Firebase Storage
+        document.getElementById('applicationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const data = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                resume: document.getElementById('resume').value,
-                job: document.getElementById('job').value,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            db.collection('applications').add(data).then(() => {
-                alert(translations[document.documentElement.lang].submitted || 'Submitted!');
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const job = document.getElementById('job').value.trim();
+            const resumeLink = document.getElementById('resumeLink').value.trim();
+            const resumeFile = document.getElementById('resumeFile').files[0];
+            const statusEl = document.getElementById('uploadStatus');
+
+            try {
+                statusEl.textContent = 'جاري رفع البيانات...';
+                let resumeUrl = '';
+                let resumeName = '';
+                if (resumeFile) {
+                    const ext = resumeFile.name.split('.').pop();
+                    const time = Date.now();
+                    const storageRef = storage.ref().child(`resumes/${time}_${name.replace(/\s+/g,'_')}.${ext}`);
+                    const uploadTask = await storageRef.put(resumeFile);
+                    resumeUrl = await uploadTask.ref.getDownloadURL();
+                    resumeName = resumeFile.name;
+                } else if (resumeLink) {
+                    resumeUrl = resumeLink;
+                    resumeName = 'link';
+                }
+
+                await db.collection('applications').add({
+                    name, email, phone: phone || null, job, resumeUrl: resumeUrl || null, resumeName: resumeName || null, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                statusEl.textContent = 'تم الإرسال بنجاح.';
+                document.getElementById('applicationForm').reset();
+                setTimeout(()=> statusEl.textContent = '', 3000);
                 showSection('home');
-            }).catch(err => alert('Error: ' + err.message));
+            } catch (err) {
+                statusEl.textContent = 'خطأ: ' + err.message;
+            }
         });
 
-        function adminLogin() {
-            const email = document.getElementById('adminEmail').value;
-            const password = document.getElementById('adminPassword').value;
-            auth.signInWithEmailAndPassword(email, password).then(() => {
-                document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('applicants').style.display = 'block';
-                loadApplicants();
-            }).catch(err => alert('Login failed: ' + err.message));
-        }
+        document.getElementById('clearForm').addEventListener('click', ()=> document.getElementById('applicationForm').reset());
 
-        function loadApplicants() {
-            const tbody = document.getElementById('applicantsTableBody');
-            tbody.innerHTML = '';
-            db.collection('applications').orderBy('timestamp', 'desc').get().then(snapshot => {
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    const row = `<tr>
-                        <td>${data.name}</td>
-                        <td>${data.email}</td>
-                        <td>${data.phone || 'N/A'}</td>
-                        <td><a href="${data.resume}" target="_blank">View</a></td>
-                        <td>${data.job}</td>
-                        <td>${data.timestamp ? data.timestamp.toDate().toLocaleString() : 'N/A'}</td>
-                    </tr>`;
-                    tbody.innerHTML += row;
-                });
-            }).catch(err => alert('Error: ' + err.message));
+        /*******************
+         *  ADMIN functions
+         *******************/
+        async function adminLogin() {
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPassword').value;
+            try {
+                const res = await auth.signInWithEmailAndPassword(email, password);
+                const uid = res.user.uid;
+                if (uid !== ADMIN_UID) {
+                    await auth.signOut();
+                    alert('مستخدم صالح لكن ليس هو المسؤول. تأكد من ADMIN_UID في الكود.');
+                    return;
+                }
+                // show panel
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('applicantsPanel').classList.remove('hidden');
+                localStorage.setItem('isOwner','true');
+                updateAdminNavVisibility();
+                loadApplicants();
+            } catch (err) {
+                alert('فشل تسجيل الدخول: ' + err.message);
+            }
         }
 
         function adminLogout() {
-            auth.signOut().then(() => {
-                document.getElementById('loginForm').style.display = 'block';
-                document.getElementById('applicants').style.display = 'none';
-            });
+            auth.signOut();
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('applicantsPanel').classList.add('hidden');
         }
+
+        // Load applicants into table
+        async function loadApplicants() {
+            const tbody = document.getElementById('applicantsTableBody');
+            tbody.innerHTML = '';
+            try {
+                const snapshot = await db.collection('applications').orderBy('timestamp','desc').get();
+                snapshot.forEach(doc => {
+                    const d = doc.data();
+                    const time = d.timestamp ? d.timestamp.toDate().toLocaleString() : 'N/A';
+                    const resumeCell = d.resumeUrl ? `<a href="${d.resumeUrl}" target="_blank">عرض</a>` : 'N/A';
+                    const row = `<tr>
+                        <td>${escapeHtml(d.name)}</td>
+                        <td>${escapeHtml(d.email)}</td>
+                        <td>${escapeHtml(d.phone || 'N/A')}</td>
+                        <td>${resumeCell}</td>
+                        <td>${escapeHtml(d.job)}</td>
+                        <td>${time}</td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            } catch (err) {
+                alert('خطأ في جلب المتقدمين: ' + err.message);
+            }
+        }
+
+        // Export applicants as CSV
+        async function exportCSV() {
+            try {
+                const snapshot = await db.collection('applications').orderBy('timestamp','desc').get();
+                const rows = [['name','email','phone','job','resumeUrl','resumeName','timestamp']];
+                snapshot.forEach(doc=>{
+                    const d = doc.data();
+                    const ts = d.timestamp ? d.timestamp.toDate().toISOString() : '';
+                    rows.push([d.name||'', d.email||'', d.phone||'', d.job||'', d.resumeUrl||'', d.resumeName||'', ts]);
+                });
+                const csv = rows.map(r => r.map(cell=>`"${String(cell||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+                const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a'); a.href = url; a.download = 'applicants.csv'; document.body.appendChild(a); a.click(); a.remove();
+                URL.revokeObjectURL(url);
+            } catch (err) { alert('Failed to export: ' + err.message); }
+        }
+
+        // Import CSV (admin only) - expects header row with at least name,email,job
+        async function importCSVFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!confirm('ستتم إضافة جميع السجلات من ملف CSV إلى مجموعة applications. المتابعة؟')) return;
+            const text = await file.text();
+            const lines = text.split(/\r?\n/).filter(l=>l.trim());
+            const header = lines.shift().split(',').map(h=>h.replace(/\"/g,'').trim().toLowerCase());
+            const idx = (col)=> header.indexOf(col);
+            const batch = db.batch ? db.batch() : null; // compat
+            try {
+                for (const line of lines) {
+                    const cols = parseCSVLine(line);
+                    const docObj = {
+                        name: cols[idx('name')] || cols[idx('full name')] || '',
+                        email: cols[idx('email')] || '',
+                        phone: cols[idx('phone')] || null,
+                        job: cols[idx('job')] || '',
+                        resumeUrl: cols[idx('resumeurl')] || cols[idx('resume_url')] || null,
+                        resumeName: cols[idx('resumename')] || null,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    await db.collection('applications').add(docObj);
+                }
+                alert('تم استيراد الملف بنجاح');
+                loadApplicants();
+            } catch (err) { alert('خطأ عند الاستيراد: ' + err.message); }
+        }
+
+        // Utilities
+        function escapeHtml(text){ if(!text) return ''; return String(text).replace(/[&<>"'`]/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'})[s]); }
+        function parseCSVLine(line){ // simple CSV parser that handles quoted values
+            const res=[]; let cur=''; let inQuotes=false; for(let i=0;i<line.length;i++){ const ch=line[i]; if(ch==='"'){ if(inQuotes && line[i+1]==='"'){ cur+='"'; i++; } else inQuotes=!inQuotes; } else if(ch===',' && !inQuotes){ res.push(cur); cur=''; } else cur+=ch; } res.push(cur); return res.map(s=>s.replace(/^"|"$/g,'')); }
+
+        // On load
+        window.addEventListener('DOMContentLoaded', ()=>{
+            // populate some static jobs (or you can fetch from DB)
+            const jobsList = document.getElementById('jobsList');
+            const jobs = [
+                {title:'مدير فندق - مجموعة فنادق القاهرة', desc:'القطاع: الفنادق | القاهرة | 5+ سنوات'},
+                {title:'منسق منتجع - منتجعات شرم الشيخ', desc:'القطاع: المنتجعات | شرم الشيخ'},
+                {title:'مشرف مصنع - تصنيع النيل', desc:'القطاع: المصانع | الإسكندرية'},
+                {title:'محلل شركات - شركة التكنولوجيا المصرية', desc:'القطاع: الشركات | الجيزة'}
+            ];
+            jobs.forEach(j=>{
+                const col = document.createElement('div'); col.className='col-md-6 col-lg-4';
+                col.innerHTML = `<div class="card job-card"><div class="card-body"><h5 class="card-title">${escapeHtml(j.title)}</h5><p class="card-text">${escapeHtml(j.desc)}</p><button class="btn btn-primary" onclick="showApplyFromCard('${escapeHtml(j.title)}')">تقدم</button></div></div>`;
+                jobsList.appendChild(col);
+            });
+
+            // admin nav visibility from local storage
+            updateAdminNavVisibility();
+
+            // if owner is set, show admin panel link automatically
+            const isOwner = localStorage.getItem('isOwner') === 'true';
+            if (isOwner) document.getElementById('adminNav').classList.remove('hidden');
+
+            // if already logged in and is admin, show panel
+            auth.onAuthStateChanged(user => {
+                if (user && user.uid === ADMIN_UID) {
+                    document.getElementById('loginForm').style.display='none';
+                    document.getElementById('applicantsPanel').classList.remove('hidden');
+                    document.getElementById('adminNav').classList.remove('hidden');
+                    loadApplicants();
+                }
+            });
+
+            showSection('home');
+        });
+
+        function showApplyFromCard(title){ showSection('apply'); document.getElementById('job').value = title; }
     </script>
 </body>
 </html>
